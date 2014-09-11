@@ -27,4 +27,4 @@ alias sr="screen -r"
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # iPython
-alias python=ipython
+alias ipy=ipython
