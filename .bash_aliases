@@ -1,4 +1,4 @@
-# ALIASES
+#! /bin/sh
 
 # general
 alias c="clear"
