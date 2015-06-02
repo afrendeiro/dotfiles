@@ -11,6 +11,7 @@
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all --date=local
     ls = ls-files
     unstage = reset HEAD
+    subup = submodule foreach git pull origin master
 
     # Show files ignored by git:
     ign = ls-files -o -i --exclude-standard
