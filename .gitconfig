@@ -1,4 +1,5 @@
 [alias]
+    aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
     st = status
     ci = commit
     br = branch
@@ -16,6 +17,36 @@
  
 [core]
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+
 [user]
     name = Andre Rendeiro
     email = afrendeiro@gmail.com
+
+[color]
+    ui = true
+
+[color "branch"]
+    current = yellow reverse
+    local = yello
+    remote = green
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = red
+
+[url "https://github.com/"]
+    insteadOf = gh:
+
+[url "https://gist.github.com/"]
+    insteadOf = gist:
+
+[url "https://bitbucket.org/"]
+    insteadOf = bb:
+
