@@ -13,8 +13,9 @@ alias who="who -u -H"
 # listing aliases
 alias l="ls --color"
 alias ll="ls -l -h --color"
+alias lla="ls -l -h -a --color"
 
-# lovement aliases
+# movement aliases
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
