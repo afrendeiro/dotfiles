@@ -6,7 +6,7 @@ alias grep="grep --color=auto"
 alias refresh="source ~/.bashrc"
 alias rm="rm -i"
 alias mv="mv -i"
-alias cp="cp -i"  
+alias cp="cp -i"
 alias top="top -d 0.4"
 alias who="who -u -H"
 
@@ -38,3 +38,9 @@ alias gc="git commit"
 alias gr="git checkout"
 alias ga="git add"
 alias gl="git lola"
+
+# ssh
+alias ngrok="ssh -X arendeiro@ngrok.com"
+alias hpc="ssh -X arendeiro@hpclogin"
+alias hpc1="ssh -X arendeiro@n001.hpc.cemm.at"
+alias hpc2="ssh -X arendeiro@n002.hpc.cemm.at"
