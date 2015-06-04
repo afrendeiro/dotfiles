@@ -132,5 +132,6 @@ extract () {
 #remapping capslock key to control
 setxkbmap -option "ctrl:nocaps"
 
-# coloured prompt
-PS1='\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h:\[\033[1;35m\]\w\[\033[1;31m\]\$\[\033[0m\] '
+# Colored prompt
+# Custom bash prompt via kirsle.net/wizards/ps1.html
+export PS1="\[$(tput bold)\]\[$(tput setaf 1)\]\u\[$(tput setaf 3)\]@\[$(tput setaf 2)\]\h \[$(tput setaf 4)\]\W\[$(tput setaf 1)\]\\$ \[$(tput sgr0)\]"
