@@ -30,7 +30,7 @@ alias sr="screen -r"
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # iPython
-alias ipy=ipython
+alias ipy="ipython"
 
 # git
 alias gs="git status"
@@ -44,3 +44,6 @@ alias ngrok="ssh -X arendeiro@ngrok.com"
 alias hpc="ssh -X arendeiro@hpclogin"
 alias hpc1="ssh -X arendeiro@n001.hpc.cemm.at"
 alias hpc2="ssh -X arendeiro@n002.hpc.cemm.at"
+
+# slurm
+alias sq="squeue | grep are"
