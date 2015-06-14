@@ -4,7 +4,7 @@ if [ -f ~/.profile ]; then
     source ~/.profile
 fi
 
-if [[ -s /cm ]]; then
+if [ -f /cm/shared/apps/slurm/ ]; then
     module load slurm
     module load java/jdk/1.7.0_51
     module load FastQC/0.11.2
