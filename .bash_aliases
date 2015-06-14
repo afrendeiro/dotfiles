@@ -4,9 +4,6 @@
 alias c="clear"
 alias grep="grep --color=auto"
 alias refresh="source ~/.bashrc"
-alias rm="rm -i"
-alias mv="mv -i"
-alias cp="cp -i"
 alias top="top -d 0.4"
 alias who="who -u -H"
 
