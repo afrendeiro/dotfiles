@@ -44,3 +44,4 @@ alias hpc2="ssh -X arendeiro@n002.hpc.cemm.at"
 
 # slurm
 alias sq="squeue | grep are"
+alias wsq="watch 'squeue | grep are'"
