@@ -18,6 +18,9 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
+# open
+alias open="xdg-open"
+
 # screen
 alias s="screen -ls"
 alias ss="screen -S"
