@@ -45,6 +45,9 @@ alias hpc="ssh -X arendeiro@hpclogin"
 alias hpc1="ssh -X arendeiro@n001.hpc.cemm.at"
 alias hpc2="ssh -X arendeiro@n002.hpc.cemm.at"
 
+# remote desktop
+alias hpcd="rdesktop -f -u arendeiro -p - hpclogin.srv.cemm.at"
+
 # slurm
 alias sq="squeue | grep are"
 alias wsq="watch 'squeue | grep are'"
