@@ -34,11 +34,49 @@ if [[ -s /cm ]]; then
     export TMPDIR=/scratch/users/arendeiro/tmp/
     export TMP_DIR=/scratch/users/arendeiro/tmp/
 
-    cancelAllJobs () {
-        for J in `sq | unexpand -t 4 | cut -f 3`; do scancel $J; done
+    # SLURM CONTROL
+    ## job cancelation
+    scancelall () {
+        readarray -t JOBS < <(qstat | grep are | unexpand -t 4 | cut -f 1 | tail -n +2)
+        function join_by { local IFS="$1"; shift; echo "$*"; }
+        JOBS_STR=`join_by , "${JOBS[@]}"`
+        scancel $JOBS_STR
+    }
+    scancelQ () {
+        readarray -t JOBS < <(qstat | grep are | grep Q | unexpand -t 4 | cut -f 1 | tail -n +2)
+        function join_by { local IFS="$1"; shift; echo "$*"; }
+        JOBS_STR=`join_by , "${JOBS[@]}"`
+        scancel $JOBS_STR   
+    }
+    scancelR () {
+        readarray -t JOBS < <(qstat | grep are | grep R | unexpand -t 4 | cut -f 1 | tail -n +2)
+        function join_by { local IFS="$1"; shift; echo "$*"; }
+        JOBS_STR=`join_by , "${JOBS[@]}"`
+        scancel $JOBS_STR
     }
 
-    scancelall () {
-        for J in `qstat | grep are | unexpand -t 4 | cut -f 1 | tail -n +2`; do scancel $J; done
+    ## quick job allocation
+    job () {
+        srun -p develop --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython
     }
+    jobd () {
+        srun -p develop --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython
+    }
+    jobs () {
+        srun -p shortq --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython
+    }
+    jobl () {
+        srun -p longq --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython
+    }
+
+    # Change looper jobs from queue
+    changeLooperQueue () {
+        find submission/*sub -exec sed -i 's/5-12:00:00/7:00:00/g' {} \;
+        find submission/*sub -exec sed -i 's/4-00:00:00/7:00:00/g' {} \;
+        find submission/*sub -exec sed -i 's/longq/shortq/g' {} \;
+        find submission/*sub -exec cat  {} \; | grep "time="
+        find submission/*sub -exec cat  {} \; | grep "partition"
+        find submission/*sub -exec sbatch {} \;
+    }
+
 fi
