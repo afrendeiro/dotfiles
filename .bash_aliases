@@ -51,3 +51,9 @@ alias hpcd="rdesktop -f -u arendeiro -p - hpclogin.srv.cemm.at"
 # slurm
 alias sq="squeue | grep are"
 alias wsq="watch 'squeue | grep are'"
+
+# Looper
+alias lor="looper run metadata/project_config.yaml > looper_run.log"
+alias lord="looper run -d metadata/project_config.yaml > looper_run.dry.log"
+alias loc="looper check metadata/project_config.yaml > looper_check.log"
+alias los="looper summarize metadata/project_config.yaml > looper_summarize.log"
