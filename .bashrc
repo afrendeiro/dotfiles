@@ -6,7 +6,7 @@ if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
 fi
 
-# This makes sure it's only executed in the CeMM cluster
+# Stuff inside is only executed in the CeMM cluster
 if [[ -s /cm ]]; then
     module load python/2.7.12
     module load slurm
@@ -26,6 +26,16 @@ if [[ -s /cm ]]; then
     module load openmpi/1.10.0
     module load R/3.2.1
     module load preseq
+
+    loadpython3 () {
+        module unload python
+        module unload gcc
+        module load gcc/4.8.2
+        module load python/3.6.1
+        # this is annoying but I must regress to R/3.3.2 because of gcc version :(
+	    module unload R
+	    module load R/3.3.2
+    }
 
     export PATH=$PATH:/home/arendeiro/.local/bin
     export PYTHONPATH=/home/arendeiro/.local/lib/python2.7/site-packages
@@ -57,16 +67,28 @@ if [[ -s /cm ]]; then
 
     ## quick job allocation
     job () {
-        srun -p develop --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython
+	loadpython3
+        srun -p develop --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython3
     }
     jobd () {
-        srun -p develop --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython
+	loadpython3
+        srun -p develop --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython3
     }
     jobs () {
-        srun -p shortq --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython
+	loadpython3
+        srun -p shortq --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython3
+    }
+    jobm () {
+	loadpython3
+        srun -p mediumq --mem 80000 -c 8 --time 1-08:00:00 --pty --x11 ipython3
     }
     jobl () {
-        srun -p longq --mem 80000 -c 8 --time 08:00:00 --pty --x11 ipython
+	loadpython3
+        srun -p longq --mem 80000 -c 8 --time 2-08:00:00 --pty --x11 ipython3
+    }
+
+    countjobsperuser () {
+        qstat | tail -n +3 | sed 's/ /\t/g' | sed -e "s/\t\+/\t/g" | cut -f 3 | sort | uniq -c
     }
 
     # Change looper jobs from queue
@@ -79,4 +101,13 @@ if [[ -s /cm ]]; then
         find submission/*sub -exec sbatch {} \;
     }
 
+    # Looperenv
+    export LOOPERENV=/home/$USER/workspace/looperenv/cemm.yaml
+
+    # RNA-seq pipelines
+    export PICARD=/cm/shared/apps/picard-tools/2.9.0/picard.jar
+    export TRIMMOMATIC_EPIGNOME=/cm/shared/apps/trimmomatic/0.32/trimmomatic-0.32-epignome.jar
+
 fi
+
+PYTHONIOENCODING="UTF-8"
