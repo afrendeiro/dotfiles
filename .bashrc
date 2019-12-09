@@ -1,5 +1,5 @@
 if [ -f ~/.profile ]; then
-    source ~/.profile
+    source ~/.ssh/profile.sh
 fi
 
 if [ -f ~/.bash_aliases ]; then

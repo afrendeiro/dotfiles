@@ -19,7 +19,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
 # open
-alias open="xdg-open"
+alias open="xdg-open 2>/dev/null"
 
 # screen
 alias s="screen -ls"
@@ -37,7 +37,6 @@ alias gs="git status"
 alias gc="git commit"
 alias gr="git checkout"
 alias ga="git add"
-alias gl="git lola"
 
 # ssh
 alias ngrok="ssh -X arendeiro@ngrok.com"
