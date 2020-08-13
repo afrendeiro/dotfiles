@@ -9,6 +9,9 @@ export PATH=/usr/local/bin:$HOME/.local/bin:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="/home/afr/.oh-my-zsh"
 
+
+# Additional PATHS
+source ~/.zsh/paths.zsh
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -103,3 +106,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Add functionality to suggest packages for commands not found
+source /etc/zsh_command_not_found

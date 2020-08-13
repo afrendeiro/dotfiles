@@ -75,11 +75,11 @@ alias d='desk'
 alias h='history'
 alias j='jobs'
 alias t='tmux'
-alias v='open-with-vim'
+# alias v='open-with-vim'
 # alias e='open-with-vim'
-alias s='open-with-sublime-text'
-alias a='open-with-atom'
-alias n='nano'
+# alias s='open-with-sublime-text'
+# alias a='open-with-atom'
+# alias n='nano'
 
 # Others commands shortcuts
 alias dg='desk go'
@@ -108,8 +108,10 @@ alias fgrep='fgrep --color=auto'
 alias mu='mutt'
 alias mf='mutt -F'
 alias zshrc='source ~/.zshrc' ## Reload config
+alias refresh='source ~/.zshrc' ## Reload config
 alias dotfiles='(cd ${DOTFILES_PATH} && git pull) ; (cd ${DOTFILES_PATH}/../private && git pull) ; source ~/.zshrc' ## Pull dotfiles from repositories and reload config
 alias snippets="cat ${DOTFILES_PATH}/zsh/snippets.zsh | sed -r 's/^function //g' | sed -r 's/^# (.*)/\x1b[32m\x1b[1m# \1\x1b[0m/'"
+alias top="top -d 0.4"
 
 alias sudo='sudo ' ## Allow aliases to be sudo’ed
 alias watch='watch ' ## Allow aliases to be watched
@@ -149,6 +151,9 @@ alias gs="git status"
 alias gc="git commit"
 alias gr="git checkout"
 alias ga="git add"
+alias gaa="git add -u"
+alias gl='git log'
+alias gcl='git clone --recursive'
 # alias cdg=' cd "$(git rev-parse --show-toplevel)"' ## git root
 # alias g='git'
 # alias gcl='git clone --recursive'
