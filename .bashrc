@@ -118,6 +118,22 @@ if [ -d "${HOME}/.julia/" ]; then
     PATH="${PATH}:${HOME}/.julia/bin"
 fi
 
+# NPM
+if [ -d "${HOME}/.npm-global/" ]; then
+    export PATH=${PATH}:${HOME}/.npm-global/bin
+fi
+
+# Cargo
+if [ -d "${HOME}/.cargo/" ]; then
+    export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
+# Poetry
+if [ -d "${HOME}/.poetry/" ]; then
+    export PATH="$HOME/.poetry/bin:$PATH"
+fi
+
+
 # clone a repo, make virtualenv and install package in it
 vclone(){  # pass a URL as argument
     NAME=`basename ${1/.git}`
@@ -128,9 +144,32 @@ vclone(){  # pass a URL as argument
     pip install .
 }
 
-# stop all docker containers
+# Stop all docker containers
 docker-stop-all(){
     for P in `docker ps | unexpand -a | cut -f 1 | tail -n +2`;
     do echo $P; docker stop $P;
     done
+}
+
+# Extract archives
+extract () {
+   if [ -f $1 ] ; then
+       case $1 in
+        *.tar.bz2)      tar xvjf $1 ;;
+        *.tar.gz)       tar xvzf $1 ;;
+        *.tar.xz)       tar Jxvf $1 ;;
+        *.bz2)          bunzip2 $1 ;;
+        *.rar)          unrar x $1 ;;
+        *.gz)           gunzip $1 ;;
+        *.tar)          tar xvf $1 ;;
+        *.tbz2)         tar xvjf $1 ;;
+        *.tgz)          tar xvzf $1 ;;
+        *.zip)          unzip $1 ;;
+        *.Z)            uncompress $1 ;;
+        *.7z)           7z x $1 ;;
+        *)              echo "don't know how to extract '$1'..." ;;
+       esac
+   else
+       echo "'$1' is not a valid file!"
+   fi
 }

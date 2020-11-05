@@ -9,12 +9,6 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -82,27 +76,6 @@ xterm*|rxvt*)
     ;;
 esac
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -123,57 +96,9 @@ fi
 export VISUAL=nano
 export EDITOR=nano
 
-# Extract archives
-extract () {
-   if [ -f $1 ] ; then
-       case $1 in
-        *.tar.bz2)      tar xvjf $1 ;;
-        *.tar.gz)       tar xvzf $1 ;;
-        *.tar.xz)       tar Jxvf $1 ;;
-        *.bz2)          bunzip2 $1 ;;
-        *.rar)          unrar x $1 ;;
-        *.gz)           gunzip $1 ;;
-        *.tar)          tar xvf $1 ;;
-        *.tbz2)         tar xvjf $1 ;;
-        *.tgz)          tar xvzf $1 ;;
-        *.zip)          unzip $1 ;;
-        *.Z)            uncompress $1 ;;
-        *.7z)           7z x $1 ;;
-        *)              echo "don't know how to extract '$1'..." ;;
-       esac
-   else
-       echo "'$1' is not a valid file!"
-   fi
-}
-
 #remapping capslock key to control
 setxkbmap -option "ctrl:nocaps"
 
 # Colored prompt
 # Custom bash prompt via kirsle.net/wizards/ps1.html
 export PS1="\[$(tput bold)\]\[$(tput setaf 1)\]\u\[$(tput setaf 3)\]@\[$(tput setaf 2)\]\h \[$(tput setaf 4)\]\W\[$(tput setaf 1)\]\\$ \[$(tput sgr0)\]"
-
-
-# Local bin
-export PATH=${PATH}:/home/afr/.local/bin
-
-# NPM
-export PATH=${PATH}:home/afr/.npm-global/bin
-
-# CODACY secret
-export CODACY_PROJECT_TOKEN=e6c853a2b5f44d6cba133b29a208292f
-# CODECOV secret
-export CODECOV_TOKEN=812be9a1-9909-450f-8b3a-29a2b4651e7a
-
-# Brew
-# eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-
-# Cargo
-export PATH="$HOME/.cargo/bin:$PATH"
-# Poetry
-export PATH="$HOME/.poetry/bin:$PATH"
-
-# byobu
-
-# include Mycroft commands
-source ~/.profile_mycroft
