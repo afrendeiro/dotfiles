@@ -1,0 +1,68 @@
+# first do:
+# #  pip install pip -U
+# #  pip install setuptools -U
+anndata
+einops
+fancyimpute
+fire
+h5py
+imageio
+IPython
+jax
+lifelines
+matplotlib
+mvlearn
+# napari
+# napari-wsi
+# napari-czifile2
+# napari-medical-image-formats
+networkx
+numpy
+pandas>=2.0.0
+parmap
+pingouin
+pymde
+# PyQt5  # preferebly install from system package manager
+scanpy
+scikit-image
+scikit-learn>=1.3.0
+scipy
+seaborn
+seaborn_extensions
+selenium
+shapely
+tensorly
+tifffile
+torch
+torchvision
+tqdm
+tqdm-loggable
+libpysal
+networkx
+gravis
+urlpath
+xgboost
+
+# performance/compatibility/extras
+accelerate
+tables
+fastcluster
+fa2
+python-igraph
+leidenalg
+lxml
+pyarrow
+fastcluster
+lxml
+openpyxl
+xlsxwriter
+scikit-misc
+imagecodecs
+
+# typing
+types-requests
+
+# system
+glances
+py3nvml
+gpustat
