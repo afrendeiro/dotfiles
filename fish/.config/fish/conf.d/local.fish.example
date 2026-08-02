@@ -1,0 +1,16 @@
+# Copy this file to ~/.config/fish/conf.d/local.fish
+# and add machine-specific settings.
+
+# SSH host aliases
+# alias hpc="ssh -X user@hostname"
+# alias hilde="ssh -X user@hostname"
+
+# Bluetooth
+# alias bconnect="echo -e 'connect AA:BB:CC:DD:EE:FF \nquit' | bluetoothctl"
+# alias dconnect="echo -e 'disconnect AA:BB:CC:DD:EE:FF \nquit' | bluetoothctl"
+
+# Printer
+# alias printdoublesided='lpr -P PRINTER_MODEL -o print-quality=5 -o sides=two-sided-long-edge'
+
+# Local environment overrides
+# set -gx MY_VAR "value"

@@ -1,0 +1,18 @@
+# Local secrets / machine-specific settings
+*.local
+*.local.fish
+fish_variables
+local.fish
+
+# Auto-generated files
+lazy-lock.json
+
+# Sensitive
+.ssh/
+.boto
+
+# Password store (separate repo)
+.password-store/
+
+# Dotfiles repo itself (when stowed to ~)
+/dotfiles/

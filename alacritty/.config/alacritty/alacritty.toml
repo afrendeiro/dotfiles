@@ -1,0 +1,3 @@
+[terminal.shell]
+program = "fish"
+args = ["-l", "-c", "tmux attach-session -t main || tmux new-session -s main"]
