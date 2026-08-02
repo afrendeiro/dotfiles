@@ -1,0 +1,53 @@
+[alias]
+    aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    df = diff
+    ds = diff --staged
+    lg = log -p
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all --date=local
+    ls = ls-files
+    unstage = reset HEAD
+    subup = submodule foreach git pull origin master
+
+    # Show files ignored by git:
+    ign = ls-files -o -i --exclude-standard
+ 
+[core]
+    whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+
+[user]
+    name = Andre Rendeiro
+    email = afrendeiro@gmail.com
+
+[color]
+    ui = true
+
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = red
+
+[url "https://github.com/"]
+    insteadOf = gh:
+
+[url "https://gist.github.com/"]
+    insteadOf = gist:
+
+[url "https://bitbucket.org/"]
+    insteadOf = bb:
+
