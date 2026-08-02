@@ -7,7 +7,10 @@ Personal configs, deployed with [GNU stow](https://www.gnu.org/software/stow/).
 ```bash
 git clone https://github.com/afrendeiro/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-stow fish tmux git nvim alacritty kitty ghostty ipython
+stow scripts fish tmux git nvim alacritty kitty ghostty ipython
+# On GNOME machines, also:
+stow gnome
+~/.config/gnome/load.sh
 ```
 
 ## Commands
@@ -47,6 +50,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/afrendeiro/dotfiles/main/boo
 
 ```
 bootstrap/          OS-specific package install scripts
+scripts/            Helper scripts installed to ~/.local/bin/
+gnome/              GNOME keybindings (dconf) — run ~/.config/gnome/load.sh to apply
 fish/               Fish shell config
 tmux/               Tmux config with tpm plugins
 git/                Git global config

@@ -1,0 +1,32 @@
+[/]
+control-center=['<Shift><Super>s']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/']
+email=['<Super>m']
+screensaver=['<Super>l']
+www=['<Shift><Super>Return']
+
+[custom-keybindings/custom0]
+binding='<Super>Return'
+command='alacritty'
+name='Launch a terminal'
+
+[custom-keybindings/custom1]
+binding='<Super>f'
+command='nautilus'
+name='Lauch a file explorer'
+
+[custom-keybindings/custom2]
+binding='<Shift><Super>b'
+command='/home/afr/.local/bin/toggle_bluetooth.sh'
+name='Toggle bluetooth'
+
+[custom-keybindings/custom3]
+binding='<Shift><Super>w'
+command='/home/afr/.local/bin/toggle_wifi.sh'
+name='Toggle wifi'
+
+# Requires Brave installed at /opt/brave-origin-bin/
+[custom-keybindings/custom4]
+binding='<Super>a'
+command='/opt/brave-origin-bin/brave-origin --profile-directory=Default --app-id=cmkgimenlgcnhfklfihogafnkmdieifb'
+name='CeMM chat'
