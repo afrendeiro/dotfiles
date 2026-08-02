@@ -60,5 +60,5 @@ alacritty/          Alacritty terminal config
 kitty/              Kitty terminal config
 ghostty/            Ghostty terminal config
 ipython/            IPython startup scripts
-legacy/             Deprecated configs kept for reference
+_legacy/            Deprecated configs kept for reference
 ```
