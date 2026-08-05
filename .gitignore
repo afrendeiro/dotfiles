@@ -15,5 +15,8 @@ lazy-lock.json
 # Password store (separate repo)
 .password-store/
 
+# IPython auto-generated
+history.sqlite
+
 # Dotfiles repo itself (when stowed to ~)
 /dotfiles/

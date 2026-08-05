@@ -103,6 +103,6 @@ uv tool install cookiecutter
 echo "=== Done ==="
 echo "Next steps:"
 echo "  git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles"
-echo "  cd ~/work/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython"
+echo "  cd ~/work/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython opencode"
 echo "  git clone git@github.com:afrendeiro/pass.git ~/.password-store"
 echo "  pass show dotfiles/local.fish > ~/.config/fish/conf.d/local.fish"

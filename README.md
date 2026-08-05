@@ -24,7 +24,7 @@ gpg --import /media/usb/gpg-private.key
 git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles
 cd ~/work/dotfiles
 # .stowrc sets --target=$HOME so plain `stow` works from any path
-stow scripts fish tmux git nvim alacritty kitty ghostty ipython
+stow scripts fish tmux git nvim alacritty kitty ghostty ipython opencode
 # On GNOME machines, also:
 stow gnome
 ~/.config/gnome/load.sh
@@ -100,5 +100,6 @@ alacritty/          Alacritty terminal config
 kitty/              Kitty terminal config
 ghostty/            Ghostty terminal config
 ipython/            IPython startup scripts
+opencode/           Opencode (code assistant) skills and config
 _legacy/            Deprecated configs kept for reference
 ```
