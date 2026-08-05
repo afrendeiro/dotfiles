@@ -6,6 +6,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 echo "=== Updating system ==="
 sudo pacman -Syu --noconfirm
 
+echo "=== Creating user directories ==="
+mkdir -p ~/{work,scratch,clones,projects}
+
 echo "=== CLI tools ==="
 sudo pacman -S --noconfirm \
     git \

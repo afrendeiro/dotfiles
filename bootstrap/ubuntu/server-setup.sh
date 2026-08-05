@@ -9,6 +9,9 @@ sudo apt-get install -y build-essential
 sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 
+echo "=== Creating user directories ==="
+mkdir -p ~/{work,scratch,clones,projects}
+
 echo "=== SSH keepalive ==="
 if ! grep -q "ServerAliveInterval" /etc/ssh/ssh_config 2>/dev/null; then
     echo "    ServerAliveInterval 120" | sudo tee -a /etc/ssh/ssh_config

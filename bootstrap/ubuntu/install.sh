@@ -7,6 +7,9 @@ echo "=== Updating system ==="
 sudo apt-get update
 sudo apt-get upgrade -y
 
+echo "=== Creating user directories ==="
+mkdir -p ~/{work,scratch,clones,projects}
+
 echo "=== Build essentials ==="
 sudo apt-get install -y build-essential git curl cmake
 
