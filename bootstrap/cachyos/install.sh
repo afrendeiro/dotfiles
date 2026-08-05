@@ -31,7 +31,12 @@ sudo pacman -S --noconfirm \
     screen \
     at \
     hyperfine \
-    pandoc
+    pandoc \
+    base-devel \
+    jq \
+    xclip \
+    bind \
+    poppler
 
 echo "=== GUI applications ==="
 sudo pacman -S --noconfirm \
@@ -75,7 +80,12 @@ bash "$SCRIPT_DIR/../common/uv.sh"
 bash "$SCRIPT_DIR/../common/herdr.sh"
 bash "$SCRIPT_DIR/../common/llm.sh"
 
+echo "=== Python tools ==="
+uv tool install cookiecutter
+
 echo "=== Done ==="
 echo "Next steps:"
-echo "  git clone https://github.com/afrendeiro/dotfiles.git ~/dotfiles"
-echo "  cd ~/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython"
+echo "  git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles"
+echo "  cd ~/work/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython"
+echo "  git clone git@github.com:afrendeiro/pass.git ~/.password-store"
+echo "  pass show dotfiles/local.fish > ~/.config/fish/conf.d/local.fish"

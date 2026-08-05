@@ -15,6 +15,7 @@ sudo apt-get install -y build-essential git curl cmake
 
 echo "=== CLI tools ==="
 sudo apt-get install -y \
+    fish \
     tmux \
     bat \
     fd-find \
@@ -33,7 +34,12 @@ sudo apt-get install -y \
     screen \
     at \
     hyperfine \
-    pandoc
+    pandoc \
+    jq \
+    xclip \
+    dnsutils \
+    texlive-extra-utils \
+    poppler-utils
 
 echo "=== GUI applications ==="
 if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
@@ -75,6 +81,7 @@ sudo apt-get install -y \
     fonts-hack \
     fonts-lato
 # MS fonts (requires multiverse)
+echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
 sudo apt-get install -y ttf-mscorefonts-installer 2>/dev/null || echo "Skipping MS fonts (multiverse may be missing)"
 
 echo "=== LaTeX ==="
@@ -87,7 +94,15 @@ bash "$SCRIPT_DIR/../common/uv.sh"
 bash "$SCRIPT_DIR/../common/herdr.sh"
 bash "$SCRIPT_DIR/../common/llm.sh"
 
+echo "=== Post-install fixes ==="
+sudo ln -sf "$(which fdfind)" /usr/local/bin/fd
+
+echo "=== Python tools ==="
+uv tool install cookiecutter
+
 echo "=== Done ==="
 echo "Next steps:"
-echo "  git clone https://github.com/afrendeiro/dotfiles.git ~/dotfiles"
-echo "  cd ~/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython"
+echo "  git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles"
+echo "  cd ~/work/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython"
+echo "  git clone git@github.com:afrendeiro/pass.git ~/.password-store"
+echo "  pass show dotfiles/local.fish > ~/.config/fish/conf.d/local.fish"

@@ -33,6 +33,7 @@ sudo apt-get install -y \
     git \
     curl \
     cmake \
+    fish \
     tmux \
     bat \
     fd-find \
@@ -47,10 +48,22 @@ sudo apt-get install -y \
     screen \
     at \
     hyperfine \
-    pandoc
+    pandoc \
+    jq \
+    dnsutils \
+    openconnect
+
+echo "=== Post-install fixes ==="
+sudo ln -sf "$(which fdfind)" /usr/local/bin/fd
 
 echo "=== Done ==="
 echo "Don't forget to:"
 echo "  - Create a regular user (see comments in this script)"
 echo "  - Set the hostname"
-echo "  - Clone and deploy dotfiles"
+echo "  - Clone and deploy dotfiles:"
+echo "    git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles"
+echo "    cd ~/work/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython"
+echo "  - Clone password store:"
+echo "    git clone git@github.com:afrendeiro/pass.git ~/.password-store"
+echo "  - Restore machine-specific config:"
+echo "    pass show dotfiles/local.fish > ~/.config/fish/conf.d/local.fish"
