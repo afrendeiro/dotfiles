@@ -25,6 +25,7 @@ sudo apt-get install -y \
     alacritty \
     wl-clipboard \
     neovim \
+    npm \
     pass \
     just \
     lazygit \
@@ -74,6 +75,11 @@ if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
 else
     echo "No display detected, skipping GUI applications"
 fi
+
+echo "=== Docker ==="
+sudo apt-get install -y docker.io docker-compose-v2
+sudo systemctl enable --now docker
+sudo usermod -aG docker "$USER"
 
 echo "=== Fonts ==="
 sudo apt-get install -y \

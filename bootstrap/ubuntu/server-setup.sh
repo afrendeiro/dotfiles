@@ -40,6 +40,7 @@ sudo apt-get install -y \
     fzf \
     btop \
     neovim \
+    npm \
     pass \
     just \
     stow \
@@ -52,6 +53,11 @@ sudo apt-get install -y \
     jq \
     dnsutils \
     openconnect
+
+echo "=== Docker ==="
+sudo apt-get install -y docker.io docker-compose-v2
+sudo systemctl enable --now docker
+sudo usermod -aG docker "$USER"
 
 echo "=== Post-install fixes ==="
 sudo ln -sf "$(which fdfind)" /usr/local/bin/fd

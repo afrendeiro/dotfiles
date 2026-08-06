@@ -21,6 +21,7 @@ sudo pacman -S --noconfirm \
     alacritty \
     wl-clipboard \
     neovim \
+    npm \
     pass \
     just \
     curl \
@@ -69,6 +70,14 @@ if ! pacman -Qs ttf-ms-fonts &>/dev/null; then
     (cd /tmp/ttf-ms-fonts && makepkg -si --noconfirm)
     rm -rf /tmp/ttf-ms-fonts
 fi
+
+echo "=== Docker ==="
+sudo pacman -S --noconfirm \
+    docker \
+    docker-compose \
+    docker-buildx
+sudo systemctl enable --now docker
+sudo usermod -aG docker "$USER"
 
 echo "=== LaTeX ==="
 sudo pacman -S --noconfirm \
