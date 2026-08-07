@@ -5,7 +5,13 @@ description: Use ONLY when working with the CeMM HPC cluster — submitting SLUR
 
 # HPC Cluster (CeMM)
 
-## Critical rule: NEVER compute on login nodes
+## Critical Rules
+
+### 1. NEVER delete any data
+
+Do not use `rm`, `rm -rf`, `mv` (to overwrite), or any other destructive command on HPC files. Data is irreplaceable — there are no backups you can rely on. If you need to clean up, ask the user first.
+
+### 2. NEVER compute on login nodes
 
 The login nodes (`login`) are shared and must ONLY be used for:
 - Submitting jobs (`sbatch`, `squeue`, `sinfo`, `scancel`)
@@ -14,6 +20,10 @@ The login nodes (`login`) are shared and must ONLY be used for:
 - Editing scripts with `vim`/`nano`
 
 **Never** run Python, R, image processing, data analysis, or any computation directly on login nodes. Always use `sbatch`.
+
+### 3. Stay in the project directory
+
+Restrict all file operations to the current project directory (`~/projects/<name>/`). Never `cd` into system directories (`/`, `/etc`, `/tmp`, `/cm/`, etc.) or other users' project folders. Do not explore the filesystem outside the project at hand.
 
 ## Login
 
