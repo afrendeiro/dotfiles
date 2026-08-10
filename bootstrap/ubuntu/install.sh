@@ -98,6 +98,7 @@ sudo apt-get install -y \
 echo "=== Cross-platform tools ==="
 bash "$SCRIPT_DIR/../common/uv.sh"
 bash "$SCRIPT_DIR/../common/herdr.sh"
+bash "$SCRIPT_DIR/../common/vicinae.sh"
 bash "$SCRIPT_DIR/../common/llm.sh"
 
 echo "=== Post-install fixes ==="

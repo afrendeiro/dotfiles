@@ -1,6 +1,6 @@
 [/]
 control-center=['<Shift><Super>s']
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/']
 email=['<Super>m']
 screensaver=['<Super>l']
 www=['<Shift><Super>Return']
@@ -25,8 +25,12 @@ binding='<Shift><Super>w'
 command='/home/afr/.local/bin/toggle_wifi.sh'
 name='Toggle wifi'
 
-# Requires Brave installed at /opt/brave-origin-bin/
 [custom-keybindings/custom4]
 binding='<Super>a'
 command='/opt/brave-origin-bin/brave-origin --profile-directory=Default --app-id=cmkgimenlgcnhfklfihogafnkmdieifb'
 name='CeMM chat'
+
+[custom-keybindings/custom5]
+binding='<Super>space'
+command='vicinae toggle'
+name='Vicinae'
