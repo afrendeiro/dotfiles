@@ -89,9 +89,6 @@ bash "$SCRIPT_DIR/../common/vicinae.sh"
 bash "$SCRIPT_DIR/../common/llm.sh"
 bash "$SCRIPT_DIR/../common/btop.sh"
 
-echo "=== Neovim ==="
-git clone https://github.com/LazyVim/starter ~/.config/nvim
-
 echo "=== Python tools ==="
 uv tool install cookiecutter
 
@@ -116,9 +113,6 @@ esac
 
 echo "=== Done ==="
 echo "Next steps:"
-echo "  git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles"
-echo "  cd ~/work/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython opencode"
-echo "  On GNOME machines: stow gnome && ~/.config/gnome/load.sh"
-echo "  On Hyprland machines: stow hyprland"
+echo "  bash ~/work/dotfiles/setup-dotfiles.sh   (or clone first: git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles)"
 echo "  git clone git@github.com:afrendeiro/pass.git ~/.password-store"
 echo "  pass show dotfiles/local.fish > ~/.config/fish/conf.d/local.fish"

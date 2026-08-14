@@ -1,0 +1,3 @@
+# Tool binaries installed by bootstrap scripts (bootstrap/common/*.sh)
+# Skip so stow --adopt doesn't drag them into the repo
+\.local/bin/(btop|herdr|uv|uvx|llm)$

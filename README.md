@@ -20,17 +20,32 @@ gpg --import /media/usb/gpg-private.key
 
 ## Install
 
+On a fresh machine, `setup-dotfiles.sh` clones the repo, stows the core modules
+(adopting any stock/preset files and restoring the repo's tracked versions), and
+applies the matching desktop-environment module automatically.
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/afrendeiro/dotfiles/main/setup-dotfiles.sh)
+```
+
+Manual equivalent:
+
 ```bash
 git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles
 cd ~/work/dotfiles
 # .stowrc sets --target=$HOME so plain `stow` works from any path
-stow scripts fish tmux git nvim alacritty kitty ghostty ipython opencode
+stow scripts fish tmux git nvim ghostty ipython opencode
 # On GNOME machines, also:
-stow gnome
-~/.config/gnome/load.sh
+stow gnome && ~/.config/gnome/load.sh
 # On Hyprland machines, also:
 stow hyprland
+# Optional: override machine terminal presets
+# stow alacritty kitty
 ```
+
+Note: `alacritty`/`kitty` are left to the machine's default presets; stow them
+explicitly if you want the repo versions. Pre-existing stock files must be
+removed or `--adopt`ed before stowing (`setup-dotfiles.sh` handles this).
 
 ## Commands
 
