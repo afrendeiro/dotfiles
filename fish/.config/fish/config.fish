@@ -104,15 +104,21 @@ end
 
 function toclipboard
     if test -n "$argv[1]"
-        xclip -selection clipboard -i $argv[1]
+        if command -q wl-copy; and test -n "$WAYLAND_DISPLAY"
+            wl-copy < $argv[1]
+        else
+            xclip -selection clipboard -i $argv[1]
+        end
     else
-        xclip -selection clipboard -i
+        if command -q wl-copy; and test -n "$WAYLAND_DISPLAY"
+            wl-copy
+        else
+            xclip -selection clipboard -i
+        end
     end
 end
 
 alias gpt='uvx --from gpt-command-line gpt --model gpt-4o'
-
-alias mon='hyprctl monitors -j | jq ".[].name"'
 
 if test -f ~/.config/fish/conf.d/local.fish
     source ~/.config/fish/conf.d/local.fish

@@ -8,6 +8,18 @@ local.fish
 # Auto-generated files
 lazy-lock.json
 
+# nwg-displays generated monitor configs (machine-specific)
+hyprland/.config/hypr/monitors.conf
+hyprland/.config/hypr/monitors.lua
+hyprland/.config/hypr/workspaces.conf
+
+# Tool binaries installed by bootstrap scripts
+scripts/.local/bin/btop
+scripts/.local/bin/herdr
+scripts/.local/bin/uv
+scripts/.local/bin/uvx
+scripts/.local/bin/llm
+
 # Sensitive
 .ssh/
 .boto

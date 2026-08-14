@@ -35,7 +35,6 @@ sudo pacman -S --noconfirm \
     pandoc \
     base-devel \
     jq \
-    xclip \
     bind \
     poppler
 
@@ -54,7 +53,6 @@ sudo pacman -S --noconfirm \
 
 echo "=== Libraries and utilities ==="
 sudo pacman -S --noconfirm \
-    gnome-browser-connector \
     libxml2 \
     libxml2-legacy \
     ncompress
@@ -89,13 +87,38 @@ bash "$SCRIPT_DIR/../common/uv.sh"
 bash "$SCRIPT_DIR/../common/herdr.sh"
 bash "$SCRIPT_DIR/../common/vicinae.sh"
 bash "$SCRIPT_DIR/../common/llm.sh"
+bash "$SCRIPT_DIR/../common/btop.sh"
+
+echo "=== Neovim ==="
+git clone https://github.com/LazyVim/starter ~/.config/nvim
 
 echo "=== Python tools ==="
 uv tool install cookiecutter
+
+echo "=== Git globals ==="
+git config --global user.name "Andre Rendeiro"
+git config --global user.email "afrendeiro@gmail.com"
+git config --global init.defaultBranch main
+
+echo "=== Desktop environment extras ==="
+case "${XDG_SESSION_DESKTOP:-}${XDG_CURRENT_DESKTOP:-}" in
+    *[Hh]yprland*)
+        bash "$SCRIPT_DIR/de/hyprland.sh"
+        ;;
+    *[Gg]nome*)
+        bash "$SCRIPT_DIR/de/gnome.sh"
+        ;;
+    *)
+        echo "Unknown desktop environment, skipping DE-specific packages"
+        echo "  Run manually: bash $SCRIPT_DIR/de/gnome.sh or de/hyprland.sh"
+        ;;
+esac
 
 echo "=== Done ==="
 echo "Next steps:"
 echo "  git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles"
 echo "  cd ~/work/dotfiles && stow fish tmux git nvim alacritty kitty ghostty ipython opencode"
+echo "  On GNOME machines: stow gnome && ~/.config/gnome/load.sh"
+echo "  On Hyprland machines: stow hyprland"
 echo "  git clone git@github.com:afrendeiro/pass.git ~/.password-store"
 echo "  pass show dotfiles/local.fish > ~/.config/fish/conf.d/local.fish"
