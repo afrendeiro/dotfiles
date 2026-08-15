@@ -1,0 +1,30 @@
+onboarding = false
+
+[theme]
+name = "terminal"
+auto_switch = false
+
+[theme.custom]
+panel_bg    = "{{ colors.background.default.hex }}"
+surface0    = "{{ colors.surface_variant.default.hex }}"
+surface1    = "{{ colors.terminal_normal_black.default.hex }}"
+surface_dim = "{{ colors.surface_variant.default.hex }}"
+overlay0    = "{{ colors.surface_variant.default.hex }}"
+overlay1    = "{{ colors.terminal_normal_black.default.hex }}"
+text        = "{{ colors.on_surface.default.hex }}"
+subtext0    = "{{ colors.outline.default.hex }}"
+accent      = "{{ colors.primary.default.hex }}"
+red         = "{{ colors.error.default.hex }}"
+green       = "{{ colors.primary.default.hex }}"
+yellow      = "{{ colors.secondary.default.hex }}"
+blue        = "{{ colors.tertiary.default.hex }}"
+mauve       = "{{ colors.primary.default.hex }}"
+teal        = "{{ colors.secondary.default.hex }}"
+peach       = "{{ colors.error.default.hex }}"
+
+[ui]
+show_agent_labels_on_pane_borders = true
+accent = "{{ colors.primary.default.hex }}"
+
+[ui.toast]
+delivery = "terminal"

@@ -34,7 +34,7 @@ Manual equivalent:
 git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles
 cd ~/work/dotfiles
 # .stowrc sets --target=$HOME so plain `stow` works from any path
-stow scripts fish tmux git nvim ghostty ipython opencode
+stow scripts fish tmux git herdr nvim ghostty ipython opencode
 # On GNOME machines, also:
 stow gnome && ~/.config/gnome/load.sh
 # On Hyprland machines, also:
@@ -116,6 +116,7 @@ hyprland/           Hyprland/noctalia changes from CachyOS defaults
 fish/               Fish shell config
 tmux/               Tmux config with tpm plugins
 git/                Git global config
+herdr/              Herdr theming (noctalia template; generates ~/.config/herdr/config.toml)
 nvim/               Neovim (LazyVim) config
 alacritty/          Alacritty terminal config
 kitty/              Kitty terminal config
