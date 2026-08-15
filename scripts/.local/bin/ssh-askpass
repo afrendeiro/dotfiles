@@ -1,0 +1,4 @@
+#!/bin/sh
+# GUI SSH passphrase prompt, used via SSH_ASKPASS.
+# The prompt string is passed as $1 (OpenSSH ssh-askpass protocol).
+exec zenity --password --title="SSH key passphrase" --text="${1:-Enter SSH key passphrase:}"
