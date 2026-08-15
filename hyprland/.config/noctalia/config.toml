@@ -115,11 +115,11 @@ wallpaper_scheme = "m3-tonal-spot"
 directory = "/usr/share/wallpapers/cachyos-wallpapers"
 
 [hooks]
-colors_changed = [ "hyprctl reload" ]
+colors_changed = [ "hyprctl reload", "noctalia msg templates-apply" ]
 
 [widget.clock]
 color = "secondary"
-format = "{:%H:%M   %m/%d/%y}"
+format = "{:%H:%M   %d/%m/%y}"
 
 [widget.launcher]
 color = "secondary"
