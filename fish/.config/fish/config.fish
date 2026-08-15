@@ -5,12 +5,6 @@ end
 function fish_greeting
 end
 
-if status is-interactive
-    if not set -q TMUX
-        exec tmux attach-session -t main -c ~ || exec tmux new-session -s main -c ~
-    end
-end
-
 set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 alias n="nvim"
