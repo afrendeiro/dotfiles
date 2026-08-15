@@ -16,6 +16,7 @@ sudo pacman -S --noconfirm \
     bat \
     fd \
     fzf \
+    dust \
     btop \
     kitty \
     alacritty \
@@ -49,7 +50,10 @@ sudo pacman -S --noconfirm \
     hunspell-en_us \
     thunderbird \
     spotify-launcher \
-    signal-desktop
+    signal-desktop \
+    evince \
+    imv \
+    celluloid
 
 echo "=== Libraries and utilities ==="
 sudo pacman -S --noconfirm \
@@ -110,6 +114,18 @@ case "${XDG_SESSION_DESKTOP:-}${XDG_CURRENT_DESKTOP:-}" in
         echo "  Run manually: bash $SCRIPT_DIR/de/gnome.sh or de/hyprland.sh"
         ;;
 esac
+
+echo "=== Default applications ==="
+xdg-mime default org.gnome.Evince.desktop application/pdf
+xdg-mime default imv-dir.desktop \
+    image/png image/jpeg image/gif image/svg+xml image/webp image/bmp \
+    image/tiff image/heif image/avif image/jxl image/qoi image/x-farbfeld
+xdg-mime default io.github.celluloid_player.Celluloid.desktop \
+    video/mp4 video/mkv video/webm video/x-matroska video/quicktime \
+    video/x-msvideo video/mpeg video/x-m4v video/ogg video/3gpp \
+    video/x-flv video/mp2t video/avi
+xdg-mime default brave-origin.desktop x-scheme-handler/http x-scheme-handler/https
+xdg-mime default org.gnome.Nautilus.desktop inode/directory
 
 echo "=== Done ==="
 echo "Next steps:"
