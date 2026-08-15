@@ -31,6 +31,7 @@ settings_show_advanced = true
 
     [shell.greeter_sync]
     auto_sync = true
+    privilege_command = "pkexec"
 
     [shell.panel]
     open_near_click_control_center = true
@@ -112,7 +113,7 @@ wallpaper_scheme = "m3-tonal-spot"
     builtin_ids = [ "btop", "gtk3", "gtk4", "hyprland", "kcolorscheme", "kitty", "qt", "alacritty" ]
 
 [wallpaper]
-directory = "/usr/share/wallpapers/cachyos-wallpapers"
+directory = "/home/afr/Pictures/wallpapers/omarchy"
 
 [hooks]
 colors_changed = [ "hyprctl reload" ]
