@@ -172,6 +172,6 @@ show_label = false
 active_pill_size = 2.5
 capsule = true
 capsule_fill = "on_primary"
-display = "none"
+show_labels = false
 inactive_pill_size = 1.0
 pill_scale = 0.80

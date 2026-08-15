@@ -7,3 +7,7 @@ else
     wlr-randr --output eDP-1 --on
     notify-send "Display" "Internal monitor enabled"
 fi
+
+# Re-evaluate PRIMARY_MONITOR and workspace monitor bindings for the new layout
+sleep 0.5
+hyprctl reload
