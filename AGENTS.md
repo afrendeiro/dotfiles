@@ -38,6 +38,16 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   post_hook reload). Edit the template, never `~/.config/herdr/config.toml`.
 - nwg-displays output (`monitors.conf`, `monitors.lua`, `workspaces.conf` at the
   hypr root, not under `config/`) is machine-specific and gitignored.
+- noctalia `[shell.greeter_sync] privilege_command = "pkexec"` — the login-greeter
+  sync elevates via the narrow `org.noctalia.greeter.apply-appearance` polkit
+  action. This DEPENDS on a system polkit rule at
+  `/etc/polkit-1/rules.d/49-noctalia-greeter.rules` (grants that action to
+  `wheel`; see README "Greeter sync"). The default `run0` escalator uses the
+  broad `org.freedesktop.systemd1.manage-units` action and prompts for a password
+  on every wallpaper change — don't switch back to `run0` without also handling that.
+- `[wallpaper] directory` points at `~/Pictures/wallpapers/omarchy` — a local,
+  untracked folder. Wallpapers are the omarchy v4.0 `themes/*/backgrounds/` set,
+  flattened as `<theme>__<file>`.
 
 ## Safety
 

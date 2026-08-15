@@ -75,6 +75,28 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # In tmux: prefix + I to install plugins
 ```
 
+## Greeter sync (Hyprland)
+
+The login greeter (noctalia-greeter) syncs wallpaper/colors on every change.
+`hyprland/.config/noctalia/config.toml` sets `privilege_command = "pkexec"` so
+this elevates through the narrow `org.noctalia.greeter.apply-appearance` polkit
+action instead of `run0` (which would prompt for a password each time). Install
+the matching polkit rule once per machine:
+
+```bash
+sudo install -D -m 644 - /etc/polkit-1/rules.d/49-noctalia-greeter.rules <<'EOF'
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.noctalia.greeter.apply-appearance" &&
+        subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+    }
+});
+EOF
+```
+
+Wallpapers live in `~/Pictures/wallpapers/omarchy/` (untracked); they're the
+omarchy v4.0 `themes/*/backgrounds/` images, flattened as `<theme>__<file>`.
+
 ## Machine-specific Settings
 
 Create `~/.config/fish/conf.d/local.fish` (gitignored) for SSH hosts, Bluetooth devices, etc. See `fish/.config/fish/conf.d/local.fish.example`.
