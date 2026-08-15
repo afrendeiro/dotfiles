@@ -5,7 +5,7 @@ TMUX_TERMINAL  = 'alacritty -e fish -l -c "tmux attach-session -t main || tmux n
 HERDR_TERMINAL = 'alacritty -e herdr'
 FILE_MANAGER = "nautilus"
 BROWSER      = "brave-origin"
-EDITOR       = "gnome-text-editor --new-window"
+EDITOR       = "nvim"
 
 -- Microsoft 365 PWAs
 OUTLOOK  = "brave-origin --profile-directory=Default --app-id=eoficlgicibekocmfdomjbfnjmehnhcd"
