@@ -2,9 +2,9 @@
 ui_scale = 1.2
 
 [bar.default]
-start = [ "launcher", "active_window", "spacer_1"]
-center = [ "workspaces", "spacer_1", "clock"]
-end = [ "notifications", "group:g1", "media", "spacer_1", "tray", "network", "volume", "session" ]
+start = [ "launcher", "workspaces", "active_window", "spacer_1"]
+center = [ "clock"]
+end = [ "notifications",  "media", "group:g1", "spacer_1", "tray", "network", "volume", "battery", "session" ]
 concave_edge_corners = true
 margin_edge = 0
 margin_ends = 0
@@ -81,17 +81,45 @@ settings_show_advanced = true
 [system.monitor]
 gpu_poll_seconds = 2
 
+[lockscreen]
+lock_before_suspend = true
+
+[idle]
+behavior_order = [ "lock", "screen-off", "suspend" ]
+
+    [idle.behavior.lock]
+    enabled = true
+    timeout = 300
+    action = "lock"
+
+    [idle.behavior.screen-off]
+    enabled = true
+    timeout = 360
+    action = "screen_off"
+
+    [idle.behavior.suspend]
+    enabled = true
+    timeout = 900
+    action = "command"
+    command = "test \"$(cat /sys/class/power_supply/AC/online 2>/dev/null)\" != 1 && noctalia msg session lock-and-suspend"
+
 [theme]
 mode = "dark"
 source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
 
     [theme.templates]
-    builtin_ids = [ "btop", "gtk3", "gtk4", "kcolorscheme", "kitty", "qt", "alacritty" ]
+    builtin_ids = [ "btop", "gtk3", "gtk4", "hyprland", "kcolorscheme", "kitty", "qt", "alacritty" ]
+
+[wallpaper]
+directory = "/usr/share/wallpapers/cachyos-wallpapers"
+
+[hooks]
+colors_changed = [ "hyprctl reload" ]
 
 [widget.clock]
 color = "secondary"
-format = "{:%H:%M - %m/%d/%Y}"
+format = "{:%H:%M   %m/%d/%y}"
 
 [widget.launcher]
 color = "secondary"
@@ -113,16 +141,19 @@ color = "error"
 type = "spacer"
 
 [widget.temp]
-show_label = false
+type = "sysmon"
+stat = "cpu_temp"
+show_value = false
 
 [widget.sysmon_2]
 glyph = "gpu-usage"
-show_label = false
+show_value = false
 stat = "gpu_temp"
 type = "sysmon"
 
 [widget.sysmon_3]
 glyph = "cpu-2"
+show_value = false
 stat = "ram_used"
 type = "sysmon"
 
@@ -130,8 +161,12 @@ type = "sysmon"
 capsule = true
 capsule_fill = "on_secondary"
 
+[widget.battery]
+hide_when_plugged = true
+
 [widget.volume]
 color = "secondary"
+show_label = false
 
 [widget.workspaces]
 active_pill_size = 2.5
