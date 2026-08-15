@@ -13,6 +13,10 @@ CALENDAR = "brave-origin --profile-directory=Default --app='https://outlook.clou
 TEAMS    = "brave-origin --profile-directory=Default --app-id=ompifgpmddkgmclendfeacglnodjjndh"
 TODO     = "brave-origin --profile-directory=Default --app='https://outlook.office.com/host/0d5c91ee-5be2-4b79-81ed-23e6c4580427/ToDoId?bO=2'"
 
+-- Web apps
+YOUTUBE = "brave-origin --profile-directory=Default --app-id=agimnkijcaahngcdmfeangaknmldooml"
+GITHUB  = "brave-origin --profile-directory=Default --app-id=mjoklplbddabcmpepnokjaffbmgbkkgg"
+
 -- Monitors
 MONITOR1 = "eDP-1"
 MONITOR2 = "DP-1"

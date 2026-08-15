@@ -76,6 +76,7 @@ hl.bind(mainMod .. " + E",          hl.dsp.exec_cmd(launchPrefix .. FILE_MANAGER
 hl.bind(mainMod .. " + SHIFT + E",  hl.dsp.exec_cmd(launchPrefix .. EDITOR))
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(launchPrefix .. BROWSER))
 hl.bind("CONTROL + SHIFT + Escape", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"))
+hl.bind(mainMod .. " + B",          hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"))
 hl.bind(mainMod .. " + Z",          hl.dsp.exec_cmd(noctCall .. "settings-toggle"))
 hl.bind(mainMod .. " + X",          hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center"))
 hl.bind(mainMod .. " + Space",      hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher"))
@@ -91,6 +92,13 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(launchPrefix .. OUTLOOK))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(launchPrefix .. CALENDAR))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(launchPrefix .. TODO))
+
+------------------------
+---- WEB APPS ----
+------------------------
+
+hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(launchPrefix .. YOUTUBE))
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(launchPrefix .. GITHUB))
 
 --------------------------
 ---- HARDWARE CONTROLS ----
