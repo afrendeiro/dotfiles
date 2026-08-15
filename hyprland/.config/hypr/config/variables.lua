@@ -6,6 +6,7 @@ HERDR_TERMINAL = 'alacritty -e herdr'
 FILE_MANAGER = "nautilus"
 BROWSER      = "brave-origin"
 EDITOR       = "nvim"
+SPOTIFY      = "spotify-launcher"
 
 -- Microsoft 365 PWAs
 OUTLOOK  = "brave-origin --profile-directory=Default --app-id=eoficlgicibekocmfdomjbfnjmehnhcd"
