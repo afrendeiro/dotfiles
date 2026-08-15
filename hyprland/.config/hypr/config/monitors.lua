@@ -9,13 +9,19 @@
 
 hl.monitor({
     output    = MONITOR1,
-    mode      = "1920x1080@60",
-    position  = "auto",
-    scale     = "1.2",
+    mode      = "modeline 193.25 1920 2056 2256 2592 1200 1203 1209 1245 -hsync +vsync",
+    position  = "0x0",
+    scale     = "1.0",
 })
 hl.monitor({
-   output    = MONITOR2,
+    output    = MONITOR2,
     mode      = "3840x2160@60",
+    position  = "auto-right",
+    scale     = "1.0",
+})
+hl.monitor({
+    output    = "",
+    mode      = "preferred",
     position  = "auto",
     scale     = "1.0",
 })

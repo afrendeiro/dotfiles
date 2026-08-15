@@ -70,6 +70,8 @@ hl.bind(mainMod .. " + code:86", function() zoomfunction(0.3) end, { repeating =
 ------------------
 
 hl.bind(mainMod .. " + Return",     hl.dsp.exec_cmd(launchPrefix .. TERMINAL))
+hl.bind(mainMod .. " + ALT + Return",     hl.dsp.exec_cmd(launchPrefix .. TMUX_TERMINAL))
+hl.bind(mainMod .. " + CONTROL + Return", hl.dsp.exec_cmd(launchPrefix .. HERDR_TERMINAL))
 hl.bind(mainMod .. " + E",          hl.dsp.exec_cmd(launchPrefix .. FILE_MANAGER))
 hl.bind(mainMod .. " + SHIFT + E",  hl.dsp.exec_cmd(launchPrefix .. EDITOR))
 hl.bind(mainMod .. " + W",          hl.dsp.exec_cmd(launchPrefix .. BROWSER))
@@ -165,16 +167,8 @@ hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special" })
 hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special())
 
 
--- Monitor/Lid management
--- Lid Closed: Suspend if no external monitor is attached, otherwise turn off eDP-1
---hl.bindl("", "switch:on:Lid Switch", hl.dsp.exec_cmd([[bash -c 'if [ $(hyprctl monitors -j | jq "length") -le 1 ]; then systemctl suspend; else hyprctl keyword monitor "eDP-1, disable"; fi']]))
-
--- Lid Opened: Re-enable internal display
---hl.bindl("", "switch:off:Lid Switch", hl.dsp.exec_cmd('hyprctl keyword monitor "eDP-1, preferred, auto, 1"'))
-
--- Bind SUPER + SHIFT + O to toggle internal monitor
--- hl.bind(mainMod .. " + SHIFT + O",      hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle_edp.sh"))
-
+-- Manual internal-monitor toggle (F9) and reset (F10)
+-- (Lid switch binds live in config/lid.lua, loaded after monitor rules)
 hl.bind(mainMod .. "+ F9", hl.dsp.exec_cmd("~/.local/bin/toggle-edp.sh"))
 
-hl.bind(mainMod .. "+ F10", hl.dsp.exec_cmd('wlr-randr --output eDP-1 --mode 1920x1200@120.000999 --scale 1.0 --pos 3840,0 --on'))
+hl.bind(mainMod .. "+ F10", hl.dsp.exec_cmd('wlr-randr --output eDP-1 --on'))
