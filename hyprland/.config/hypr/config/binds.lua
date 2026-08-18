@@ -70,11 +70,11 @@ hl.bind(mainMod .. " + code:86", function() zoomfunction(0.3) end, { repeating =
 ------------------
 
 hl.bind(mainMod .. " + Return",     hl.dsp.exec_cmd(launchPrefix .. TERMINAL))
-hl.bind(mainMod .. " + ALT + Return",     hl.dsp.exec_cmd(launchPrefix .. TMUX_TERMINAL))
-hl.bind(mainMod .. " + CONTROL + Return", hl.dsp.exec_cmd(launchPrefix .. HERDR_TERMINAL))
+hl.bind(mainMod .. " + ALT + Return",     hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. TMUX_CLASS .. " " .. launchPrefix .. TMUX_TERMINAL))
+hl.bind(mainMod .. " + CONTROL + Return", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. HERDR_CLASS .. " " .. launchPrefix .. HERDR_TERMINAL))
 hl.bind(mainMod .. " + E",          hl.dsp.exec_cmd(launchPrefix .. FILE_MANAGER))
 hl.bind(mainMod .. " + SHIFT + E",  hl.dsp.exec_cmd(launchPrefix .. EDITOR))
-hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(launchPrefix .. BROWSER))
+hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. BROWSER_CLASS .. " " .. launchPrefix .. BROWSER))
 hl.bind("CONTROL + SHIFT + Escape", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"))
 hl.bind(mainMod .. " + B",          hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"))
 hl.bind(mainMod .. " + Z",          hl.dsp.exec_cmd(noctCall .. "settings-toggle"))
@@ -92,7 +92,7 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(launchPrefix .. OUTLOOK))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(launchPrefix .. CALENDAR))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(launchPrefix .. TODO))
-hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(launchPrefix .. THUNDERBIRD))
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. THUNDERBIRD_CLASS .. " " .. launchPrefix .. THUNDERBIRD))
 
 ------------------------
 ---- WEB APPS ----
@@ -170,7 +170,7 @@ hl.bind(mainMod .. " + CONTROL + mouse_down", hl.dsp.focus({ workspace = "m+1" }
 hl.bind(mainMod .. " + SHIFT + S",     hl.dsp.window.move({ workspace = "special" }))
 hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.workspace.toggle_special())
 
-hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(launchPrefix .. SPOTIFY))
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. SPOTIFY_CLASS .. " " .. launchPrefix .. SPOTIFY))
 
 
 -- Manual internal-monitor toggle (F9) and reset (F10)

@@ -1,13 +1,13 @@
 -- Hyprland default apps
 
 TERMINAL     = "kitty"
-TMUX_TERMINAL  = 'alacritty -e fish -l -c "tmux attach-session -t main || tmux new-session -s main"'
-HERDR_TERMINAL = 'alacritty -e herdr'
+TMUX_TERMINAL  = 'alacritty --class tmux -e fish -l -c "tmux attach-session -t main || tmux new-session -s main"'
+HERDR_TERMINAL = 'alacritty --class herdr -e herdr'
 FILE_MANAGER = "nautilus"
 BROWSER      = "brave-origin"
 EDITOR       = "nvim"
 SPOTIFY      = "spotify-launcher"
-THUNDERBIRD  = "thunderbird"
+THUNDERBIRD  = "org.mozilla.Thunderbird"
 
 -- Microsoft 365 PWAs
 OUTLOOK  = "brave-origin --profile-directory=Default --app-id=eoficlgicibekocmfdomjbfnjmehnhcd"
@@ -18,6 +18,13 @@ TODO     = "brave-origin --profile-directory=Default --app='https://outlook.offi
 -- Web apps
 YOUTUBE = "brave-origin --profile-directory=Default --app-id=agimnkijcaahngcdmfeangaknmldooml"
 GITHUB  = "brave-origin --profile-directory=Default --app-id=mjoklplbddabcmpepnokjaffbmgbkkgg"
+
+-- Window classes (app_id / WM_CLASS) for launch-or-focus binds
+THUNDERBIRD_CLASS = "org.mozilla.Thunderbird"
+SPOTIFY_CLASS     = "spotify"
+BROWSER_CLASS     = "brave-origin"
+TMUX_CLASS        = "tmux"
+HERDR_CLASS       = "herdr"
 
 -- Monitors
 MONITOR1 = "eDP-1"
