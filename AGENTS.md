@@ -69,3 +69,11 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - `opencode/.config/opencode/skills/*/SKILL.md` + `opencode.jsonc` are stowed into
   `~/.config/opencode/`. Editing a skill here edits the deployed copy — keep
   changes consistent with the coding-style conventions.
+
+## Hardware notes
+
+- `notes/xps14-da14260-hard-reset.md` — known EC power-loss/hard-reset issue on
+  this laptop (XPS 14 DA14260): on battery the keyboard/trackpad freeze, then the
+  EC cuts power (1 amber + 6 white blink code, BIOS "WDT" event). Unresolved as of
+  2026-08-18; before assuming any abrupt shutdown is a config problem, check the
+  Dell/omarchy threads linked in that note for a fix.
