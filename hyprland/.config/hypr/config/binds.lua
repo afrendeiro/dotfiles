@@ -92,6 +92,7 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(launchPrefix .. OUTLOOK))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(launchPrefix .. CALENDAR))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(launchPrefix .. TODO))
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(launchPrefix .. THUNDERBIRD))
 
 ------------------------
 ---- WEB APPS ----
