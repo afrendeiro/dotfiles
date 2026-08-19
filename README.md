@@ -34,7 +34,7 @@ Manual equivalent:
 git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles
 cd ~/work/dotfiles
 # .stowrc sets --target=$HOME so plain `stow` works from any path
-stow scripts fish tmux git herdr nvim ghostty ipython opencode
+stow scripts fish tmux git herdr nvim ghostty ipython opencode nautilus
 # On GNOME machines, also:
 stow gnome && ~/.config/gnome/load.sh
 # On Hyprland machines, also:
@@ -145,6 +145,7 @@ kitty/              Kitty terminal config
 ghostty/            Ghostty terminal config
 ipython/            IPython startup scripts
 opencode/           Opencode (code assistant) skills and config
+nautilus/           Nautilus "Open Terminal Here" extension (needs nautilus-python)
 _legacy/            Deprecated configs kept for reference
 ```
 

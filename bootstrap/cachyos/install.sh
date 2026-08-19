@@ -53,7 +53,8 @@ sudo pacman -S --noconfirm \
     signal-desktop \
     evince \
     imv \
-    celluloid
+    celluloid \
+    nautilus-python
 
 echo "=== Libraries and utilities ==="
 sudo pacman -S --noconfirm \

@@ -73,6 +73,15 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `~/.config/opencode/`. Editing a skill here edits the deployed copy — keep
   changes consistent with the coding-style conventions.
 
+## nautilus module
+
+- `nautilus/.local/share/nautilus-python/extensions/open-terminal.py` adds
+  "Open Terminal Here" to the nautilus context menu (folder + background).
+  Requires the `nautilus-python` package (installed by `bootstrap/cachyos/install.sh`).
+  After changing the script, restart nautilus (`nautilus -q`) to reload it.
+  It launches `kitty -d <path>` — update the `TERMINAL` constant if the main
+  terminal changes (mirror `hyprland/.../variables.lua`).
+
 ## Hardware notes
 
 - `notes/xps14-da14260-hard-reset.md` — known EC power-loss/hard-reset issue on

@@ -1,12 +1,14 @@
 # Local secrets / machine-specific settings
 *.local
 !scripts/.local/
+!nautilus/.local/
 *.local.fish
 fish_variables
 local.fish
 
 # Auto-generated files
 lazy-lock.json
+__pycache__/
 
 # nwg-displays generated monitor configs (machine-specific)
 hyprland/.config/hypr/monitors.conf
