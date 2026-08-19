@@ -8,7 +8,7 @@ name = "terminal"
 auto_switch = false
 
 [theme.custom]
-panel_bg    = "{{ colors.background.default.hex }}"
+panel_bg    = "reset"
 surface0    = "{{ colors.surface_variant.default.hex }}"
 surface1    = "{{ colors.terminal_normal_black.default.hex }}"
 surface_dim = "{{ colors.surface_variant.default.hex }}"
