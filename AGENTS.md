@@ -97,6 +97,16 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   session (`alacritty --class tmux ...`) via `hyprland/.../variables.lua`.
   Do NOT add color overrides that shadow the imported noctalia theme.
 
+## kitty module
+
+- Main terminal (`TERMINAL = "kitty"` in `hyprland/.../variables.lua`).
+  `kitty.conf` sets `background_opacity 0.6` (matches alacritty), padding, and
+  `include`s the noctalia-generated theme `~/.config/kitty/themes/noctalia.conf`
+  (generated, NOT in the repo). Same transparency story as alacritty.
+- Noctalia dependency: on machines WITHOUT noctalia, the theme `include`s in
+  kitty.conf / alacritty.toml must be removed or replaced, otherwise the
+  terminals fall back to a plain look.
+
 ## Hardware notes
 
 - `notes/xps14-da14260-hard-reset.md` — known EC power-loss/hard-reset issue on

@@ -34,17 +34,18 @@ Manual equivalent:
 git clone git@github.com:afrendeiro/dotfiles.git ~/work/dotfiles
 cd ~/work/dotfiles
 # .stowrc sets --target=$HOME so plain `stow` works from any path
-stow scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty
+stow scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty kitty
 # On GNOME machines, also:
 stow gnome && ~/.config/gnome/load.sh
 # On Hyprland machines, also:
 stow hyprland
-# Optional: override machine terminal preset
-# stow kitty
 ```
 
-Note: `kitty` is left to the machine's default preset; stow it explicitly if
-you want the repo version. Pre-existing stock files must be
+Note: `alacritty`/`kitty` import/include noctalia-generated theme files
+(`~/.config/alacritty/themes/noctalia.toml`,
+`~/.config/kitty/themes/noctalia.conf`) that are NOT in the repo — on
+machines without noctalia, remove the import/include or pick another theme.
+Pre-existing stock files must be
 removed or `--adopt`ed before stowing (`setup-dotfiles.sh` handles this).
 
 ## Commands
@@ -141,7 +142,7 @@ git/                Git global config
 herdr/              Herdr theming (noctalia template; generates ~/.config/herdr/config.toml)
 nvim/               Neovim (LazyVim) config
 alacritty/          Alacritty terminal config (noctalia theme import, opacity 0.6; hosts herdr/tmux)
-kitty/              Kitty terminal config
+kitty/              Kitty terminal config (noctalia theme include, opacity 0.6; main $TERMINAL)
 ghostty/            Ghostty terminal config
 ipython/            IPython startup scripts
 opencode/           Opencode (code assistant) skills and config

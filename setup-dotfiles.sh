@@ -5,12 +5,14 @@ set -euo pipefail
 # Stows repo configs over any stock/preset files (CachyOS skel, bootstrap-created
 # ~/.gitconfig and LazyVim starter) by adopting then restoring the repo's tracked
 # versions. Idempotent: safe to re-run.
-# alacritty is tracked (noctalia theme import, opacity 0.6; hosts herdr/tmux).
-# kitty is left to the machine's preset by default; stow it explicitly.
+# alacritty + kitty are tracked (noctalia theme, opacity 0.6).
+# NOTE: their configs `import`/`include` noctalia-generated theme files
+# (alacritty/themes/noctalia.toml, kitty/themes/noctalia.conf). Without noctalia
+# installed, drop the import/include or use a different theme.
 
 REPO_URL="git@github.com:afrendeiro/dotfiles.git"
 REPO_DIR="$HOME/work/dotfiles"
-BASE_MODULES="scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty"
+BASE_MODULES="scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty kitty"
 
 echo "=== Cloning dotfiles ==="
 if [ ! -d "$REPO_DIR/.git" ]; then
@@ -64,4 +66,5 @@ fi
 
 echo "=== Done ==="
 echo "Open a new shell for aliases to take effect."
-echo "Optional: 'stow kitty' to override the machine terminal preset."
+echo "Optional: none — all terminal presets (alacritty/kitty) are stowed;"
+echo "they depend on noctalia-generated theme files (see top of script)."
