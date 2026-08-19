@@ -14,6 +14,9 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   then apply the detected DE module). Update it if the module set or stow
   behavior changes.
 - New config → create `<module>/.config/...` under a new or existing top-level dir.
+- Running `sudo` from a non-interactive shell fails (no TTY to read the password).
+  Use `pkexec <cmd>` instead — it pops a GUI polkit prompt on the desktop and
+  works from this session.
 
 ## Desktop stack (CachyOS + Hyprland + noctalia + herdr)
 
