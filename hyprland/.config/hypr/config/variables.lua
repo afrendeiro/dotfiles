@@ -7,7 +7,7 @@ FILE_MANAGER = "nautilus"
 BROWSER      = "brave-origin"
 EDITOR       = "nvim"
 SPOTIFY      = "spotify-launcher"
-THUNDERBIRD  = "org.mozilla.Thunderbird"
+THUNDERBIRD  = "org.mozilla.Thunderbird.desktop"
 
 -- Microsoft 365 PWAs
 OUTLOOK  = "brave-origin --profile-directory=Default --app-id=eoficlgicibekocmfdomjbfnjmehnhcd"
