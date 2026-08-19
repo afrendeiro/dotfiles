@@ -38,7 +38,11 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   spam every ~1s).
 - herdr's config is GENERATED from a noctalia template
   (`herdr/.config/noctalia/templates/herdr.toml` + `herdr-templates.toml`,
-  post_hook reload). Edit the template, never `~/.config/herdr/config.toml`.
+  post_hook reload). Edit the template, never `~/.config/herdr/config.toml`;
+  apply with `noctalia msg templates-apply`.
+  `panel_bg = "reset"` makes herdr inherit the host terminal's background
+  instead of painting an opaque palette color — required for herdr panes
+  (incl. opencode) to keep alacritty's transparency (`opacity = 0.6`).
 - nwg-displays output (`monitors.conf`, `monitors.lua`, `workspaces.conf` at the
   hypr root, not under `config/`) is machine-specific and gitignored.
 - noctalia `[shell.greeter_sync] privilege_command = "pkexec"` — the login-greeter
@@ -81,6 +85,17 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   After changing the script, restart nautilus (`nautilus -q`) to reload it.
   It launches `kitty -d <path>` — update the `TERMINAL` constant if the main
   terminal changes (mirror `hyprland/.../variables.lua`).
+
+## alacritty module
+
+- Deployed on this machine (NOT left to stock presets). `alacritty.toml`
+  imports the noctalia-generated theme `~/.config/alacritty/themes/noctalia.toml`
+  (generated, NOT in the repo) and sets `opacity = 0.6` to match kitty's
+  `background_opacity 0.6` — keep transparency in sync across terminals.
+  `live_config_reload = true`, so edits apply to running windows.
+- Host terminal for herdr (`alacritty --class herdr -e herdr`) and the tmux
+  session (`alacritty --class tmux ...`) via `hyprland/.../variables.lua`.
+  Do NOT add color overrides that shadow the imported noctalia theme.
 
 ## Hardware notes
 

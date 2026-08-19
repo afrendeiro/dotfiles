@@ -5,11 +5,12 @@ set -euo pipefail
 # Stows repo configs over any stock/preset files (CachyOS skel, bootstrap-created
 # ~/.gitconfig and LazyVim starter) by adopting then restoring the repo's tracked
 # versions. Idempotent: safe to re-run.
-# alacritty/kitty are left to the machine's presets by default; stow them explicitly.
+# alacritty is tracked (noctalia theme import, opacity 0.6; hosts herdr/tmux).
+# kitty is left to the machine's preset by default; stow it explicitly.
 
 REPO_URL="git@github.com:afrendeiro/dotfiles.git"
 REPO_DIR="$HOME/work/dotfiles"
-BASE_MODULES="scripts fish tmux git herdr nvim ghostty ipython opencode nautilus"
+BASE_MODULES="scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty"
 
 echo "=== Cloning dotfiles ==="
 if [ ! -d "$REPO_DIR/.git" ]; then
@@ -63,4 +64,4 @@ fi
 
 echo "=== Done ==="
 echo "Open a new shell for aliases to take effect."
-echo "Optional: 'stow alacritty kitty' to override machine terminal presets."
+echo "Optional: 'stow kitty' to override the machine terminal preset."
