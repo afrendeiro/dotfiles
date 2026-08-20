@@ -1,0 +1,23 @@
+{
+  "client_id": "24087451-19c7-4c30-ac3c-a67640afeaaa",
+  "notification_mode": "System",
+  "notification_show_preview": true,
+  "notification_preview_len": 80,
+  "message_limit": 50,
+  "search_context_limit": 3,
+  "chat_limit": 50,
+  "chat_icon_theme": "unicode",
+  "file_preview_enabled": true,
+  "file_preview_in_terminal": true,
+  "file_upload_enabled": true,
+  "presence_enabled": true,
+  "user_profile_enabled": true,
+  "user_profile_extended": false,
+  "teams_channels_enabled": false,
+  "channel_mentions_enabled": false,
+  "channel_msg_refresh_min": 2,
+  "sqlite_enabled": true,
+  "external_editor": "nvim",
+  "browser_command": "xdg-open",
+  "image_viewer": "imv"
+}

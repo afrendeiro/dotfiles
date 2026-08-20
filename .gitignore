@@ -21,10 +21,18 @@ scripts/.local/bin/herdr
 scripts/.local/bin/uv
 scripts/.local/bin/uvx
 scripts/.local/bin/llm
+scripts/.local/bin/teams-tui-go
 scripts/.local/bin/pyright
 scripts/.local/bin/pyright-langserver
 scripts/.local/bin/pyright-python
 scripts/.local/bin/pyright-python-langserver
+scripts/.local/bin/tw_asana_sync
+scripts/.local/bin/tw_caldav_sync
+scripts/.local/bin/tw_gcal_sync
+scripts/.local/bin/tw_gkeep_sync
+scripts/.local/bin/tw_gtasks_sync
+scripts/.local/bin/tw_notion_sync
+scripts/.local/bin/fs_gkeep_sync
 
 # Sensitive
 .ssh/

@@ -12,7 +12,7 @@ set -euo pipefail
 
 REPO_URL="git@github.com:afrendeiro/dotfiles.git"
 REPO_DIR="$HOME/work/dotfiles"
-BASE_MODULES="scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty kitty"
+BASE_MODULES="scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty kitty teams-tui-go"
 
 echo "=== Cloning dotfiles ==="
 if [ ! -d "$REPO_DIR/.git" ]; then
