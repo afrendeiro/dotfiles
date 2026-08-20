@@ -101,6 +101,14 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   LSP loads at startup: restart opencode after config changes.
 - `skills/herdr/SKILL.md` is generated from `herdr --skill` — regenerate it when
   the herdr CLI surface changes instead of hand-editing.
+- `skills/grant-writing/` (SKILL.md + `templates/`) encodes the markdown-first
+  grant proposal workflow: project layout, pandoc+LibreOffice docx/pdf build,
+  proposal structure and writing voice. Must remain generic — no real funding
+  programs, projects, or proposal content may be referenced in the skill or
+  its templates. The shipped `templates/ref.docx` is a sanitized reference
+  template: it preserves the styling (fonts, heading sizes, page fields) but
+  all body text is style-name placeholders; do not reintroduce content into
+  it.
 
 ## nautilus module
 - `nautilus/.local/share/nautilus-python/extensions/open-terminal.py` adds

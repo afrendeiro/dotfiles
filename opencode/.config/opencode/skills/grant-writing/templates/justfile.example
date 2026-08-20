@@ -1,0 +1,16 @@
+# Build orchestration for a markdown-first grant proposal.
+# Copy to <project>/justfile. Adjust the master document name (default: grant.md).
+# See the grant-writing skill for the full pipeline.
+
+_pandoc := "pandoc"
+_ref := "ref.docx"
+
+default:
+    @just --list
+
+build:
+    {{_pandoc}} grant.md -o grant.docx --reference-doc={{_ref}}
+    libreoffice --headless --convert-to pdf --outdir . grant.docx
+
+clean:
+    rm -f grant.docx grant.pdf

@@ -1,0 +1,7 @@
+# Generated artifacts are disposable — the Markdown source is the source of truth.
+*.pdf
+*.docx
+*.odt
+
+# Keep the pandoc styling template tracked.
+!ref.docx
