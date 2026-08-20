@@ -93,6 +93,7 @@ bash "$SCRIPT_DIR/../common/herdr.sh"
 bash "$SCRIPT_DIR/../common/vicinae.sh"
 bash "$SCRIPT_DIR/../common/llm.sh"
 bash "$SCRIPT_DIR/../common/btop.sh"
+bash "$SCRIPT_DIR/../common/pyright.sh"
 
 echo "=== Python tools ==="
 uv tool install cookiecutter

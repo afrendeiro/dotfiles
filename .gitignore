@@ -21,6 +21,10 @@ scripts/.local/bin/herdr
 scripts/.local/bin/uv
 scripts/.local/bin/uvx
 scripts/.local/bin/llm
+scripts/.local/bin/pyright
+scripts/.local/bin/pyright-langserver
+scripts/.local/bin/pyright-python
+scripts/.local/bin/pyright-python-langserver
 
 # Sensitive
 .ssh/

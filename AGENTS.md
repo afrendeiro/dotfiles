@@ -40,6 +40,9 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   (`herdr/.config/noctalia/templates/herdr.toml` + `herdr-templates.toml`,
   post_hook reload). Edit the template, never `~/.config/herdr/config.toml`;
   apply with `noctalia msg templates-apply`.
+  Custom keybindings live in `[keys]`/`[[keys.command]]` in the template —
+  `prefix+l` opens a lazygit popup, `prefix+|` splits vertical,
+  `prefix+shift+q` closes a pane, `prefix+arrows` move pane focus.
   `panel_bg = "reset"` makes herdr inherit the host terminal's background
   instead of painting an opaque palette color — required for herdr panes
   (incl. opencode) to keep alacritty's transparency (`opacity = 0.6`).
@@ -76,6 +79,13 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - `opencode/.config/opencode/skills/*/SKILL.md` + `opencode.jsonc` are stowed into
   `~/.config/opencode/`. Editing a skill here edits the deployed copy — keep
   changes consistent with the coding-style conventions.
+- `opencode.jsonc` sets `lsp: true` (all built-in LSP servers). pyright is
+  installed by `bootstrap/common/pyright.sh` (`uv tool install pyright`) and is
+  NOT auto-installed by opencode — without it, Python files get no diagnostics.
+  Other built-ins (typescript, bash, lua, ...) are auto-installed by opencode.
+  LSP loads at startup: restart opencode after config changes.
+- `skills/herdr/SKILL.md` is generated from `herdr --skill` — regenerate it when
+  the herdr CLI surface changes instead of hand-editing.
 
 ## nautilus module
 
