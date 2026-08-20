@@ -22,6 +22,14 @@ type = "plugin_action"
 command = "file-picker.open"
 description = "Pick file (fzf, copies path to clipboard)"
 
+[[keys.command]]
+key = "prefix+t"
+type = "popup"
+command = "exec \"${SHELL:-sh}\""
+description = "Open scratch terminal"
+width = "80%"
+height = "80%"
+
 [theme]
 name = "terminal"
 auto_switch = false

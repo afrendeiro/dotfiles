@@ -55,6 +55,8 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `$SHELL` (fish), so the preview body lives in `preview.sh` invoked as
   `sh "$HERDR_PLUGIN_ROOT/preview.sh" '{1}'` — never inline POSIX syntax.
   Needs fzf/tree/bat + wl-copy or xclip.
+  `prefix+t` is a scratch-terminal popup (`type = "popup"`,
+  `exec "${SHELL:-sh}"`) — a built-in config recipe, not a plugin.
   `panel_bg = "reset"` makes herdr inherit the host terminal's background
   instead of painting an opaque palette color — required for herdr panes
   (incl. opencode) to keep alacritty's transparency (`opacity = 0.6`).

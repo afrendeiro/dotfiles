@@ -14,6 +14,8 @@ edit the template, then apply with `noctalia msg templates-apply`.
   over the focused pane's cwd, dirs first, tree/bat preview; Enter copies
   the absolute path to the clipboard for pasting into e.g. opencode as an
   `@file` reference)
+- `prefix+t` — open a scratch-terminal popup in the focused pane's cwd
+  (exit the shell to close)
 - `prefix+|` — split pane vertically
 - `prefix+shift+q` — close a pane
 - `prefix+arrows` — move pane focus
