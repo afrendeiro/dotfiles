@@ -148,8 +148,8 @@ ipython/            IPython startup scripts
 opencode/           Opencode (code assistant) skills and config
 nautilus/           Nautilus "Open Terminal Here" extension (needs nautilus-python)
 teams-tui-go/       Terminal Microsoft Teams client (config + OAuth)
-docs/               Human-facing usage notes (desktop stack, teams-tui-go)
-notes/              Agent notes (hardware issues, plans)
+docs/               Evergreen human usage guides (desktop stack, opencode)
+notes/              Machine & environment state: quirks, incidents, fixes, plans (see notes/README.md)
 _legacy/            Deprecated configs kept for reference
 ```
 
