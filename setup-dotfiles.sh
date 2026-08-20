@@ -64,6 +64,16 @@ if command -v pass >/dev/null 2>&1 \
     echo "Restored machine-specific fish config"
 fi
 
+echo "=== Linking herdr plugin(s) ==="
+if command -v herdr >/dev/null 2>&1; then
+    if herdr plugin list --json 2>/dev/null | grep -q '"plugin_id":"file-picker"'; then
+        echo "  file-picker plugin already linked"
+    else
+        herdr plugin link "$REPO_DIR/herdr/plugins/file-picker" \
+            || echo "  WARNING: could not link file-picker plugin"
+    fi
+fi
+
 echo "=== Done ==="
 echo "Open a new shell for aliases to take effect."
 echo "Optional: none — all terminal presets (alacritty/kitty) are stowed;"

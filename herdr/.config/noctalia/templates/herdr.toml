@@ -16,6 +16,12 @@ command = "lazygit"
 width = "80%"
 height = "80%"
 
+[[keys.command]]
+key = "prefix+f"
+type = "plugin_action"
+command = "file-picker.open"
+description = "Pick file (fzf, copies path to clipboard)"
+
 [theme]
 name = "terminal"
 auto_switch = false

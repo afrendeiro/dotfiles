@@ -42,6 +42,19 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   apply with `noctalia msg templates-apply`.
   Custom keybindings live in `[keys]`/`[[keys.command]]` in the template
   (binding map: `docs/desktop-stack.md`).
+- `herdr/plugins/file-picker/` is a local herdr plugin (manifest
+  `herdr-plugin.toml` + `open.sh`/`pick.sh`/`preview.sh`), linked with
+  `herdr plugin link herdr/plugins/file-picker` (auto-linked in
+  `setup-dotfiles.sh`). `prefix+f` → `type = "plugin_action"` →
+  `file-picker.open` opens a popup running fzf over the focused pane's cwd
+  (dirs first, tree/bat preview); Enter copies the absolute path to the
+  clipboard. Notes: popup pane commands run with the popup cwd, NOT the
+  plugin root — the manifest uses `sh -c "$HERDR_PLUGIN_ROOT/pick.sh"` to
+  resolve the script, and `open.sh` reads `focused_pane_cwd` from
+  `HERDR_PLUGIN_CONTEXT_JSON`. The fzf preview runs through the user's
+  `$SHELL` (fish), so the preview body lives in `preview.sh` invoked as
+  `sh "$HERDR_PLUGIN_ROOT/preview.sh" '{1}'` — never inline POSIX syntax.
+  Needs fzf/tree/bat + wl-copy or xclip.
   `panel_bg = "reset"` makes herdr inherit the host terminal's background
   instead of painting an opaque palette color — required for herdr panes
   (incl. opencode) to keep alacritty's transparency (`opacity = 0.6`).

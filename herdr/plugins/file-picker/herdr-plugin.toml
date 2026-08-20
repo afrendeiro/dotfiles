@@ -1,0 +1,20 @@
+id = "file-picker"
+name = "File Picker"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "fzf file picker: browse files with a tree preview and copy the selection"
+platforms = ["linux"]
+
+[[actions]]
+id = "open"
+title = "Open file picker"
+contexts = ["workspace"]
+command = ["sh", "open.sh"]
+
+[[panes]]
+id = "pick"
+title = "Pick file"
+placement = "popup"
+width = "80%"
+height = "80%"
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/pick.sh"]

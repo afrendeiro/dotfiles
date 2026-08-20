@@ -10,6 +10,10 @@ Defined in `herdr/.config/noctalia/templates/herdr.toml` under
 edit the template, then apply with `noctalia msg templates-apply`.
 
 - `prefix+l` — open a lazygit popup
+- `prefix+f` — open the file picker popup (herdr plugin `file-picker`: fzf
+  over the focused pane's cwd, dirs first, tree/bat preview; Enter copies
+  the absolute path to the clipboard for pasting into e.g. opencode as an
+  `@file` reference)
 - `prefix+|` — split pane vertically
 - `prefix+shift+q` — close a pane
 - `prefix+arrows` — move pane focus
