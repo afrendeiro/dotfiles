@@ -40,9 +40,8 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   (`herdr/.config/noctalia/templates/herdr.toml` + `herdr-templates.toml`,
   post_hook reload). Edit the template, never `~/.config/herdr/config.toml`;
   apply with `noctalia msg templates-apply`.
-  Custom keybindings live in `[keys]`/`[[keys.command]]` in the template —
-  `prefix+l` opens a lazygit popup, `prefix+|` splits vertical,
-  `prefix+shift+q` closes a pane, `prefix+arrows` move pane focus.
+  Custom keybindings live in `[keys]`/`[[keys.command]]` in the template
+  (binding map: `docs/desktop-stack.md`).
   `panel_bg = "reset"` makes herdr inherit the host terminal's background
   instead of painting an opaque palette color — required for herdr panes
   (incl. opencode) to keep alacritty's transparency (`opacity = 0.6`).
@@ -56,8 +55,7 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   broad `org.freedesktop.systemd1.manage-units` action and prompts for a password
   on every wallpaper change — don't switch back to `run0` without also handling that.
 - `[wallpaper] directory` points at `~/Pictures/wallpapers/omarchy` — a local,
-  untracked folder. Wallpapers are the omarchy v4.0 `themes/*/backgrounds/` set,
-  flattened as `<theme>__<file>`.
+  untracked folder (details: `docs/desktop-stack.md`).
 
 ## Safety
 
@@ -105,8 +103,7 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   committed). Changing optional-feature scopes in config.json requires deleting
   it and re-authenticating via device code flow. Teams channels/mentions/extended
   profiles need admin-consented Graph scopes — keep them off unless granted.
-- Launched with `SUPER+T` (`kitty -e teams-tui-go`); `SUPER+SHIFT+T` opens the
-  Teams PWA for meetings/screen-sharing (TUI can't do those).
+- Launch keybinds (`SUPER+T` / `SUPER+SHIFT+T`): `docs/desktop-stack.md`.
 
 ## alacritty module
 

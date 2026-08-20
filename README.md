@@ -147,6 +147,9 @@ ghostty/            Ghostty terminal config
 ipython/            IPython startup scripts
 opencode/           Opencode (code assistant) skills and config
 nautilus/           Nautilus "Open Terminal Here" extension (needs nautilus-python)
+teams-tui-go/       Terminal Microsoft Teams client (config + OAuth)
+docs/               Human-facing usage notes (desktop stack, teams-tui-go)
+notes/              Agent notes (hardware issues, plans)
 _legacy/            Deprecated configs kept for reference
 ```
 
