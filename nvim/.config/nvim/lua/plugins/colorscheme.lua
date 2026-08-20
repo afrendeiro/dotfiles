@@ -1,22 +1,18 @@
 return {
   {
-    "loctvl842/monokai-pro.nvim",
+    "RRethy/base16-nvim",
     lazy = false,
     priority = 1000,
-    opts = {
-      filter = "pro",
-      transparent_background = false,
-      terminal_colors = true,
-    },
-    config = function(_, opts)
-      require("monokai-pro").setup(opts)
-      vim.cmd.colorscheme("monokai-pro")
+    config = function()
+      require("matugen").setup()
     end,
   },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "monokai-pro",
+      colorscheme = function()
+        require("matugen").setup()
+      end,
     },
   },
 }
