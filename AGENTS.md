@@ -66,7 +66,7 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - Machine-specific settings belong in `~/.config/fish/conf.d/local.fish`
   (gitignored, backed up via pass) — see `fish/.config/fish/conf.d/local.fish.example`.
 - Don't commit generated state: `lazy-lock.json`, `node_modules/`, `package*.json`,
-  `plugins/`, `themes/`, and `btop|herdr|uv|uvx|llm` binaries. If `git status`
+  `plugins/`, `themes/`, and `btop|herdr|uv|uvx|llm|teams-tui-go|*_sync` binaries. If `git status`
   shows surprises, check `.gitignore`.
 
 ## Commits
@@ -88,13 +88,25 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   the herdr CLI surface changes instead of hand-editing.
 
 ## nautilus module
-
 - `nautilus/.local/share/nautilus-python/extensions/open-terminal.py` adds
   "Open Terminal Here" to the nautilus context menu (folder + background).
   Requires the `nautilus-python` package (installed by `bootstrap/cachyos/install.sh`).
   After changing the script, restart nautilus (`nautilus -q`) to reload it.
   It launches `kitty -d <path>` — update the `TERMINAL` constant if the main
   terminal changes (mirror `hyprland/.../variables.lua`).
+
+## teams-tui-go module
+
+- `teams-tui-go/.config/teams-tui-go/config.json` is stowed to
+  `~/.config/teams-tui-go/`; the binary is installed prebuilt (no Go toolchain)
+  by `bootstrap/common/teams-tui-go.sh` to `~/.local/bin/teams-tui-go`
+  (gitignored under `scripts/.local/bin/`).
+- OAuth tokens live in `~/.cache/teams-tui-go/token.json` (auto-refreshed, never
+  committed). Changing optional-feature scopes in config.json requires deleting
+  it and re-authenticating via device code flow. Teams channels/mentions/extended
+  profiles need admin-consented Graph scopes — keep them off unless granted.
+- Launched with `SUPER+T` (`kitty -e teams-tui-go`); `SUPER+SHIFT+T` opens the
+  Teams PWA for meetings/screen-sharing (TUI can't do those).
 
 ## alacritty module
 
@@ -116,6 +128,30 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - Noctalia dependency: on machines WITHOUT noctalia, the theme `include`s in
   kitty.conf / alacritty.toml must be removed or replaced, otherwise the
   terminals fall back to a plain look.
+
+## nvim module
+
+- LazyVim, themed by the noctalia **community template `neovim`**: it renders
+  the current palette into `~/.config/nvim/lua/matugen.lua` (base16 colors +
+  SIGUSR1 live-reload handler). The file is generated — gitignored.
+- Community templates are enabled in ONE canonical place:
+  `opencode/.config/noctalia/opencode-templates.toml` (`community_ids =
+  ["opencode", "neovim"]`). Noctalia merges config per-key with later files
+  winning — do NOT split `community_ids` across multiple `*-templates.toml`
+  files. The template ID is `neovim`, not `nvim`.
+- `lua/plugins/colorscheme.lua` uses `RRethy/base16-nvim` with LazyVim
+  `opts.colorscheme` as a **function** (`require("matugen").setup()`) — a
+  string like `"base16"` fails (no `base16.vim` colorscheme) and triggers
+  LazyVim's habamax fallback.
+- `lua/plugins` must stay a stow directory symlink (not file-level symlinks):
+  the template's `apply.sh` detects the base16 spec with a recursive `grep -r`
+  that cannot see through individual file symlinks — if it misses, it writes a
+  duplicate `plugins/base16.lua` (lazy warns about duplicate specs).
+- Live reload: `apply.sh` post_hook sends `SIGUSR1` to nvim; nvim survives the
+  signal by default (no default handler needed).
+- The noctalia community template was NOT copied into this repo — it lives in
+  `~/.local/state/noctalia/community-templates/neovim/` (cached upstream copy;
+  local edits are preserved by noctalia's sync).
 
 ## Hardware notes
 
