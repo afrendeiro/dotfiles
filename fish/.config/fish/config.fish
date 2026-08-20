@@ -15,6 +15,8 @@ alias grep="grep --color=auto"
 alias refresh="source ~/.config/fish/config.fish"
 alias top="top -d 0.4"
 alias who="who -u -H"
+alias oc="opencode -c"
+alias osl="opencode session list"
 # Firefox path is OS-dependent; override in ~/.config/fish/conf.d/local.fish
 # alias firefox="/snap/firefox/current/usr/lib/firefox/firefox"
 
@@ -40,6 +42,19 @@ end
 
 function tk
     tmux kill-session -t "$argv[1]"
+end
+
+function osr
+    set -l sel (opencode session list --format json \
+        | jq -r '.[] | [.id, .title, .directory] | @tsv' \
+        | fzf --with-nth=2.. --delimiter='\t' --preview='echo {} | cut -f3' 2>/dev/null)
+    if test -z "$sel"
+        return 1
+    end
+    set -l id (echo "$sel" | cut -f1)
+    set -l dir (echo "$sel" | cut -f3)
+    cd "$dir"
+    opencode -s "$id"
 end
 
 alias s="screen -ls"
