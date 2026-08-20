@@ -79,7 +79,8 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - Machine-specific settings belong in `~/.config/fish/conf.d/local.fish`
   (gitignored, backed up via pass) — see `fish/.config/fish/conf.d/local.fish.example`.
 - Don't commit generated state: `lazy-lock.json`, `node_modules/`, `package*.json`,
-  `plugins/`, `themes/`, and `btop|herdr|uv|uvx|llm|teams-tui-go|*_sync` binaries. If `git status`
+  `plugins/`, `themes/`, and `btop|herdr|uv|uvx|llm|teams-tui-go|ruff|ty|black|*_sync`
+  binaries. If `git status`
   shows surprises, check `.gitignore`.
 
 ## Commits
@@ -93,7 +94,8 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `~/.config/opencode/`. Editing a skill here edits the deployed copy — keep
   changes consistent with the coding-style conventions.
 - `opencode.jsonc` sets `lsp: true` (all built-in LSP servers). pyright is
-  installed by `bootstrap/common/pyright.sh` (`uv tool install pyright`) and is
+  installed by `bootstrap/common/python-tools.sh` (`uv tool install pyright`;
+  the same script installs ruff, ty, black) and is
   NOT auto-installed by opencode — without it, Python files get no diagnostics.
   Other built-ins (typescript, bash, lua, ...) are auto-installed by opencode.
   LSP loads at startup: restart opencode after config changes.

@@ -7,4 +7,7 @@ if ! command -v uv &>/dev/null; then
 fi
 
 uv tool install pyright
-echo "pyright installed (LSP server for opencode/neovim)"
+uv tool install ruff
+uv tool install ty
+uv tool install black
+echo "python tools installed (pyright LSP, ruff linter, ty type checker, black formatter)"

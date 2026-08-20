@@ -26,6 +26,10 @@ scripts/.local/bin/pyright
 scripts/.local/bin/pyright-langserver
 scripts/.local/bin/pyright-python
 scripts/.local/bin/pyright-python-langserver
+scripts/.local/bin/ruff
+scripts/.local/bin/ty
+scripts/.local/bin/black
+scripts/.local/bin/blackd
 scripts/.local/bin/tw_asana_sync
 scripts/.local/bin/tw_caldav_sync
 scripts/.local/bin/tw_gcal_sync

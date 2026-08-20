@@ -100,7 +100,7 @@ bash "$SCRIPT_DIR/../common/uv.sh"
 bash "$SCRIPT_DIR/../common/herdr.sh"
 bash "$SCRIPT_DIR/../common/vicinae.sh"
 bash "$SCRIPT_DIR/../common/llm.sh"
-bash "$SCRIPT_DIR/../common/pyright.sh"
+bash "$SCRIPT_DIR/../common/python-tools.sh"
 
 echo "=== Post-install fixes ==="
 sudo ln -sf "$(which fdfind)" /usr/local/bin/fd
