@@ -2,6 +2,9 @@ if test -f /usr/share/cachyos-fish-config/cachyos-config.fish
     source /usr/share/cachyos-fish-config/cachyos-config.fish
 end
 
+set -gx EDITOR nvim
+set -gx VISUAL nvim
+
 function fish_greeting
 end
 
