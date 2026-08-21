@@ -8,6 +8,7 @@ set -gx VISUAL nvim
 function fish_greeting
 end
 
+alias o="opencode"
 alias n="nvim"
 alias f="fzf"
 alias c="clear"
