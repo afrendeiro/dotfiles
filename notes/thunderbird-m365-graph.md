@@ -1,28 +1,60 @@
 # Thunderbird + Microsoft 365 (Graph) — research & plan
 
-Status: **planned, not implemented** (2026-08-21). No action taken yet.
+Status: **decision made 2026-08-21** — interim: keep TB IMAP mail + Outlook
+Web for calendar/contacts. Revisit when Thunderbird ships native Graph
+calendar + address book (active roadmap item, no ETA).
 
 ## Context
 
 - M365 work account (CeMM tenant) via Thunderbird 153.0.2.
 - **EWS is retired for Exchange Online on 2026-10-01** — EWS-only clients
-  (KMail, Evolution's main path, Owl add-on) are on borrowed time.
+  (KMail, Evolution's main path, Owl add-on) are on borrowed time. IMAP is
+  NOT affected; the current TB IMAP account (outlook.office365.com, OAuth2
+  with Mozilla's client ID `d6d589a7-…`, already consented by the tenant)
+  keeps working indefinitely.
 
-## Landscape (verified 2026-08-21)
+## Key facts (verified 2026-08-21)
 
-- **Thunderbird 154.0 (2026-08-18): native Microsoft Graph for M365** — first
-  open-source Linux client with Graph; EWS since 145 (Rust). This is the plan.
-- Evolution 3.60: Graph in preview (m365 work items, behind a flag); EWS mature.
-- KMail: EWS only, no shipped Graph.
-- Hiri/Mailspring: closed source. Geary/Claws/Neomutt: IMAP only.
+- **Thunderbird Graph support = mail only** (MozillaWiki, 2026-07-02;
+  desktop roadmap 2026-07-23: "Active — Exchange (EWS, GraphAPI): *finalize
+  … including calendar and address book support*" — not shipped, no ETA).
+- **M365 business calendars/contacts cannot be used in Thunderbird without
+  Graph.** CalDAV/CardDAV exists only for consumer Outlook.com
+  (`outlook.live.com/owa/calendar/<email>/caldav/`), NOT for Exchange
+  Online: `outlook.office.com/owa/calendar/<email>/caldav/` returns HTTP 400
+  on all methods (a real CalDAV endpoint would 401 + WWW-Authenticate), the
+  TB "Add calendar" wizard finds nothing there, and Microsoft Q&A
+  (learn.microsoft.com, 2025-02-14) confirms no CardDAV for Exchange Online.
+  Do not retry this path.
+- TB 154.0 (2026-08-18) adds native Graph for M365 **mail** — optional for
+  us (IMAP already works); the 154 upgrade itself is still worth doing.
+- Evolution 3.60: Graph in preview (m365 work items, behind a flag); EWS
+  mature. KMail: EWS only, no shipped Graph.
 
-## Plan (when 154 lands in CachyOS repos)
+## Chosen interim (2026-08-21)
 
-1. `pacman -Syu` → Thunderbird 154
-2. Re-provision the M365 account via the Graph flow (Thunderbird uses
-   Microsoft's own Entra client ID — the tenant may need to allowlist it per
-   Thunderbird's admin documentation)
-3. Document the account setup in `docs/thunderbird.md`
+- Mail: stay on TB IMAP (no action).
+- Calendar/contacts: Outlook Web. There is a Brave webapp shortcut for the
+  OWA calendar, but it re-prompts for 2FA auth regularly (annoying) — that
+  is the known cost of this interim.
+
+## Rejected paths (do not revisit without new facts)
+
+- **CalDAV/CardDAV for M365** — does not exist (see above).
+- **M365-Calendar-for-Thunderbird add-on (kowjens)** — third-party Graph
+  add-on; needs Entra admin consent, and CeMM IT is done with custom
+  requests.
+- **DavMail / TbSync bridges** — DavMail is EWS-based (dies 2026-10-01);
+  TbSync providers unmaintained.
+
+## Future plan (when TB ships native Graph calendar + address book)
+
+1. `pacman -Syu` → TB with Graph calendar/address book (also picks up 154+).
+2. Re-provision the M365 account via AccountHub → Graph flow (TB uses its
+   own Entra client ID; the tenant already consents to it for IMAP, so it
+   should work without IT).
+3. Verify calendar + contacts sync; then document in `docs/thunderbird.md`.
+4. Optionally also move mail to Graph at that point (feature parity, filters).
 
 ## Dropped for now
 
@@ -32,5 +64,5 @@ Status: **planned, not implemented** (2026-08-21). No action taken yet.
 
 ## TODO (future agent)
 
-Upgrade to TB 154 when packaged in CachyOS repos, convert the M365 account to
-Graph, verify, and write `docs/thunderbird.md`.
+When TB's Graph calendar/address-book support ships (roadmap "Active"),
+run the future plan above and write `docs/thunderbird.md`.
