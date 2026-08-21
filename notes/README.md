@@ -13,7 +13,7 @@ loaded into every agent session.
   them or "fixes" a non-bug.
 - **Machine-local fixes that live outside the repo** — state dirs like
   `~/.local/state/noctalia/` are not tracked; a note is the only record.
-- **Plans** — agreed work that isn't implemented yet (`todo-stack.md`).
+- **Plans** — agreed work that isn't implemented yet (`camera-ipu7.md`).
 
 ## Where things go (keep redundancy low)
 
@@ -42,5 +42,5 @@ Rules of thumb:
 - First lines: `# <topic>` followed by a `Status:` line (e.g. `fixed 2026-08-20`,
   `unresolved (last checked ...)`, `planned, not implemented`).
 - End with a `## TODO (future agent)` section when follow-up work exists
-  (the xps note and todo-stack use this).
+  (the xps and camera notes use this).
 - Link related notes and docs rather than copying their content.

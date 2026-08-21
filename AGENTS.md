@@ -81,7 +81,7 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - Machine-specific settings belong in `~/.config/fish/conf.d/local.fish`
   (gitignored, backed up via pass) — see `fish/.config/fish/conf.d/local.fish.example`.
 - Don't commit generated state: `lazy-lock.json`, `node_modules/`, `package*.json`,
-  `plugins/`, `themes/`, and `btop|herdr|uv|uvx|llm|teams-tui-go|ruff|ty|black|matcha|*_sync`
+  `plugins/`, `themes/`, and `btop|herdr|uv|uvx|llm|teams-tui-go|ruff|ty|black|*_sync`
   binaries. If `git status`
   shows surprises, check `.gitignore`.
 
