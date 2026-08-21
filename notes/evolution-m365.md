@@ -17,9 +17,13 @@ awaiting CeMM admin consent. EWS hard deadline **2026-10-01**.
   not activatable"). gnome-keyring is autostarted via
   `hyprland/.config/autostart/gnome-keyring-secrets.desktop` (XDG
   autostart; Hyprland runs under UWSM).
-- **Launch:** `SUPER+SHIFT+M` → Evolution (`launch-or-focus.sh`, class
-  `org.gnome.Evolution`). OWA PWA keybinds (M/C/T/SHIFT+T/N) kept as
-  backup. In-app: Ctrl+1 Mail · Ctrl+2 Contacts · Ctrl+3 Calendar ·
+  Tokens are keyed `OAuth2::<Service>[<user>]` — NOT by source UID.
+  Verify with: `secret-tool lookup e-source-uid 'OAuth2::Office365[arendeiro@cemm.at]'`
+  (6158-byte payload confirmed 2026-08-21). If the first sign-in predates
+  gnome-keyring, re-authenticate once so the store lands permanently.
+- **Launch:** `SUPER+M` → Evolution (`launch-or-focus.sh`, class
+  `org.gnome.Evolution`). OWA PWA keybinds (`SUPER+SHIFT+M`/C/T/SHIFT+T/N)
+  kept as backup. In-app: Ctrl+1 Mail · Ctrl+2 Contacts · Ctrl+3 Calendar ·
   Ctrl+4 Tasks · Ctrl+5 Memos; File → New Window for a second view.
 - **Thunderbird retired as primary 2026-08-21** — package kept installed
   for a few weeks as backup (`~/.thunderbird/` profile untouched). Do not
