@@ -93,7 +93,7 @@ hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(launchPrefix .. CALENDAR))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e teams-tui-go"))
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(launchPrefix .. TODO))
-hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. THUNDERBIRD_CLASS .. " " .. launchPrefix .. THUNDERBIRD))
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. EVOLUTION_CLASS .. " " .. launchPrefix .. EVOLUTION))
 
 ------------------------
 ---- WEB APPS ----

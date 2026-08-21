@@ -7,7 +7,7 @@ FILE_MANAGER = "nautilus"
 BROWSER      = "brave-origin"
 EDITOR       = "nvim"
 SPOTIFY      = "spotify-launcher"
-THUNDERBIRD  = "org.mozilla.Thunderbird.desktop"
+EVOLUTION    = "org.gnome.Evolution.desktop"
 
 -- Microsoft 365 PWAs
 OUTLOOK  = "brave-origin --profile-directory=Default --app-id=eoficlgicibekocmfdomjbfnjmehnhcd"
@@ -20,7 +20,7 @@ YOUTUBE = "brave-origin --profile-directory=Default --app-id=agimnkijcaahngcdmfe
 GITHUB  = "brave-origin --profile-directory=Default --app-id=mjoklplbddabcmpepnokjaffbmgbkkgg"
 
 -- Window classes (app_id / WM_CLASS) for launch-or-focus binds
-THUNDERBIRD_CLASS = "org.mozilla.Thunderbird"
+EVOLUTION_CLASS   = "org.gnome.Evolution"
 SPOTIFY_CLASS     = "spotify"
 BROWSER_CLASS     = "brave-origin"
 TMUX_CLASS        = "tmux"
