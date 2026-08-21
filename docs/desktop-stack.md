@@ -20,6 +20,17 @@ edit the template, then apply with `noctalia msg templates-apply`.
 - `prefix+shift+q` — close a pane
 - `prefix+arrows` — move pane focus
 
+## Email & Microsoft 365
+
+- `SUPER+SHIFT+M` — launch/focus **Evolution** (mail, calendar, contacts,
+  tasks; EWS account, see `notes/evolution-m365.md`)
+- `SUPER+M` — Outlook PWA · `SUPER+C` — Calendar PWA · `SUPER+N` — To Do
+  PWA (kept as backups while the Evolution EWS bridge is in use)
+- In Evolution: `Ctrl+1` Mail · `Ctrl+2` Contacts · `Ctrl+3` Calendar ·
+  `Ctrl+4` Tasks · `Ctrl+5` Memos · `File → New Window` for a second view
+- OAuth tokens live in gnome-keyring (autostarted via
+  `hyprland/.config/autostart/gnome-keyring-secrets.desktop`)
+
 ## Microsoft Teams
 
 - `SUPER+T` — launch the terminal Teams client (`kitty -e teams-tui-go`)
