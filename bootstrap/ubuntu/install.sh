@@ -50,7 +50,10 @@ if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
         keepassxc \
         libreoffice \
         hunspell-en-us \
-        thunderbird
+        evolution \
+        evolution-ews \
+        evolution-data-server \
+        gnome-keyring
 
     # Brave browser
     if ! command -v brave-browser &>/dev/null; then

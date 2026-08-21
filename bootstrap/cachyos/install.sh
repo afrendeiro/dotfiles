@@ -48,7 +48,10 @@ sudo pacman -S --noconfirm \
     opencode \
     libreoffice-fresh \
     hunspell-en_us \
-    thunderbird \
+    evolution \
+    evolution-ews \
+    evolution-data-server \
+    gnome-keyring \
     spotify-launcher \
     signal-desktop \
     evince \
@@ -119,6 +122,7 @@ case "${XDG_SESSION_DESKTOP:-}${XDG_CURRENT_DESKTOP:-}" in
 esac
 
 echo "=== Default applications ==="
+xdg-mime default org.gnome.Evolution.desktop x-scheme-handler/mailto
 xdg-mime default org.gnome.Evince.desktop application/pdf
 xdg-mime default imv-dir.desktop \
     image/png image/jpeg image/gif image/svg+xml image/webp image/bmp \
