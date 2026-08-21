@@ -82,3 +82,54 @@ released kernel as of 7.1.8).
 - https://bugzilla.redhat.com/show_bug.cgi?id=2413656 (vision-drivers tracker)
 - https://github.com/EliNaig/dell-pa14250-camera-fix (same SVP7500 hardware)
 - https://github.com/intel/vision-drivers (intel_cvs source)
+
+## For a future agent: track upstream progress / native solution
+
+Status as of 2026-08-21: workaround in place; NO native (mainline) solution
+exists. Periodically (e.g. after kernel/libcamera upgrades, or if this note is
+> 2 months old) check whether the workaround can be removed:
+
+1. **intel_cvs upstreaming** (the big one — camera will not enumerate at all
+   without it):
+   - https://github.com/intel/vision-drivers/issues/36 — request to upstream
+     intel_cvs (its bulk-transfer code is the blocker)
+   - https://bugzilla.redhat.com/show_bug.cgi?id=2413656 — Hans de Goede's
+     tracker ("Intel vision drivers are missing...")
+   - Fix test: unload intel_cvs, reboot, then check
+     `ls /sys/bus/i2c/devices/ | grep -i ovti` → if `i2c-OVTI08F4:00`
+     appears WITHOUT intel_cvs, mainline now handles the CVS handshake.
+   - If upstreamed: remove the DKMS step from `setup-dotfiles.sh`, the
+     `ipu7-usbio-order.conf` softdep can stay or go.
+
+2. **libcamera 0.7.2+ soft-ISP crash** (reported as a regression here; NOT yet
+   filed upstream by us):
+   - Crash: `std::array<unsigned int, 64> operator[]` assert in
+     `libcamera::SwStatsCpu::processBayerFrame2`; cause: libcamera requests a
+     4096 B input stride ("Input buffer stride ignored by the driver.
+     Requested 4096, got 3904") that the ipu7 isys driver ignores, so the
+     stats walk reads misaligned rows.
+   - Fix test: set `software_isp.mode: gpu` in `/etc/libcamera/configuration.yaml`
+     (or delete the file) and re-run
+     `gst-launch-1.0 libcamerasrc ! fakesink`. No crash + new libcamera
+     version → regression fixed; then restore the default config and drop the
+     cpu-mode file from `bootstrap/cachyos/libcamera/`.
+   - If still broken and upstream is quiet, file it:
+     https://gitlab.freedesktop.org/camera/libcamera/-/issues (component:
+     software ISP / simple pipeline, mention ipu7 stride).
+
+3. **ipu7 staging driver resume bug** ("Failed to get runtime PM"):
+   - The refcount-leak fixes (`b298b808`, `843644e1`) are merged upstream but
+     NOT the actual failure; check `journalctl -k | grep -i "runtime PM"`
+     after a suspend/resume cycle on a newer kernel.
+   - Fix test: delete `90-ipu7-power.rules` (or set
+     `power/control` to auto) and suspend/resume; camera must still stream
+     via the relay (`ffmpeg -f v4l2 -i /dev/video33 -frames:v 1 /tmp/t.jpg`).
+   - Also relevant: https://github.com/intel/ipu7-drivers/issues/63 (PSYS
+     permanently defers on in-tree kernels — hardware ISP; we use the CPU
+     soft ISP so this is not blocking).
+
+When ALL three are native/working, strip the workaround: `setup-dotfiles.sh`
+camera section, `bootstrap/cachyos/{udev,modprobe.d,modules-load.d,libcamera}`,
+the `systemd` module's relay unit, and this note's workaround sections (keep a
+short "resolved natively" paragraph), then update the AGENTS.md entry.
+

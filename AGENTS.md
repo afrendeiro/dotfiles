@@ -192,4 +192,7 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `ipu7-camera-relay.service` (stowed from the `systemd` module). A udev rule
   keeps IPU7 runtime-active to dodge the staging-driver resume bug. Rebuild
   intel_cvs after kernel updates is automatic via DKMS; if the camera is
-  missing, verify with the checks in the note.
+  missing, verify with the checks in the note. The note's "track upstream
+  progress" section lists what to check before removing any of the
+  workaround pieces (intel_cvs upstreaming, libcamera 0.7.2 soft-ISP
+  regression, ipu7 resume fix).
