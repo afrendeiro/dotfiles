@@ -184,3 +184,12 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   EC cuts power (1 amber + 6 white blink code, BIOS "WDT" event). Unresolved as of
   2026-08-18; before assuming any abrupt shutdown is a config problem, check the
   Dell/omarchy threads linked in that note for a fix.
+- `notes/camera-ipu7-suspend.md` — camera (OV08X40 via Intel IPU7 + Synaptics
+  CVS bridge) on this XPS 14. Requires the out-of-tree `intel_cvs` driver
+  (`intel/vision-drivers`, installed via DKMS, AUTOINSTALL) to enumerate the
+  sensor, plus libcamera `software_isp: cpu` mode (GPU path crashes against
+  the ipu7 driver's stride), v4l2loopback `/dev/video33` + user relay service
+  `ipu7-camera-relay.service` (stowed from the `systemd` module). A udev rule
+  keeps IPU7 runtime-active to dodge the staging-driver resume bug. Rebuild
+  intel_cvs after kernel updates is automatic via DKMS; if the camera is
+  missing, verify with the checks in the note.
