@@ -74,12 +74,14 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 
 ## Safety
 
+- **Never install from the AUR and never use AUR helpers (yay/paru/pikaur).**
+  Official repos, GitHub releases, and Flatpak only.
 - Never commit secrets: `.ssh/`, `*.local.fish`, `local.fish`, `fish_variables`,
   `.boto`, password store, nwg-displays monitor files are gitignored.
 - Machine-specific settings belong in `~/.config/fish/conf.d/local.fish`
   (gitignored, backed up via pass) — see `fish/.config/fish/conf.d/local.fish.example`.
 - Don't commit generated state: `lazy-lock.json`, `node_modules/`, `package*.json`,
-  `plugins/`, `themes/`, and `btop|herdr|uv|uvx|llm|teams-tui-go|ruff|ty|black|*_sync`
+  `plugins/`, `themes/`, and `btop|herdr|uv|uvx|llm|teams-tui-go|ruff|ty|black|matcha|*_sync`
   binaries. If `git status`
   shows surprises, check `.gitignore`.
 

@@ -30,6 +30,7 @@ scripts/.local/bin/ruff
 scripts/.local/bin/ty
 scripts/.local/bin/black
 scripts/.local/bin/blackd
+scripts/.local/bin/matcha
 scripts/.local/bin/tw_asana_sync
 scripts/.local/bin/tw_caldav_sync
 scripts/.local/bin/tw_gcal_sync
