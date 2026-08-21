@@ -184,7 +184,7 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   EC cuts power (1 amber + 6 white blink code, BIOS "WDT" event). Unresolved as of
   2026-08-18; before assuming any abrupt shutdown is a config problem, check the
   Dell/omarchy threads linked in that note for a fix.
-- `notes/camera-ipu7-suspend.md` — camera (OV08X40 via Intel IPU7 + Synaptics
+- `notes/camera-ipu7.md` — camera (OV08X40 via Intel IPU7 + Synaptics
   CVS bridge) on this XPS 14. Requires the out-of-tree `intel_cvs` driver
   (`intel/vision-drivers`, installed via DKMS, AUTOINSTALL) to enumerate the
   sensor, plus libcamera `software_isp: cpu` mode (GPU path crashes against

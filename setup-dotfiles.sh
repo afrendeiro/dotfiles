@@ -70,7 +70,7 @@ echo "=== Camera (IPU7) system setup ==="
 # modprobe load order, libcamera configured for the CPU soft ISP (the GPU
 # path crashes with libcamera >= 0.7.2 on the ipu7 driver's stride), and a
 # udev rule keeping IPU7 runtime-active (suspend/resume driver bug).
-# See notes/camera-ipu7-suspend.md.
+# See notes/camera-ipu7.md.
 if [ -d "$REPO_DIR/bootstrap/cachyos/udev/rules.d" ]; then
     if sudo install -Dm644 "$REPO_DIR"/bootstrap/cachyos/udev/rules.d/*.rules \
             /etc/udev/rules.d/ && sudo udevadm control --reload-rules; then

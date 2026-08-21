@@ -2,5 +2,5 @@
 # Workaround for the staging ipu7 driver failing to runtime-resume the PSYS
 # device on suspend/resume ("Failed to get runtime PM" in journalctl), which
 # leaves the OV08X40 MIPI camera dead until reboot.
-# See notes/camera-ipu7-suspend.md.
+# See notes/camera-ipu7.md.
 ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x8086", ATTR{device}=="0xb05d", ATTR{power/control}="on"
