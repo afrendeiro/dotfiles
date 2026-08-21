@@ -1,0 +1,14 @@
+[Unit]
+Description=IPU7 camera relay (libcamera -> v4l2loopback)
+# GStreamer relays the libcamera soft-ISP output to a v4l2loopback device so
+# browsers/desktop apps see a normal webcam. See notes/camera-ipu7-suspend.md.
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/gst-launch-1.0 libcamerasrc ! videoconvert ! videoflip method=rotate-180 ! video/x-raw,format=YUY2 ! v4l2sink device=/dev/video33
+Restart=always
+RestartSec=10
+Environment=LIBCAMERA_LOG_LEVELS=*:ERROR
+
+[Install]
+WantedBy=default.target

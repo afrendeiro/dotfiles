@@ -12,7 +12,7 @@ set -euo pipefail
 
 REPO_URL="git@github.com:afrendeiro/dotfiles.git"
 REPO_DIR="$HOME/work/dotfiles"
-BASE_MODULES="scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty kitty teams-tui-go"
+BASE_MODULES="scripts fish tmux git herdr nvim ghostty ipython opencode nautilus alacritty kitty teams-tui-go systemd"
 
 echo "=== Cloning dotfiles ==="
 if [ ! -d "$REPO_DIR/.git" ]; then
@@ -63,6 +63,58 @@ if command -v pass >/dev/null 2>&1 \
     pass show dotfiles/local.fish > "$HOME/.config/fish/conf.d/local.fish"
     echo "Restored machine-specific fish config"
 fi
+
+echo "=== Camera (IPU7) system setup ==="
+# The XPS 14 webcam is an IPU7 + OV08X40 MIPI sensor behind a Synaptics CVS
+# bridge. It needs: the out-of-tree intel_cvs driver (built via DKMS), the
+# modprobe load order, libcamera configured for the CPU soft ISP (the GPU
+# path crashes with libcamera >= 0.7.2 on the ipu7 driver's stride), and a
+# udev rule keeping IPU7 runtime-active (suspend/resume driver bug).
+# See notes/camera-ipu7-suspend.md.
+if [ -d "$REPO_DIR/bootstrap/cachyos/udev/rules.d" ]; then
+    if sudo install -Dm644 "$REPO_DIR"/bootstrap/cachyos/udev/rules.d/*.rules \
+            /etc/udev/rules.d/ && sudo udevadm control --reload-rules; then
+        echo "  Installed IPU7 udev rules"
+    else
+        echo "  WARNING: could not install udev rules (need sudo)"
+    fi
+fi
+if [ -d "$REPO_DIR/bootstrap/cachyos/modprobe.d" ]; then
+    if sudo install -Dm644 "$REPO_DIR"/bootstrap/cachyos/modprobe.d/*.conf \
+            /etc/modprobe.d/; then
+        echo "  Installed modprobe.d configs (ipu7-usbio-order, v4l2loopback)"
+    else
+        echo "  WARNING: could not install modprobe.d configs (need sudo)"
+    fi
+fi
+if [ -d "$REPO_DIR/bootstrap/cachyos/modules-load.d" ]; then
+    sudo install -Dm644 "$REPO_DIR"/bootstrap/cachyos/modules-load.d/*.conf \
+            /etc/modules-load.d/ \
+        && echo "  Installed modules-load.d (v4l2loopback)"
+fi
+sudo install -Dm644 "$REPO_DIR/bootstrap/cachyos/libcamera/configuration.yaml" \
+        /etc/libcamera/configuration.yaml \
+    && echo "  Installed libcamera config (software_isp cpu mode)"
+if command -v dkms >/dev/null 2>&1; then
+    if [ -d /usr/src/vision-driver-1.0.0 ]; then
+        echo "  vision-driver (intel_cvs) already in /usr/src"
+    else
+        echo "  Cloning intel/vision-drivers for DKMS (intel_cvs)"
+        sudo git clone --depth 1 https://github.com/intel/vision-drivers.git \
+            /usr/src/vision-driver-1.0.0
+        sudo dkms add vision-driver/1.0.0
+    fi
+    if ! dkms status 2>/dev/null | grep -q "vision-driver/1.0.0: installed"; then
+        sudo dkms build vision-driver/1.0.0 && sudo dkms install vision-driver/1.0.0
+    fi
+    echo "  intel_cvs DKMS module installed (auto-rebuilds on kernel updates)"
+fi
+
+echo "=== Enabling camera relay (libcamera -> v4l2loopback) ==="
+systemctl --user daemon-reload 2>/dev/null || true
+systemctl --user enable --now ipu7-camera-relay.service 2>/dev/null \
+    && echo "  ipu7-camera-relay.service running (webcam at /dev/video33)" \
+    || echo "  WARNING: could not enable ipu7-camera-relay (login session only; enable manually)"
 
 echo "=== Linking herdr plugin(s) ==="
 if command -v herdr >/dev/null 2>&1; then
