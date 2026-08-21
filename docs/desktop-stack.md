@@ -22,10 +22,10 @@ edit the template, then apply with `noctalia msg templates-apply`.
 
 ## Email & Microsoft 365
 
-- `SUPER+SHIFT+M` — launch/focus **Evolution** (mail, calendar, contacts,
+- `SUPER+M` — launch/focus **Evolution** (mail, calendar, contacts,
   tasks; EWS account, see `notes/evolution-m365.md`)
-- `SUPER+M` — Outlook PWA · `SUPER+C` — Calendar PWA · `SUPER+N` — To Do
-  PWA (kept as backups while the Evolution EWS bridge is in use)
+- `SUPER+SHIFT+M` — Outlook PWA · `SUPER+C` — Calendar PWA · `SUPER+N` —
+  To Do PWA (kept as backups while the Evolution EWS bridge is in use)
 - In Evolution: `Ctrl+1` Mail · `Ctrl+2` Contacts · `Ctrl+3` Calendar ·
   `Ctrl+4` Tasks · `Ctrl+5` Memos · `File → New Window` for a second view
 - OAuth tokens live in gnome-keyring (autostarted via
