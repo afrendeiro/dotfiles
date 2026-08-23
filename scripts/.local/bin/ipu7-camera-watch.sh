@@ -30,7 +30,7 @@ consumers() {
     done
 }
 
-closed_since=0
+closed_since=$(date +%s)
 while true; do
     if [ -n "$(consumers)" ]; then
         systemctl --user start "$RELAY"
