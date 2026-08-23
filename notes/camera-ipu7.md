@@ -54,18 +54,15 @@ capture nodes but no sensor entity; nothing in `lsusb` looks camera-like.
    ! video/x-raw,format=YUY2 ! v4l2sink device=/dev/video33`.
    The `videoflip rotate-180` matches the CachyOS guide for this XPS; remove
    if orientation is wrong.
-5. **Privacy LED (on-demand relay)** — the relay is NOT always-on.
-   `ipu7-camera-watch.service`
-   (`scripts/.local/bin/ipu7-camera-watch.sh`) polls `/proc` every 0.5 s for
-   readers of `/dev/video33` (ignoring the relay's own sink fd) and starts
-   the relay on demand; the relay is stopped after the device stays unread
-   for 5 s, so the sensor and its LED are off when no app uses the camera.
-   Requires NO `exclusive_caps` on the loopback: an idle loopback with
-   `exclusive_caps=1` only advertises output caps, so consumers can't even
-   open it to trigger the watchdog.
-   Known behavior: a consumer that opens + immediately streams in < ~1 s
-   gets EIO (relay startup takes ~1 s) — browsers retry and the portal's
-   device enumeration pre-warms the relay before the chooser even shows up.
+5. **Privacy LED (frozen-idle relay)** — the relay service always runs, but
+   `ipu7-camera-watch.service` (`scripts/.local/bin/ipu7-camera-watch.sh`)
+   SIGSTOPs it while no app reads `/dev/video33` (polling `/proc` fds every
+   0.5 s, ignoring the relay's own sink fd) and SIGCONTs it within ~0.5 s of
+   a consumer opening the device. A frozen gst process keeps the loopback
+   producer attached, so consumers never hit the EIO/EBUSY cold-start race
+   (STREAMON succeeds; frames simply don't arrive until SIGCONT), while the
+   stalled sensor turns the privacy LED off. Requires NO `exclusive_caps` on
+   the loopback, or apps can't open the idle device at all.
    v4l2loopback ≥ 0.15 emits no open/close uevents, so this is a /proc scan
    instead of a udev trigger.
 
@@ -85,11 +82,11 @@ released kernel as of 7.1.8).
 - `ls /sys/bus/i2c/devices/ | grep ovti` → `i2c-OVTI08F4:00`
 - `media-ctl -d /dev/media0 -p | grep ov08` → `ov08x40 17-0036` entity
 - `journalctl -k | grep -i "transfer of ownership"` → success line
-- `systemctl --user status ipu7-camera-watch` → active (relay is on demand;
-  `ipu7-camera-relay` is only active while something reads /dev/video33)
+- `systemctl --user status ipu7-camera-watch` → active (the relay
+  `ipu7-camera-relay` is always active but usually SIGSTOPped; a consumer
+  open unfreezes it within ~0.5 s)
 - `ffmpeg -f v4l2 -i /dev/video33 -frames:v 1 /tmp/cam.jpg` → real image
-  (hold the device open for ~2 s first, e.g. `exec 3<>/dev/video33; sleep 3`,
-  so the watchdog warms the relay up before the single-shot open)
+  (works straight from cold — the relay is always attached)
 - Direct stills: `cam --camera 1 --capture=1 --file=/tmp/cam.dng`
 
 ## References
@@ -145,13 +142,17 @@ exists. Periodically (e.g. after kernel/libcamera upgrades, or if this note is
      soft ISP so this is not blocking).
 
 4. **On-demand relay is a stopgap** (v4l2loopback has no open/close uevents
-   since 0.15; the /proc-scan watchdog in `ipu7-camera-watch.sh` is a hack):
+   since 0.15; the /proc-scan + SIGSTOP watchdog in `ipu7-camera-watch.sh`
+   is a hack):
    - If a future pipewire ships `libcamera-provider.so`
      (`ls /usr/lib/spa-0.2/v4l2/`) the browser portal can expose the camera
      natively and the loopback + relay + watchdog can all go away (LED then
      follows page usage exactly).
    - Or if v4l2loopback regains open/close uevents, replace the watchdog
      with udev RUN rules.
+   - The raw IPU7 ISYS nodes (/dev/video1-31) are also listed as cameras by
+     the v4l2 camera provider; selecting them fails (STREAMON "Link has
+     been severed"). Only "IPU7-Camera" (video33) works.
 
 When ALL of the above are native/working, strip the workaround:
 `setup-dotfiles.sh` camera section,
