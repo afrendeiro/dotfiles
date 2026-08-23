@@ -141,6 +141,15 @@ hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(noctCall .. "panel-toggle clipboard")
 -- Notifications
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center notifications"))
 
+---------------------------
+---- SNAPSHOTS (btrfs) ----
+---------------------------
+
+-- Create / list / manage snapper root snapshots (scripts in the scripts module)
+hl.bind(mainMod .. " + CONTROL + S", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e ~/.local/bin/snapshot-create.sh"))
+hl.bind(mainMod .. " + CONTROL + L", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e ~/.local/bin/snapshot-list.sh"))
+hl.bind(mainMod .. " + CONTROL + R", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e ~/.local/bin/snapshot-menu.sh"))
+
 -------------------------------
 ---- WORKSPACES & MONITORS ----
 -------------------------------
