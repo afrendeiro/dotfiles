@@ -7,7 +7,10 @@ set -u
 
 DEV=/dev/video33
 RELAY=ipu7-camera-relay.service
-STOP_DELAY=5
+# Grace period after the last consumer closes: long enough that the camera
+# chooser's format enumeration (which opens the device) keeps the relay warm
+# until the page actually streams.
+STOP_DELAY=15
 POLL_SEC=0.5
 
 relay_pid() {
