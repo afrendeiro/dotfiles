@@ -110,11 +110,11 @@ if command -v dkms >/dev/null 2>&1; then
     echo "  intel_cvs DKMS module installed (auto-rebuilds on kernel updates)"
 fi
 
-echo "=== Enabling camera relay (libcamera -> v4l2loopback) ==="
+echo "=== Enabling camera relay watchdog (libcamera -> v4l2loopback) ==="
 systemctl --user daemon-reload 2>/dev/null || true
-systemctl --user enable --now ipu7-camera-relay.service 2>/dev/null \
-    && echo "  ipu7-camera-relay.service running (webcam at /dev/video33)" \
-    || echo "  WARNING: could not enable ipu7-camera-relay (login session only; enable manually)"
+systemctl --user enable --now ipu7-camera-watch.service 2>/dev/null \
+    && echo "  ipu7-camera-watch.service running (relay starts on demand; LED off when unused)" \
+    || echo "  WARNING: could not enable ipu7-camera-watch (login session only; enable manually)"
 
 echo "=== Linking herdr plugin(s) ==="
 if command -v herdr >/dev/null 2>&1; then

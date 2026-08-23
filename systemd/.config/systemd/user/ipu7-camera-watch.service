@@ -1,0 +1,14 @@
+[Unit]
+Description=Start/stop IPU7 camera relay on demand
+# Scans /proc for readers of /dev/video33 and runs the camera relay only
+# while a browser/app has the camera open, so the sensor and its privacy
+# LED stay off otherwise. See notes/camera-ipu7.md.
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/ipu7-camera-watch.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

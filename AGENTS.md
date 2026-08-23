@@ -189,10 +189,14 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   (`intel/vision-drivers`, installed via DKMS, AUTOINSTALL) to enumerate the
   sensor, plus libcamera `software_isp: cpu` mode (GPU path crashes against
   the ipu7 driver's stride), v4l2loopback `/dev/video33` + user relay service
-  `ipu7-camera-relay.service` (stowed from the `systemd` module). A udev rule
-  keeps IPU7 runtime-active to dodge the staging-driver resume bug. Rebuild
-  intel_cvs after kernel updates is automatic via DKMS; if the camera is
-  missing, verify with the checks in the note. The note's "track upstream
-  progress" section lists what to check before removing any of the
-  workaround pieces (intel_cvs upstreaming, libcamera 0.7.2 soft-ISP
-  regression, ipu7 resume fix).
+  `ipu7-camera-relay.service` (stowed from the `systemd` module). The relay
+  runs ON DEMAND: `ipu7-camera-watch.service` scans /proc for readers of
+  `/dev/video33` and starts/stops it, so the privacy LED is off when unused
+  (no `exclusive_caps` on the loopback, or consumers can't open it to
+  trigger the watchdog). A udev rule keeps IPU7 runtime-active to dodge the
+  staging-driver resume bug. Rebuild intel_cvs after kernel updates is
+  automatic via DKMS; if the camera is missing, verify with the checks in
+  the note. The note's "track upstream progress" section lists what to
+  check before removing any of the workaround pieces (intel_cvs
+  upstreaming, libcamera 0.7.2 soft-ISP regression, ipu7 resume fix,
+  pipewire libcamera-provider / v4l2loopback uevents).
