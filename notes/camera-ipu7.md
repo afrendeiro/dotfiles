@@ -57,24 +57,36 @@ capture nodes but no sensor entity; nothing in `lsusb` looks camera-like.
    if orientation is wrong.
 5. **Privacy LED (proxy + on-demand relay)** — a black-frame proxy service
    `systemd/.config/systemd/user/ipu7-camera-proxy.service`
-   (`videotestsrc pattern=black`, same 4K YUY2 caps as the relay, 5 fps)
-   ALWAYS writes to `/dev/video33`, so the loopback always has a producer
-   attached: consumers can open + STREAMON without EIO/EBUSY, and the
-   format they negotiate matches what the relay delivers, so the swap is
-   seamless. The watchdog `ipu7-camera-watch.service`
+   (`videotestsrc pattern=black`, same 4K YUY2 caps as the relay, 30 fps,
+   ~5 % CPU) ALWAYS writes to `/dev/video33`, so the loopback always has a
+   producer attached: consumers can open + STREAMON without EIO/EBUSY, and
+   the format AND frame rate they negotiate match what the relay delivers
+   (4K YUY2 @ 30 fps), so the swap is seamless and browsers don't cap to a
+   low fps. The watchdog `ipu7-camera-watch.service`
    (`scripts/.local/bin/ipu7-camera-watch.sh`, a /proc fd scan every 0.5 s —
    v4l2loopback ≥ 0.15 emits no open/close uevents) swaps the proxy for the
-   real relay while any app reads the device and swaps back after the
+   real relay while any app STREAMS the device and swaps back after the
    device stays unread for 15 s, so the sensor (and its privacy LED) only
-   runs while the camera is actually used. The proxy must be dropped
-   BEFORE the relay starts: v4l2loopback lets only one output fd set the
-   format (else the relay's S_FMT → EBUSY), and a brief producer-less gap
-   only stalls the already-streaming consumer, never errors it. Requires NO
-   `exclusive_caps` on the loopback, or apps can't open the idle device.
-   Known caveat: at 720p/1080p relay caps the libcamera 0.7.2 soft-ISP
-   crashes (stride bug below); 4K is stable. The raw IPU7 ISYS nodes
-   (/dev/video1-31) are also listed by the v4l2 camera provider; selecting
-   them fails ("Link has been severed").
+   runs while the camera is actually used. Consumers are detected by open
+   flags: only O_RDWR/O_WRONLY holders count — Chromium's capture service
+   keeps an O_RDONLY monitor fd open permanently and probe enumerations are
+   O_RDONLY, so they never trigger or pin the relay. The proxy must be
+   dropped BEFORE the relay starts: v4l2loopback lets only one output fd set
+   the format (else the relay's S_FMT → EBUSY), and a brief producer-less
+   gap only stalls the already-streaming consumer, never errors it.
+   `exclusive_caps=1` is REQUIRED on the loopback: Chromium's V4L2 factory
+   skips any device advertising both CAPTURE and OUTPUT caps (assumed
+   memory-to-memory, crbug.com/139356) — without it Brave sees no cameras.
+   With exclusive_caps the loopback advertises CAPTURE while a producer is
+   attached (the proxy always streams, so it is always listable) and OUTPUT
+   when idle; `keep_format=1` cannot be used instead (it makes QUERYCAP
+   show CAPTURE even to the producers, so gst v4l2sink refuses to open as
+   an output device). Known caveat: at 1080p/1440p relay caps the libcamera
+   0.7.2 soft-ISP crashes (stride bug below); only 4K is stable — 4K@30
+   works (~29 fps). The raw IPU7 ISYS nodes (/dev/video1-31) are also
+   listed by the v4l2 camera provider (Firefox) but not by Chromium (bayer
+   formats aren't in its usable list); selecting them fails ("Link has
+   been severed").
 
 ## Secondary bug: IPU7 dies on suspend/resume
 

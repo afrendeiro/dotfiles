@@ -188,14 +188,17 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   CVS bridge) on this XPS 14. Requires the out-of-tree `intel_cvs` driver
   (`intel/vision-drivers`, installed via DKMS, AUTOINSTALL) to enumerate the
   sensor, plus libcamera `software_isp: cpu` mode (GPU path crashes against
-  the ipu7 driver's stride), v4l2loopback `/dev/video33` + user relay service
-  `ipu7-camera-relay.service` (stowed from the `systemd` module). A black
-  frame proxy (`ipu7-camera-proxy.service`) always writes to the loopback so
-  consumers never hit a cold-start EIO; `ipu7-camera-watch.service` scans
-  /proc for readers of `/dev/video33` and swaps the proxy for the real
-  relay on demand, so the privacy LED is off when no app uses the camera
-  (no `exclusive_caps` on the loopback, or apps can't open it). A udev rule
-  keeps IPU7 runtime-active to dodge the
+  the ipu7 driver's stride), v4l2loopback `/dev/video33` (REQUIRES
+  `exclusive_caps=1`: Chromium skips dual-capture/output devices,
+  crbug.com/139356) + user relay service `ipu7-camera-relay.service` (stowed
+  from the `systemd` module). A black frame proxy (`ipu7-camera-proxy.service`,
+  same 4K YUY2 caps as the relay so the swap is seamless) always writes to
+  the loopback so consumers never hit a cold-start EIO and browsers
+  negotiate 30 fps; `ipu7-camera-watch.service` scans /proc fds and swaps
+  the proxy for the real relay only while a streaming consumer (O_RDWR,
+  not O_RDONLY probes/monitors) is attached, so the privacy LED is off
+  when no app uses the camera. A udev rule keeps IPU7 runtime-active to
+  dodge the
   staging-driver resume bug. Rebuild intel_cvs after kernel updates is
   automatic via DKMS; if the camera is missing, verify with the checks in
   the note. The note's "track upstream progress" section lists what to
