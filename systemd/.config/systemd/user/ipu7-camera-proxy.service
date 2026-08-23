@@ -1,0 +1,17 @@
+[Unit]
+Description=IPU7 camera proxy (black frame source for v4l2loopback)
+# Writes an idle black frame stream to /dev/video33 so the loopback always
+# has a producer attached (consumers never hit EIO on open/STREAMON) without
+# running the sensor. The real relay replaces this while a consumer is
+# present. StartLimit disabled: the watchdog restarts this unit on every
+# poll while the camera is idle. See notes/camera-ipu7.md.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/gst-launch-1.0 videotestsrc pattern=black ! videoconvert ! video/x-raw,format=YUY2,width=3840,height=2160,framerate=5/1 ! v4l2sink device=/dev/video33
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target
