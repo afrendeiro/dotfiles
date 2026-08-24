@@ -17,6 +17,15 @@ awaiting CeMM admin consent. EWS hard deadline **2026-10-01**.
   not activatable"). gnome-keyring is autostarted via
   `hyprland/.config/autostart/gnome-keyring-secrets.desktop` (XDG
   autostart; Hyprland runs under UWSM).
+  **Auto-unlock at login (2026-08-24):** `pam_gnome_keyring` added to
+  `/etc/pam.d/greetd` (`-auth optional pam_gnome_keyring.so` +
+  `-session optional pam_gnome_keyring.so auto_start`; backup
+  `greetd.bak-20260824`). The `Default_keyring` password equals the login
+  password, so PAM unlocks it at every login — no manual unlock. On the
+  first reboot after the change a prompt still appeared; after ticking
+  "automatically unlock" in the dialog it never prompts again. If the
+  keyring ever needs a manual unlock, the prompt is now sticky/centered
+  (`gcr-prompter` windowrule, `hyprland/.../autostart-user.lua`).
   Tokens are keyed `OAuth2::<Service>[<user>]` — NOT by source UID.
   Verify with: `secret-tool lookup e-source-uid 'OAuth2::Office365[arendeiro@cemm.at]'`
   (6158-byte payload confirmed 2026-08-21). If the first sign-in predates
