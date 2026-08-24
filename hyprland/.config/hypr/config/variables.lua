@@ -6,7 +6,7 @@ HERDR_TERMINAL = 'alacritty --class herdr -e herdr'
 FILE_MANAGER = "nautilus"
 BROWSER      = "brave-origin"
 EDITOR       = "nvim"
-SPOTIFY      = "spotify-launcher"
+SPOTIFY      = 'kitty --class spotify-tui -e spotify_player'
 EVOLUTION    = "org.gnome.Evolution.desktop"
 
 -- Microsoft 365 PWAs
@@ -21,7 +21,7 @@ GITHUB  = "brave-origin --profile-directory=Default --app-id=mjoklplbddabcmpepno
 
 -- Window classes (app_id / WM_CLASS) for launch-or-focus binds
 EVOLUTION_CLASS   = "org.gnome.Evolution"
-SPOTIFY_CLASS     = "spotify"
+SPOTIFY_CLASS     = "spotify-tui"
 BROWSER_CLASS     = "brave-origin"
 TMUX_CLASS        = "tmux"
 HERDR_CLASS       = "herdr"
