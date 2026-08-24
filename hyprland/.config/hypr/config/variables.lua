@@ -7,6 +7,7 @@ FILE_MANAGER = "nautilus"
 BROWSER      = "brave-origin"
 EDITOR       = "nvim"
 SPOTIFY      = 'kitty --class spotify-tui -e spotify_player'
+OBSIDIAN     = "obsidian"
 EVOLUTION    = "org.gnome.Evolution.desktop"
 
 -- Microsoft 365 PWAs
@@ -22,6 +23,7 @@ GITHUB  = "brave-origin --profile-directory=Default --app-id=mjoklplbddabcmpepno
 -- Window classes (app_id / WM_CLASS) for launch-or-focus binds
 EVOLUTION_CLASS   = "org.gnome.Evolution"
 SPOTIFY_CLASS     = "spotify-tui"
+OBSIDIAN_CLASS    = "obsidian"
 BROWSER_CLASS     = "brave-origin"
 TMUX_CLASS        = "tmux"
 HERDR_CLASS       = "herdr"

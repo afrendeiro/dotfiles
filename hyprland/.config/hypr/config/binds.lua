@@ -102,6 +102,7 @@ hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(launchPrefix .. OUTLOOK))
 
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(launchPrefix .. YOUTUBE))
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(launchPrefix .. GITHUB))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. OBSIDIAN_CLASS .. " " .. launchPrefix .. OBSIDIAN))
 
 --------------------------
 ---- HARDWARE CONTROLS ----
