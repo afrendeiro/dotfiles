@@ -74,8 +74,10 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 
 ## Safety
 
-- **Never install from the AUR and never use AUR helpers (yay/paru/pikaur).**
-  Official repos, GitHub releases, and Flatpak only.
+- **Prefer pacman from the official/CachyOS repos.** Never install from the
+  AUR and never use AUR helpers (yay/paru/pikaur). Fallbacks, in order:
+  GitHub releases, then Flatpak (`flatpak` + the Flathub user remote are
+  installed for this purpose).
 - Never commit secrets: `.ssh/`, `*.local.fish`, `local.fish`, `fish_variables`,
   `.boto`, password store, nwg-displays monitor files are gitignored.
 - Machine-specific settings belong in `~/.config/fish/conf.d/local.fish`
