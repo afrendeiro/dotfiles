@@ -87,6 +87,21 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   binaries. If `git status`
   shows surprises, check `.gitignore`.
 
+## scripts module
+
+- Executables live in `scripts/.local/bin/` (stowed as a directory symlink, so
+  `~/.local/bin` IS the repo dir — files are live immediately on edit). Tracked
+  scripts are committed here; tool binaries installed by bootstrap scripts
+  (btop, herdr, uv, llm, ruff, ty, black, pyright, teams-tui-go, ...) are
+  gitignored.
+- Naming convention: lowercase, **hyphen-separated**, action-first
+  (`connect-vpn.sh`, `toggle-wifi.sh`, `snapshot-create.sh`). Use `restart-*`
+  for scripts that restart daemons (`restart-audio.sh` restarts
+  pipewire/pipewire-pulse/wireplumber, `restart-network.sh` restarts
+  systemd-networkd/resolved). No underscores. Renaming a script requires
+  updating references (Hyprland `binds.lua`, gnome `media-keys.dconf`,
+  systemd unit `ExecStart=`, docs) and is deployed automatically via stow.
+
 ## Commits
 
 - Format: `module: description` (e.g. `fish: remove auto tmux attach on login`).
