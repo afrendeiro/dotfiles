@@ -97,7 +97,10 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - Naming convention: lowercase, **hyphen-separated**, action-first
   (`connect-vpn.sh`, `toggle-wifi.sh`, `snapshot-create.sh`). Use `restart-*`
   for scripts that restart daemons (`restart-audio.sh` restarts
-  pipewire/pipewire-pulse/wireplumber, `restart-network.sh` restarts
+  pipewire/pipewire-pulse/wireplumber AND relaunches noctalia —
+  restarting pipewire drops noctalia's in-process WirePlumber mixer
+  connection with no reconnection logic, so volume/mute keys silently stop
+  working until noctalia is restarted; `restart-network.sh` restarts
   systemd-networkd/resolved). No underscores. Renaming a script requires
   updating references (Hyprland `binds.lua`, gnome `media-keys.dconf`,
   systemd unit `ExecStart=`, docs) and is deployed automatically via stow.
