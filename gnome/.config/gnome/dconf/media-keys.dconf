@@ -17,12 +17,12 @@ name='Lauch a file explorer'
 
 [custom-keybindings/custom2]
 binding='<Shift><Super>b'
-command='/home/afr/.local/bin/toggle_bluetooth.sh'
+command='/home/afr/.local/bin/toggle-bluetooth.sh'
 name='Toggle bluetooth'
 
 [custom-keybindings/custom3]
 binding='<Shift><Super>w'
-command='/home/afr/.local/bin/toggle_wifi.sh'
+command='/home/afr/.local/bin/toggle-wifi.sh'
 name='Toggle wifi'
 
 [custom-keybindings/custom4]
