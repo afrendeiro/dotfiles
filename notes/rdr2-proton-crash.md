@@ -1,8 +1,10 @@
 # RDR2 (Steam) crashes at engine init on this machine — investigation log
 
-Status: **unresolved** (last explored 2026-08-27). Game has NEVER run on this
-machine (crash dumps since 2026-08-14). Real fault isolated (see below); all
-12+ hypotheses ruled out; see TODO for the watch list.
+Status: **RESOLVED — kernel regression** (2026-08-27). RDR2 boots and runs on
+the **LTS kernel (`6.18.42-1-cachyos-lts`)**; the init crash only occurs on
+`7.2.0-1-cachyos`. First-ever successful game start on this machine. Remaining
+post-boot issue: Social Club entitlement (account sign-in in the fresh
+prefix), not a crash.
 
 ## Symptom
 
@@ -11,28 +13,32 @@ starts → crashes during **Game Init** (all engine pools 0, 0 GPU usage, empty
 crash dump) → launcher shows "the game crashed" menu (Retry / Safe Mode both
 fail). Safe mode gets marginally further, still crashes.
 
-## The REAL fault (from WINEDEBUG trace `~/steam-1174180.log`, 41 MB)
+## ROOT CAUSE (confirmed 2026-08-27)
 
-RDR2.exe (pid 09b4 in the log) runs ~2 s after spawn, then dies with:
+**The kernel: `7.2.0-1-cachyos`.** On `6.18.42-1-cachyos-lts` (installed and
+bootable via the limine menu) the game boots and runs past init with zero
+changes to any game config. The crash signature on 7.2.0 — RDR2.exe
+`EXCEPTION_ACCESS_VIOLATION` at varying addresses (reads at 0x28, -1, …)
+with a handled `0xc000001d` on a sibling thread — is a race-flavored
+regression in 7.2.0 (likely a wine-relevant subsystem change: futex/vma/
+sync behavior). Nothing userspace fixed it: renderer, Proton (11.0 /
+Experimental / GE), gamescope, prefix, caches, mesa (26.2.1 → git),
+NVAPI (incl. `ALLOW_OTHER_DRIVERS`), v4l device hiding, cpuset/affinity —
+all ruled out. The game's `0xc000001d`/AV pair and the PSR oops (below) both
+point at the new-kernel stack.
 
-```
-warn:seh:dispatch_exception backtrace: --- Exception 0xc0000005.
-code=c0000005 (EXCEPTION_ACCESS_VIOLATION), READ at address 0x28   → NULL+0x28 deref
-rip = RDR2.exe + 0x2C8363F   (stack entirely inside RDR2.exe)
-```
+Actions:
+- Report the regression upstream (CachyOS bug tracker; kernel 7.2.0 + RDR2/
+  wine init AV).
+- For gaming: boot the LTS entry (`linux-cachyos-lts` in the limine menu).
+  Consider making LTS the default boot entry if 7.2.0 misbehaves elsewhere.
+- The PSR glitch should be re-checked on LTS — may share the same kernel
+  root cause.
 
-Immediately preceding the fault, the game's GPU/display detection:
-1. SetupAPI device-tree walk (`CM_Get_DevNode_Status`/`CM_Get_Child` — wine
-   stubs) at 1776.223–228
-2. `d3d11.dll` + `nvapi64.dll` (DXVK-NVAPI) load; `NvAPI_Initialize` FAILS
-   ("NVIDIA or other suitable device not found") at 1776.26
-3. ~10 ms later the AV. The game's own WER handler runs (writes the crash log),
-   so wine DID dispatch this exception — the AV itself is the fatal event.
-
-The game's `.text` section is PACKED (high-entropy bytes on disk) — static
-disassembly impossible. The v4l DIV0 crashes in the same log (10× `0xc0000094`
-in `qcap.so`) are **LAUNCHER noise** — they happen at 1746s, ~28 s BEFORE
-RDR2.exe spawns, across four launcher subprocess pids. **Red herring.**
+Post-boot note: after the first successful launch the game may report
+"Social Club account not entitled to RDR2" — that is the fresh-prefix account
+sync (the game never ran on this machine before), fixed by signing into the
+Rockstar account in the launcher and relaunching. Not a crash.
 
 ## Dead ends (all tested 2026-08-27, all ruled out)
 
