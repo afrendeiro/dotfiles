@@ -1,0 +1,4 @@
+[theme.templates.user.noctalia-folders]
+input_path  = "$XDG_CONFIG_HOME/noctalia/templates/folder-icon.svg"
+output_path = "~/.icons/NoctaliaFolders/scalable/places/folder.svg"
+post_hook   = "gtk-update-icon-cache -f ~/.icons/NoctaliaFolders || true"
