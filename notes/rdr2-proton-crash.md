@@ -1,7 +1,7 @@
 # RDR2 (Steam) crashes at engine init on this machine — investigation log
 
-Status: **unresolved** (last explored 2026-08-27). Game has NEVER run on this
-machine (crash dumps since 2026-08-14). Ongoing; see TODO.
+Status: **unresolved — root cause identified** (last explored 2026-08-27).
+Game has NEVER run on this machine (crash dumps since 2026-08-14). See TODO.
 
 ## Symptom
 
@@ -9,6 +9,26 @@ Steam → Rockstar Games Launcher opens fine (loading bar completes) → RDR2.ex
 starts → crashes during **Game Init** (all engine pools 0, 0 GPU usage, empty
 crash dump) → launcher shows "the game crashed" menu (Retry / Safe Mode both
 fail). Safe mode gets marginally further, still crashes.
+
+## Root cause (confirmed from WINEDEBUG trace `~/steam-1174180.log`, 41 MB)
+
+The game's init loads the VFW capture chain (`avicap32 → msvfw32 → quartz →
+qcap`) and enumerates video devices. Wine's `qcap.so` probes the host's
+`/dev/video*` and **divides by zero** when a device returns a bad fps:
+
+```
+err:quartz:v4l_device_create Failed to get fps: Inappropriate ioctl for device.
+warn:seh:dispatch_exception backtrace: --- Exception 0xc0000094 at qcap.so + 0x2a36
+err:seh:call_seh_handlers invalid frame ... => unable to dispatch exception.
+```
+
+0xc0000094 (EXCEPTION_INT_DIVIDE_BY_ZERO) with an undispatchable frame kills
+the process (10 occurrences in the log = every attempt). This machine has
+35+ `/dev/video*` nodes (Intel IPU7 camera video0-31 + v4l2loopback
+`/dev/video33`), so wine's probe always hits a broken device. REMOVING the
+v4l2loopback (camera stack stopped, video33 gone) did NOT fix it — the IPU7
+nodes alone still trigger the crash. (On typical desktops with no webcam,
+wine finds nothing and the game proceeds — which is why RDR2 normally works.)
 
 ## Environment
 
@@ -60,24 +80,33 @@ fail). Safe mode gets marginally further, still crashes.
 crashed, so either not the same cause or gamescope-on-PTL has its own bug).
 CachyOS forum thread with the EXACT same symptom (black screen + loading bar →
 engine-init crash, user was on NVIDIA laptop): one user fixed it by removing
-all launch options + reinstalling; no root cause identified.
+all launch options + reinstalling; no root cause identified. The v4l qcap
+divide-by-zero above supersedes both as the likely cause on THIS machine.
+
+## Related machine issue found during testing (2026-08-27)
+
+During the game attempts the **display started glitching** even after the game
+exited. Kernel journal shows an oops in the xe driver:
+`intel_psr_activate` + `xe: *ERROR* Timed out waiting PSR idle state`
+(10:47, PSR = Panel Self Refresh). Workaround installed:
+`/etc/modprobe.d/xe-psr-off.conf` → `options xe enable_psr=0`
+(the param is boot-only; needs a reboot to take effect). Re-modeset
+(`wlr-randr --output eDP-1 --mode 1920x1200@120.000999Hz`) was applied as a
+stopgap. If the glitch persists after reboot with PSR off, revisit.
 
 ## Next steps
 
-1. **Decisive capture (in flight)**: relaunch with launch options
-   `WINEDEBUG=+seh %command%` → crash → grep the tail of
-   `~/.local/share/Steam/logs/console-linux.txt` for the exception stack
-   (also look for any `wine: Unhandled exception` block). A `PROTON_LOG=1
-   %command%` run writes `proton_log.txt` into the game dir — check there too.
-2. **Clean slate**: delete `compatdata/1174180` (back up; loses only in-game
-   settings/profiles) + `steamapps/shadercache/1174180` (fossilize/foz cache)
+1. **Try `WINEDLLOVERRIDES="avicap32=" %command%`** as launch options —
+   disables the VFW capture DLL so wine never probes v4l. If the game then
+   boots (it shouldn't need video capture), this is the fix.
+2. **Clean slate** (if step 1 fails): delete `compatdata/1174180` (back up;
+   loses only in-game settings/profiles) + `steamapps/shadercache/1174180`
    and retry — clears the invalid-version prefix churn and any bad shader cache.
-3. If the stack points into ANV/mesa: `pacman -Syu` mesa (CachyOS rolling;
-   B390/PTL is new — driver fixes land often), then search
-   `ValveSoftware/Proton#3291` (RDR2 mega-thread) and mesa/ANV issues for
-   PTL-specific RDR2 reports.
-4. If fullscreen-class: try windowed/borderless before launch (no official
-   `-windowed` arg; would edit the game settings once the game boots once).
+3. If the game still probes v4l: hide the devices from the container
+   (pressure-vessel bind-mount manipulation) or unload `intel_ipu7_isys`
+   before gaming (kills the camera until reloaded) — heavier.
+4. **Reboot for the PSR fix** and re-check the display; also retest RDR2
+   afterwards (a clean GPU state may matter).
 
 ## Related config on this machine
 
