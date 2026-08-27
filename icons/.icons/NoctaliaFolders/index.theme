@@ -1,0 +1,9 @@
+[Icon Theme]
+Name=Noctalia Folders
+Comment=Adwaita with noctalia-primary folder icons
+Inherits=Adwaita
+Directories=scalable/places
+
+[scalable/places]
+Size=48
+Type=Scalable
