@@ -1,8 +1,8 @@
 # RDR2 (Steam) crashes at engine init on this machine — investigation log
 
-Status: **unresolved — real fault isolated, cause not yet fixed**
-(last explored 2026-08-27). Game has NEVER run on this machine (crash dumps
-since 2026-08-14). See TODO.
+Status: **unresolved** (last explored 2026-08-27). Game has NEVER run on this
+machine (crash dumps since 2026-08-14). Real fault isolated (see below); all
+12+ hypotheses ruled out; see TODO for the watch list.
 
 ## Symptom
 
@@ -48,6 +48,9 @@ RDR2.exe spawns, across four launcher subprocess pids. **Red herring.**
 | Clean slate: fresh `compatdata/1174180` + `shadercache/1174180` (backs up in `.bak-20260827`) | identical crash |
 | **mesa-git 26.3.0_devel** (cachyos-v3, replaced mesa 26.2.1) | identical crash (missing crash-menu once — behavior shift only) |
 | `LD_PRELOAD` signal dumper (runtime instruction capture) | **stripped by pressure-vessel** — dead end |
+| `DXVK_NVAPI_ALLOW_OTHER_DRIVERS=1` (fake NVIDIA on any driver) | NvAPI_Initialize STILL failed (option exists in the binaries but no effect) — ruled out |
+| Full 16-CPU run (after the cpuset fix below) | identical crash — CPU topology ruled out |
+| **gamescope + Vulkan** (the Mint-thread Intel fix — only ever tested with DX12 before) | identical crash — ruled out. Notable: **no PSR glitch** on this run |
 
 ## Environment
 
@@ -92,36 +95,58 @@ RDR2.exe spawns, across four launcher subprocess pids. **Red herring.**
   Run: `nohup /tmp/opencode/rdr2-gdb-watch.sh &` then launch the game; results
   in `/tmp/opencode/rdr2-gdb-u/`.
 
-## Related machine issue: display glitching during fullscreen (xe/PSR)
+## Related machine issue found during testing (2026-08-27)
+
+### The cpuset pin — whole machine on 4 low-power cores (FIXED)
+
+The ENTIRE machine was cpuset-pinned to **CPUs 12-15** (`system.slice` +
+`user.slice` `cpuset.cpus.effective` = 12-15; every process incl. PID 1's
+descendants, Steam, Hyprland). Perpetrator: **ananicy-cpp** (CachyOS's
+auto-niceness daemon) — its `apply_cpuset` feature (default ON) pins cgroups
+on hybrid CPUs, re-applied every 15 s check cycle. Consequences:
+- The whole desktop ran on 2E+2LP cores (Panther Lake 6P+8E+2LP).
+- `taskset -c 0-7 %command%` launch options failed ("doesn't launch",
+  Play→Cancel) because children cannot widen beyond the parent cpuset.
+
+Fix (durable):
+1. Append `apply_cpuset = false` to `/etc/ananicy.d/ananicy.conf`
+2. `systemctl restart ananicy-cpp`
+3. `systemctl set-property --runtime system.slice AllowedCPUs=0-15` and
+   `... user.slice AllowedCPUs=0-15` (runtime; resets at reboot, but nothing
+   re-pins anymore)
+
+Verified stable across ananicy's check cycle. This is a REAL machine fix
+independent of RDR2 — the whole desktop now uses all 16 CPUs. The RDR2 crash
+persists regardless (topology ruled out).
+
+### Display glitching during fullscreen (xe/PSR) — confirmed kernel bug
 
 Recurring **screen glitch** during the game's fullscreen transitions. Kernel
 journal: `WARNING ... intel_psr_activate+0x3cf [xe]` +
-`xe: *ERROR* Timed out waiting PSR idle state` — a kernel bug on this
-Panther Lake panel during modesets. Status:
-
-- `xe.enable_psr=0` added to the boot cmdline (`/etc/default/limine`) — did
-  NOT prevent the glitch (the PSR state machine still runs in the modeset
-  path); the oops recurred at 11:44 even with PSR off
-- `xe.psr_safest_params=1` added to the cmdline (2026-08-27, limine.conf
-  regenerated via `limine-update`) — **untested yet** (needs a reboot)
-- No newer kernel available (7.2.0-1-cachyos is current) — likely needs an
-  upstream xe/i915 fix; track in a future check
-- modprobe.d drop-in `/etc/modprobe.d/xe-psr-off.conf` exists too (inert;
-  kernel cmdline is the effective source)
-- If the glitch persists after reboot with safest params: file/track as its
-  own hardware note (xps14 PSR bug), document `wlr-randr` re-modeset as a
-  stopgap
+`xe: *ERROR* Timed out waiting PSR idle state`. Status:
+- `xe.enable_psr=0` + `xe.psr_safest_params=1` in the boot cmdline —
+  the oops STILL fires (12:06:46) → confirmed unfixed kernel bug on this
+  Panther Lake panel during modesets
+- No newer kernel available (7.2.0-1-cachyos current) — track on kernel updates
+- Datapoint: the **gamescope run had no glitch** — gamescope's compositing
+  may avoid the triggering modeset path
+- Stopgap: reboot clears the glitch; `wlr-randr --output eDP-1 --mode
+  1920x1200@120.000999Hz` re-modeset as an immediate relief
+- modprobe.d drop-in `/etc/modprobe.d/xe-psr-off.conf` exists (inert; cmdline
+  is the effective source)
 
 ## Remaining steps (in order)
 
-1. **Reboot** (clears glitch, applies `psr_safest_params=1`) → re-arm the
-   fixed watcher → one launch → gdb captures the runtime fault → identify the
-   NULLed structure from the unpacked instruction
-2. **gamescope + Vulkan** combo — the Mint-thread Intel fix, never tested
-   together (gamescope was only tried with DX12)
-3. Depending on the gdb result: targeted fix (e.g., a game setting that
-   bypasses the failing probe, a DXVK/wine knob, or filing the bug upstream
-   with the captured instruction)
+1. **One final capture run** (planned 2026-08-27, post-cpuset-fix):
+   launch options `PROTON_LOG=1 WINEDEBUG=+seh %command%`, read the fresh
+   `~/steam-1174180.log` — confirm whether the fault signature changed with
+   all 16 CPUs available (varied across runs: reads at 0x28, 0xFFFFFFFFFFFFFFFF,
+   … — race/incompat signature). See TODO for the outcome.
+2. If still failing: treat as **upstream-watch** — kernel (PSR + PTL fixes),
+   mesa, Proton/wine, and the RDR2 mega-thread `ValveSoftware/Proton#3291`
+   for Intel reports. Revisit monthly or on updates.
+3. If a future kernel/mesa/Proton update lands: re-run the capture and
+   re-evaluate.
 
 ## Related config on this machine
 
@@ -130,12 +155,19 @@ Panther Lake panel during modesets. Status:
   exists on this hyprland-lua build)
 - gamescope 3.16.25 installed; RDR2's per-game gamescope launch options were
   cleared during testing
+- **Debug infra left behind** (2026-08-27): `kernel.yama.ptrace_scope=0` in
+  `/etc/sysctl.d/99-ptrace.conf` (user-level gdb attach works); watcher
+  script `/tmp/opencode/rdr2-gdb-watch.sh` (SIGSTOP+gdb, excludes
+  reaper/PlayRDR2/self); `~/.cache/protonfixes/protonfixes.log`; the camera
+  stack + `/dev/video*` perms were restored after testing
 
 ## TODO (future agent)
 
-- Run the gdb capture (steps above) and record the faulting instruction +
-  registers from `/tmp/opencode/rdr2-gdb-u/gdb-*.log`
-- Test `psr_safest_params=1`; if the glitch persists, open a dedicated
-  hardware note and check upstream xe fixes on kernel updates
+- Run the final capture (Remaining steps #1) and record the fault signature.
+- Test `psr_safest_params=1` result is CONFIRMED NOT sufficient (oops at
+  12:06:46) — the PSR glitch needs an upstream xe fix; re-check on kernel
+  updates; consider a dedicated hardware note if it persists.
+- Verify the cpuset fix survives a reboot (expected: yes, nothing re-pins;
+  the `--runtime` slice lift resets, ananicy's `apply_cpuset=false` holds).
 - If fixed: document the working recipe (proton, renderer, launch options)
-  and mark this note resolved
+  and mark this note resolved.
