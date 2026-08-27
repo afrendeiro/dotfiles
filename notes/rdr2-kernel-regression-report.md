@@ -27,6 +27,7 @@ A handled `EXCEPTION_ILLEGAL_INSTRUCTION` (0xc000001d) fires on a sibling thread
 
 - `7.2.0-1-cachyos`: crashes 100% of attempts, every Proton, every renderer, every config.
 - `6.18.42-1-cachyos-lts`: **game boots and runs** with an identical userspace (same prefix, same Proton, same launch options). First successful launch on this machine. Kernel-only regression.
+- **Vanilla Arch `linux` (7.1.9-arch1-2): does not boot on this machine at all** — black screen immediately after the bootloader. CachyOS's kernels carry Panther Lake (PTL) platform enablement that mainline 7.1.9 lacks. The CachyOS issue-template checkbox "reproduced on Arch Linux's `linux` kernel" therefore cannot be satisfied on this hardware; this report is the CachyOS-side record. When Arch's mainline reaches 7.2.0, retest to separate "mainline 7.2 regression" from "CachyOS 7.2.0 patches" (TODO).
 
 ## Ruled out (all identical on 7.2.0)
 
