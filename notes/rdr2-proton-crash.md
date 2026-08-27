@@ -6,6 +6,22 @@ the **LTS kernel (`6.18.42-1-cachyos-lts`)**; the init crash only occurs on
 post-boot issue: Social Club entitlement (account sign-in in the fresh
 prefix), not a crash.
 
+## Current setup / trade-off (2026-08-28)
+
+- **Boot default = `7.2.0-1-cachyos`** (daily driver: full audio, all
+  hardware enablement). `default_entry: 0`, `remember_last_entry: no` in
+  `/boot/limine.conf` (header survives `limine-update` regeneration).
+- **RDR2 sessions: reboot → press a key at the limine menu → pick
+  `linux-cachyos-lts`.** On LTS the game works, but **internal speakers/
+  headphones are dead** (the 6.18 SOF stack has no Panther Lake SoundWire
+  machine driver — HDMI-only; Bluetooth audio works). This is the same
+  PTL-enablement gap inverted: 7.2.0 has audio but crashes RDR2.
+- **Retest 7.2.0 on every kernel update** (and once the filed CachyOS bug —
+  see `rdr2-kernel-regression-report.md` — is fixed): the goal is ONE kernel
+  that runs both.
+- Anno 1404 (Steam non-Steam install, extracted to `/home/afr/Games/Anno1404-setup/`)
+  is a separate track, on hold by user request.
+
 ## Symptom
 
 Steam → Rockstar Games Launcher opens fine (loading bar completes) → RDR2.exe
