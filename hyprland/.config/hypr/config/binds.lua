@@ -93,6 +93,7 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " ..
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(launchPrefix .. CALENDAR))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e teams-tui-go"))
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS))
+hl.bind(mainMod .. " + CONTROL + T", hl.dsp.exec_cmd("~/.local/bin/toggle-dwt.sh"))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(launchPrefix .. TODO))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(launchPrefix .. OUTLOOK))
 
@@ -180,6 +181,9 @@ hl.bind(mainMod .. " + CONTROL + mouse_down", hl.dsp.focus({ workspace = "m+1" }
 
 -- Special workspace (scratchpad)
 hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.workspace.toggle_special())
+
+-- Gaming workspace (games are routed there by windowrules)
+hl.bind(mainMod .. " + SHIFT + G", hl.dsp.focus({ workspace = "name:gaming" }))
 
 hl.bind(mainMod .. " + S",          hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. SPOTIFY_CLASS .. " " .. launchPrefix .. SPOTIFY))
 hl.bind(mainMod .. " + SHIFT + S",  hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. SPOTIFY_TUI_CLASS .. " " .. launchPrefix .. SPOTIFY_TUI))
