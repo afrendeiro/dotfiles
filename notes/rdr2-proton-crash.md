@@ -19,6 +19,23 @@ prefix), not a crash.
 - **Retest 7.2.0 on every kernel update** (and once the filed CachyOS bug —
   see `rdr2-kernel-regression-report.md` — is fixed): the goal is ONE kernel
   that runs both.
+
+## Watch list (researched 2026-08-28 — what to retest when it lands)
+
+- **Kernel 7.3** (merge window open Aug 2026; final ~Sep–Oct): headline
+  changes include a **scheduler/SMP overhaul** (IPI-wait preemption,
+  P99 −90%, gaming min-fps boosts, better asymmetric P/E-core support) —
+  the 7.2 cache-aware scheduler change is our RDR2 regression suspect, so
+  retest RDR2 on 7.3 (hope: regression fixed → one kernel for game + audio).
+  Also in 7.3 DRM/xe: Xe3 Panther Lake Peak Bandwidth Threshold (display
+  power), Nova Lake default-on, plus a Linus-fixed xe memory bug — retest
+  the PSR glitch on 7.3.
+- **Mesa 26.3** (already installed as cachyos mesa-git 26.3.0_devel): ANV
+  compressed-memory default for Xe2+ general buffers → DXVK gains up to
+  ~5% on Arc; ANV Vulkan video H.265 compliance fix. Keep mesa-git current.
+- The CachyOS bug report draft (`rdr2-kernel-regression-report.md`) is the
+  vehicle for the 7.2.0 regression; paste-ready copy at
+  `/tmp/opencode/rdr2-cachyos-bug-report.md`.
 - Anno 1404 (Steam non-Steam install, extracted to `/home/afr/Games/Anno1404-setup/`)
   is a separate track, on hold by user request.
 
