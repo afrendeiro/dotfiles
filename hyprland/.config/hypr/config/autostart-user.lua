@@ -9,3 +9,6 @@ end)
 -- never be stranded on a hidden workspace again.
 hl.window_rule({ match = { class = "gcr-prompter" }, float = true, center = true, pin = true })
 hl.window_rule({ match = { class = "^(pinentry.*)$" }, float = true, center = true, pin = true })
+
+-- Touchpad: allow camera-look while keys are held (DWT suppresses the pad while typing/WASD)
+hl.config({ input = { touchpad = { disable_while_typing = false } } })
