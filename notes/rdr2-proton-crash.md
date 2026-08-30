@@ -8,11 +8,13 @@ prefix), not a crash.
 
 ## Current setup / trade-off (2026-08-28)
 
-- **Boot default = `7.2.0-1-cachyos`** (daily driver: full audio, all
-  hardware enablement). `default_entry: 0`, `remember_last_entry: no` in
-  `/boot/limine.conf` (header survives `limine-update` regeneration).
+- **Boot = last selected kernel** (sticky selection). `default_entry: 0`
+  (fallback for first boot), `remember_last_entry: yes` in
+  `/boot/limine.conf` (header survives `limine-update` regeneration). A
+  picked kernel sticks for subsequent boots.
 - **RDR2 sessions: reboot → press a key at the limine menu → pick
-  `linux-cachyos-lts`.** On LTS the game works, but **internal speakers/
+  `linux-cachyos-lts` → stays on LTS until another kernel is chosen.** On
+  LTS the game works, but **internal speakers/
   headphones are dead** (the 6.18 SOF stack has no Panther Lake SoundWire
   machine driver — HDMI-only; Bluetooth audio works). This is the same
   PTL-enablement gap inverted: 7.2.0 has audio but crashes RDR2.
