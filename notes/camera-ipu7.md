@@ -3,6 +3,14 @@
 Status: working as of 2026-08-21. Camera streams to browsers/desktop apps via
 libcamera → v4l2loopback relay.
 
+Re-checked 2026-08-26: **no native solution; all workarounds still required** —
+libcamera still 0.7.2-3.1 (soft-ISP stride crash present), no
+`libcamera-provider.so` in `/usr/lib/spa-0.2/v4l2/`, and kernel 7.2.0-1-cachyos
+still logs `intel-ipu7 ... Failed to get runtime PM` after s2idle (the
+90-ipu7-power.rules workaround stays). Upstream: intel/vision-drivers#36 still
+open; RH bug 2413656 still NEW — Hans de Goede has left IPU6/IPU7 work
+(reassigned to Kate Hsuan, 2026-08-18), so upstreaming pace looks unchanged.
+
 ## Hardware
 
 - XPS 14 (DA14260): IPU7 (PCI `8086:b05d`) + **OmniVision OV08X40** sensor

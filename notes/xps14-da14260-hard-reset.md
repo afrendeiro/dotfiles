@@ -1,6 +1,6 @@
 # XPS 14 DA14260 — abrupt power loss on battery (EC hard reset)
 
-Status: **unresolved** (last checked 2026-08-18). Watching the linked threads for a fix.
+Status: **unresolved** (last checked 2026-08-26). Watching the linked threads for a fix.
 
 ## Symptom
 
@@ -29,7 +29,14 @@ This machine (Dell XPS 14 DA14260, Panther Lake / Core Ultra X7) is affected.
   a 14-day crash-free milestone (2026-08-16) — unconfirmed long-term.
 - Easier workaround reported by one user: run the **"Optimized"** power profile
   instead of "Quiet".
-- Official path: contact Dell support, reference **KB 000455608**.
+- Official path: contact Dell support, reference **KB 000455608** (Dell community manager
+  pinned this on 2026-08-11; no official fix announced).
+- omarchy #5953 was **closed** by its reporter (claimed a firmware update fixed it), but
+  Dell-thread users call that premature — crashes on BIOS 1.9.0 continued into August
+  (incl. Fedora). No BIOS > 1.9.0 exists and 1.9.0 is Windows-only (not on LVFS); this
+  machine is still on 1.8.2.
+- 2026-08-26 check: no solution, no recall, no BIOS update. Dell thread's OP shipped the
+  laptop to Dell's service center; no verdict posted.
 
 ## Threads to check for a fix
 

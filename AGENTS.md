@@ -71,6 +71,11 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   on every wallpaper change — don't switch back to `run0` without also handling that.
 - `[wallpaper] directory` points at `~/Pictures/wallpapers/omarchy` — a local,
   untracked folder (details: `docs/desktop-stack.md`).
+- **LOCAL-ONLY, never commit**: the `[calendar]` + `[calendar.account.cemm]`
+  block appended at the end of `hyprland/.config/noctalia/config.toml` (CeMM
+  Exchange ICS — org URL). It exists only in the working copy; noctalia has no
+  config include mechanism. After any `git checkout`/stash/merge of that file,
+  re-append it from the working copy (it ends at `pill_scale = 0.80`).
 
 ## Safety
 
