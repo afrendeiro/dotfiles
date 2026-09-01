@@ -94,6 +94,8 @@ hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(launchPrefix .. CALENDAR))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e teams-tui-go"))
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS))
 hl.bind(mainMod .. " + CONTROL + T", hl.dsp.exec_cmd("~/.local/bin/toggle-dwt.sh"))
+hl.bind(mainMod .. " + CONTROL + W", hl.dsp.exec_cmd("~/.local/bin/toggle-wifi.sh"))
+hl.bind(mainMod .. " + CONTROL + B", hl.dsp.exec_cmd("~/.local/bin/toggle-bluetooth.sh"))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(launchPrefix .. TODO))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(launchPrefix .. OUTLOOK))
 
