@@ -42,3 +42,36 @@ edit the template, then apply with `noctalia msg templates-apply`.
 
 `~/Pictures/wallpapers/omarchy/` is a local, untracked folder with the omarchy
 v4.0 `themes/*/backgrounds/` images, flattened as `<theme>__<file>`.
+
+## WiFi — eduroam (generic recipe)
+
+WiFi is managed by NetworkManager + wpa_supplicant; toggle the radio with
+`toggle-wifi.sh` (`nmcli radio wifi on|off`). NetworkManager profiles are
+machine-local system state — no WiFi credentials are ever committed to this
+repo.
+
+**PEAP/MSCHAPv2 institutions** (the common case, e.g. username + password):
+
+```
+nmcli con add type wifi con-name eduroam ssid eduroam \
+  wifi-sec.key-mgmt wpa-eap \
+  802-1x.eap peap \
+  802-1x.identity <username>@<institution-domain> \
+  802-1x.phase2-auth mschapv2 \
+  802-1x.system-ca-certs yes
+```
+
+- Set the password (stored root-only in
+  `/etc/NetworkManager/system-connections/eduroam.nmconnection`; also the
+  way to rotate it later): `nmcli con modify eduroam 802-1x.password <secret>`
+- Or keep it agent-owned (prompted per connect, nothing stored):
+  `nmcli --ask con up eduroam`
+- Connect: `nmcli con up eduroam` · verify: `nmcli dev status` (expect
+  `wlan0 → connected → eduroam`) and an `ip -4 addr` / HTTPS check
+- Anonymous identity: leave blank (outer PEAP identity = full identity)
+  unless the institution requires otherwise
+
+**Certificate-based institutions (EAP-TLS)**: use the eduroam CAT installer
+(`cat.eduroam.org` → institution → Linux/NetworkManager installer) — it
+provisions the correct profile, user certificate handling and trust anchors.
+Requires `python-gobject`.
