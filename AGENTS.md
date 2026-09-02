@@ -28,7 +28,11 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `config/binds.lua` (SUPER keybinds, uwsm launch prefix, noctalia msg panels),
   `config/monitors.lua` (eDP-1 modeline + external auto-right),
   `config/workspaces.lua` (10 persistent + gaming, on PRIMARY_MONITOR),
-  `config/lid.lua` (must load AFTER monitor rules), and `hyprland.lua`.
+  `config/lid.lua` (must load AFTER monitor rules; owns lid-close suspend:
+  external monitor → eDP-1 off, else suspend on battery while
+  `~/.local/state/lid-suspend` != "disabled" — toggled by
+  `toggle-lid-suspend.sh` / `SUPER+CTRL+P`; logind `HandleLidSwitch=ignore`),
+  and `hyprland.lua`.
 - noctalia drives the bar/shell/theme. Binds use `noctalia msg <cmd>`; theme
   applies via `require("noctalia").apply_theme()` and `hooks.colors_changed`
   triggers `hyprctl reload`. Do NOT add `noctalia msg templates-apply` to
@@ -79,6 +83,11 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 
 ## Safety
 
+- **Never restart `systemd-logind` from a running session** (e.g. to apply a
+  `HandleLidSwitch` change): it tears down the uwsm/Hyprland session → black
+  screen, forced power-off. Lid handling lives in the Hyprland layer
+  (`lid.lua` + `toggle-lid-suspend.sh`); `/etc/systemd/logind.conf.d/` stays
+  untouched.
 - **Prefer pacman from the official/CachyOS repos.** Never install from the
   AUR and never use AUR helpers (yay/paru/pikaur). Fallbacks, in order:
   GitHub releases, then Flatpak (`flatpak` + the Flathub user remote are

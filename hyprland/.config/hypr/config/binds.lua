@@ -97,6 +97,7 @@ hl.bind(mainMod .. " + CONTROL + T", hl.dsp.exec_cmd("~/.local/bin/toggle-dwt.sh
 hl.bind(mainMod .. " + CONTROL + W", hl.dsp.exec_cmd("~/.local/bin/toggle-wifi.sh"))
 hl.bind(mainMod .. " + CONTROL + B", hl.dsp.exec_cmd("~/.local/bin/toggle-bluetooth.sh"))
 hl.bind(mainMod .. " + CONTROL + H", hl.dsp.exec_cmd("~/.local/bin/connect-sony-headphones.sh"))
+hl.bind(mainMod .. " + CONTROL + P", hl.dsp.exec_cmd("~/.local/bin/toggle-lid-suspend.sh"))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(launchPrefix .. TODO))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(launchPrefix .. OUTLOOK))
 
