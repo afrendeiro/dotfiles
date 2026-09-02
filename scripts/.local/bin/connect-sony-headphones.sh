@@ -10,7 +10,8 @@ if ! bluetoothctl show | grep -q 'Powered: yes'; then
 fi
 
 if bluetoothctl info "$DEV" | grep -q 'Connected: yes'; then
-    notify-send -a bluetooth "$NAME" "already connected"
+    bluetoothctl disconnect "$DEV" >/dev/null
+    notify-send -a bluetooth "$NAME" "disconnected"
     exit 0
 fi
 
