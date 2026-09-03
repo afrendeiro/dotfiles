@@ -1,6 +1,9 @@
 # Random hard freezes — total hang, no kernel trace (2026-09-01 →)
 
-Status: **investigating**. First cluster began 2026-09-01 evening (on
+Status: **no recurrence since moving to `7.2.2-1-cachyos`** (2026-09-03,
+>1 day freeze-free — cluster was entirely on `7.2.0-1-cachyos`). Possibly
+kernel-specific (7.2.1's futex/io_uring/HID fixes are candidates); watch
+continues. First cluster began 2026-09-01 evening (on
 `7.2.0-1-cachyos`), repeated 2–3× on 2026-09-02. No cause identified yet;
 nothing in the logs explains it. Report new occurrences + the checklist
 results back to keep this note current.
@@ -25,6 +28,11 @@ results back to keep this note current.
 - **16:54:45 — journal stops mid-line (noctalia pam setuid msg), nothing
   after** — the freeze
 - ~17:11 — hard reboot into `7.2.2-1-cachyos` (current)
+- **2026-09-03 — no freeze since the 7.2.2 reboot (>1 day).** Cluster was
+  100% on 7.2.0; if this holds, treat the cause as kernel-side in the
+  7.2.0 window (7.2.1's futex/io_uring/HID/HID-over-BT fix batches are the
+  only behavior-relevant deltas; see the 7.2.0→7.2.2 analysis in
+  `rdr2-proton-crash.md` watch list).
 
 ## Evidence
 
