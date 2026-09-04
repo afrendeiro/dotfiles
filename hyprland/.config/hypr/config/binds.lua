@@ -16,36 +16,36 @@ hl.bind(mainMod .. " + F",           hl.dsp.window.fullscreen(),                
 hl.bind(mainMod .. " + J",           hl.dsp.layout("togglesplit"),                            { description = "Toggle split (tiling)" })
 
 -- Change focus
-hl.bind(mainMod .. " + Left",  hl.dsp.focus({ direction = "left" }),   { description = "Focus window left" })
-hl.bind(mainMod .. " + Right", hl.dsp.focus({ direction = "right" }),  { description = "Focus window right" })
-hl.bind(mainMod .. " + Up",    hl.dsp.focus({ direction = "up" }),     { description = "Focus window up" })
-hl.bind(mainMod .. " + Down",  hl.dsp.focus({ direction = "down" }),   { description = "Focus window down" })
-hl.bind("ALT + Tab",           hl.dsp.window.cycle_next(),             { description = "Cycle windows" })
-hl.bind(mainMod .. " + Tab",   hl.dsp.exec_cmd(noctCall .. "window-switcher"), { description = "Window switcher (noctalia)" })
+hl.bind(mainMod .. " + Left",  hl.dsp.focus({ direction = "left" }),   { description = "· Focus window left" })
+hl.bind(mainMod .. " + Right", hl.dsp.focus({ direction = "right" }),  { description = "· Focus window right" })
+hl.bind(mainMod .. " + Up",    hl.dsp.focus({ direction = "up" }),     { description = "· Focus window up" })
+hl.bind(mainMod .. " + Down",  hl.dsp.focus({ direction = "down" }),   { description = "· Focus window down" })
+hl.bind("ALT + Tab",           hl.dsp.window.cycle_next(),             { description = "· Cycle windows" })
+hl.bind(mainMod .. " + Tab",   hl.dsp.exec_cmd(noctCall .. "window-switcher"), { description = "· Window switcher (noctalia)" })
 
 -- Move active window around workspaces & monitors
-hl.bind(mainMod .. " + SHIFT + Up",                   hl.dsp.window.move({ direction = "u" }), { description = "Move window up" })
-hl.bind(mainMod .. " + SHIFT + Right",                hl.dsp.window.move({ direction = "r" }), { description = "Move window right" })
-hl.bind(mainMod .. " + SHIFT + Left",                 hl.dsp.window.move({ direction = "l" }), { description = "Move window left" })
-hl.bind(mainMod .. " + SHIFT + Down",                 hl.dsp.window.move({ direction = "d" }), { description = "Move window down" })
+hl.bind(mainMod .. " + SHIFT + Up",                   hl.dsp.window.move({ direction = "u" }), { description = "· Move window up" })
+hl.bind(mainMod .. " + SHIFT + Right",                hl.dsp.window.move({ direction = "r" }), { description = "· Move window right" })
+hl.bind(mainMod .. " + SHIFT + Left",                 hl.dsp.window.move({ direction = "l" }), { description = "· Move window left" })
+hl.bind(mainMod .. " + SHIFT + Down",                 hl.dsp.window.move({ direction = "d" }), { description = "· Move window down" })
 for i = 1, NUM_WPM do
     local key = i % 10
-    hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = tostring(i) }), { description = "Move window to workspace N" })
+    hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = tostring(i) }), { description = "· Move window to workspace N" })
 end
-hl.bind(mainMod .. " + SHIFT + mouse_up",             hl.dsp.window.move({ monitor   = "-1" }), { description = "Move window to previous monitor" })
-hl.bind(mainMod .. " + SHIFT + mouse_down",           hl.dsp.window.move({ monitor   = "+1" }), { description = "Move window to next monitor" })
-hl.bind(mainMod .. " + CONTROL + SHIFT + Right",      hl.dsp.window.move({ workspace = "m+1" }), { description = "Move window to next workspace (monitor)" })
-hl.bind(mainMod .. " + CONTROL + SHIFT + Left",       hl.dsp.window.move({ workspace = "m-1" }), { description = "Move window to previous workspace (monitor)" })
-hl.bind(mainMod .. " + CONTROL + SHIFT + mouse_up",   hl.dsp.window.move({ workspace = "m-1" }), { description = "Move window to previous workspace" })
-hl.bind(mainMod .. " + CONTROL + SHIFT + mouse_down", hl.dsp.window.move({ workspace = "m+1" }), { description = "Move window to next workspace" })
+hl.bind(mainMod .. " + SHIFT + mouse_up",             hl.dsp.window.move({ monitor   = "-1" }), { description = "· Move window to previous monitor" })
+hl.bind(mainMod .. " + SHIFT + mouse_down",           hl.dsp.window.move({ monitor   = "+1" }), { description = "· Move window to next monitor" })
+hl.bind(mainMod .. " + CONTROL + SHIFT + Right",      hl.dsp.window.move({ workspace = "m+1" }), { description = "· Move window to next workspace (monitor)" })
+hl.bind(mainMod .. " + CONTROL + SHIFT + Left",       hl.dsp.window.move({ workspace = "m-1" }), { description = "· Move window to previous workspace (monitor)" })
+hl.bind(mainMod .. " + CONTROL + SHIFT + mouse_up",   hl.dsp.window.move({ workspace = "m-1" }), { description = "· Move window to previous workspace" })
+hl.bind(mainMod .. " + CONTROL + SHIFT + mouse_down", hl.dsp.window.move({ workspace = "m+1" }), { description = "· Move window to next workspace" })
 for i = 1, NUM_WPM do
     local key = i % 10
-    hl.bind(mainMod .. " + SHIFT + CONTROL + " .. key, hl.dsp.window.move({ workspace = "m~" .. i }), { description = "Move window to persistent workspace N" })
+    hl.bind(mainMod .. " + SHIFT + CONTROL + " .. key, hl.dsp.window.move({ workspace = "m~" .. i }), { description = "· Move window to persistent workspace N" })
 end
 
 -- Move & Resize with mouse
-hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { description = "Drag window (mouse)" })
-hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { description = "Resize window (mouse)" })
+hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { description = "· Drag window (mouse)" })
+hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { description = "· Resize window (mouse)" })
 
 -- Zoom
 local function zoomfunction(value)
@@ -58,12 +58,12 @@ local function zoomfunction(value)
         hl.config({ cursor = { zoom_factor = zoomvalue + value } })
     end
 end
-hl.bind(mainMod .. " + Minus", function() zoomfunction(-0.3) end, { description = "Zoom UI out", repeating = true })
-hl.bind(mainMod .. " + Plus", function() zoomfunction(0.3) end, { description = "Zoom UI in", repeating = true })
+hl.bind(mainMod .. " + Minus", function() zoomfunction(-0.3) end, { description = "· Zoom UI out", repeating = true })
+hl.bind(mainMod .. " + Plus", function() zoomfunction(0.3) end, { description = "· Zoom UI in", repeating = true })
 
 --# Zoom with keypad
-hl.bind(mainMod .. " + code:82", function() zoomfunction(-0.3) end, { description = "Zoom UI out (keypad)", repeating = true })
-hl.bind(mainMod .. " + code:86", function() zoomfunction(0.3) end, { description = "Zoom UI in (keypad)", repeating = true })
+hl.bind(mainMod .. " + code:82", function() zoomfunction(-0.3) end, { description = "· Zoom UI out (keypad)", repeating = true })
+hl.bind(mainMod .. " + code:86", function() zoomfunction(0.3) end, { description = "· Zoom UI in (keypad)", repeating = true })
 
 
 ------------------
@@ -76,13 +76,13 @@ hl.bind(mainMod .. " + CONTROL + Return", hl.dsp.exec_cmd("~/.local/bin/launch-o
 hl.bind(mainMod .. " + E",          hl.dsp.exec_cmd(launchPrefix .. FILE_MANAGER),            { description = "File manager" })
 hl.bind(mainMod .. " + SHIFT + E",  hl.dsp.exec_cmd(launchPrefix .. EDITOR),                  { description = "Editor" })
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. BROWSER_CLASS .. " " .. launchPrefix .. BROWSER), { description = "Browser (launch or focus)" })
-hl.bind("CONTROL + SHIFT + Escape", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"),  { description = "btop (terminal)" })
-hl.bind(mainMod .. " + B",          hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"),  { description = "btop (terminal)" })
+hl.bind("CONTROL + SHIFT + Escape", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"),  { description = "· btop (terminal)" })
+hl.bind(mainMod .. " + B",          hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"),  { description = "· btop (terminal)" })
 hl.bind(mainMod .. " + Z",          hl.dsp.exec_cmd(noctCall .. "settings-toggle"),           { description = "Settings (noctalia)" })
 hl.bind(mainMod .. " + X",          hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center"), { description = "Control center" })
 hl.bind(mainMod .. " + Space",      hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher"),     { description = "Launcher" })
 hl.bind(mainMod .. " + period",     hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher /emo"), { description = "Emoji picker" })
-hl.bind(mainMod .. " + L",          hl.dsp.exec_cmd(noctCall .. "session lock"),              { description = "Lock session" })
+hl.bind(mainMod .. " + L",          hl.dsp.exec_cmd(noctCall .. "session lock"),              { description = "· Lock session" })
 hl.bind(mainMod .. " + ALT + C",    hl.dsp.exec_cmd(noctCall .. "panel-toggle session"),      { description = "Session panel" })
 
 -------------------------
@@ -115,20 +115,20 @@ hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " ..
 ---------------------------
 
 -- Audio
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(noctCall .. "volume-up"),   { description = "Volume up", locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(noctCall .. "volume-down"), { description = "Volume down", locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(noctCall .. "volume-mute"), { description = "Mute", locked = true })
-hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd(noctCall .. "mic-mute"),    { description = "Mic mute", locked = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(noctCall .. "volume-up"),   { description = "· Volume up", locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(noctCall .. "volume-down"), { description = "· Volume down", locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(noctCall .. "volume-mute"), { description = "· Mute", locked = true })
+hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd(noctCall .. "mic-mute"),    { description = "· Mic mute", locked = true })
 
 -- Media
-hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd(noctCall .. "media toggle"),   { description = "Media play/pause", locked = true })
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd(noctCall .. "media toggle"),   { description = "Media play/pause", locked = true })
-hl.bind("XF86AudioNext",  hl.dsp.exec_cmd(noctCall .. "media next"),     { description = "Media next", locked = true })
-hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd(noctCall .. "media previous"), { description = "Media previous", locked = true })
+hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd(noctCall .. "media toggle"),   { description = "· Media play/pause", locked = true })
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd(noctCall .. "media toggle"),   { description = "· Media play/pause", locked = true })
+hl.bind("XF86AudioNext",  hl.dsp.exec_cmd(noctCall .. "media next"),     { description = "· Media next", locked = true })
+hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd(noctCall .. "media previous"), { description = "· Media previous", locked = true })
 
 -- Brightness (explicit MONITOR1 target: noctalia's "current" output resolution fails on this setup)
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd(noctCall .. "brightness-up " .. MONITOR1),   { description = "Brightness up (eDP-1)", locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down " .. MONITOR1), { description = "Brightness down (eDP-1)", locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd(noctCall .. "brightness-up " .. MONITOR1),   { description = "· Brightness up (eDP-1)", locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down " .. MONITOR1), { description = "· Brightness down (eDP-1)", locked = true, repeating = true })
 
 -------------------
 ---- UTILITIES ----
@@ -136,8 +136,8 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down " 
 
 -- Screen Capture
 hl.bind(mainMod .. " + P",     hl.dsp.exec_cmd("hyprpicker -a -n"),      { description = "Color picker (hyprpicker)" })
-hl.bind("Print",               hl.dsp.exec_cmd(noctCall .. "screenshot-region"),     { description = "Screenshot region" })
-hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"), { description = "Screenshot fullscreen" })
+hl.bind("Print",               hl.dsp.exec_cmd(noctCall .. "screenshot-region"),     { description = "· Screenshot region" })
+hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"), { description = "· Screenshot fullscreen" })
 
 -- Theming and Wallpaper
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(noctCall .. "panel-toggle wallpaper"), { description = "Wallpaper panel" })
@@ -168,27 +168,27 @@ hl.bind(mainMod .. " + CONTROL + R", hl.dsp.exec_cmd(launchPrefix .. TERMINAL ..
 -- Absolute
 for i = 1, NUM_WPM do
     local key = i % 10
-    hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }), { description = "Focus workspace N" })
+    hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }), { description = "· Focus workspace N" })
 end
 -- Relative
 for i = 1, NUM_WPM do
     local key = i % 10
-    hl.bind(mainMod .. " + CONTROL + " .. key, hl.dsp.focus({ workspace = "m~" .. i }), { description = "Focus persistent workspace N" })
+    hl.bind(mainMod .. " + CONTROL + " .. key, hl.dsp.focus({ workspace = "m~" .. i }), { description = "· Focus persistent workspace N" })
 end
 
 -- Move to adjacent workspaces and next empty on a given monitor
-hl.bind(mainMod .. " + CONTROL + Right",       hl.dsp.focus({ workspace = "m+1" }),     { description = "Next workspace (on monitor)" })
-hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "m-1" }),     { description = "Previous workspace (on monitor)" })
-hl.bind(mainMod .. " + CONTROL + Down",        hl.dsp.focus({ workspace = "emptym" }),  { description = "Next empty workspace (on monitor)" })
+hl.bind(mainMod .. " + CONTROL + Right",       hl.dsp.focus({ workspace = "m+1" }),     { description = "· Next workspace (on monitor)" })
+hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "m-1" }),     { description = "· Previous workspace (on monitor)" })
+hl.bind(mainMod .. " + CONTROL + Down",        hl.dsp.focus({ workspace = "emptym" }),  { description = "· Next empty workspace (on monitor)" })
 
 -- Scroll through existing workspaces & monitors
-hl.bind(mainMod .. " + mouse_down",           hl.dsp.focus({ workspace = "m-1" }), { description = "Previous workspace (scroll)" })
-hl.bind(mainMod .. " + mouse_up",             hl.dsp.focus({ workspace = "m+1" }), { description = "Next workspace (scroll)" })
-hl.bind(mainMod .. " + CONTROL + mouse_up",   hl.dsp.focus({ workspace = "m-1" }), { description = "Previous workspace (scroll)" })
-hl.bind(mainMod .. " + CONTROL + mouse_down", hl.dsp.focus({ workspace = "m+1" }), { description = "Next workspace (scroll)" })
+hl.bind(mainMod .. " + mouse_down",           hl.dsp.focus({ workspace = "m-1" }), { description = "· Previous workspace (scroll)" })
+hl.bind(mainMod .. " + mouse_up",             hl.dsp.focus({ workspace = "m+1" }), { description = "· Next workspace (scroll)" })
+hl.bind(mainMod .. " + CONTROL + mouse_up",   hl.dsp.focus({ workspace = "m-1" }), { description = "· Previous workspace (scroll)" })
+hl.bind(mainMod .. " + CONTROL + mouse_down", hl.dsp.focus({ workspace = "m+1" }), { description = "· Next workspace (scroll)" })
 
 -- Special workspace (scratchpad)
-hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.workspace.toggle_special(), { description = "Scratchpad (special workspace)" })
+hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.workspace.toggle_special(), { description = "· Scratchpad (special workspace)" })
 
 -- Gaming workspace (games are routed there by windowrules)
 hl.bind(mainMod .. " + SHIFT + G", hl.dsp.focus({ workspace = "name:gaming" }), { description = "Gaming workspace" })

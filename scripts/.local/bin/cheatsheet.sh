@@ -6,7 +6,6 @@
 
 list="$(hyprctl binds -j | jq -r '
   def keyname($k): { "period": ".", "Print": "PrtSc", "Minus": "-", "Plus": "+",
-                     "code:82": "Kp-Minus", "code:86": "Kp-Plus",
                      "mouse:272": "LMB", "mouse:273": "RMB" }[$k] // $k;
   [ .[] | select(.has_description)
     | select(.key != "" and (.key | test("mouse|code|switch:") | not))
@@ -15,11 +14,11 @@ list="$(hyprctl binds -j | jq -r '
            [((($m / 8) | floor) % 2), "ALT"],   [($m % 2), "SHIFT"] ]
        | map(select(.[0] == 1) | .[1]) | join("+")) as $mods
     | (if $mods == "" then keyname(.key) else $mods + "+" + keyname(.key) end) as $combo
-    | select(($combo | test("mouse|code")) | not)
-    | "\($combo) \u2022 \(.description)" ]
-  | sort_by(if startswith("SUPER") then "0" else "1" end + .)
+    | (.description | if startswith("\u00b7 ") then { grp: "1", txt: .[2:] } else { grp: "0", txt: . } end) as $d
+    | "\($d.grp)\t\($combo) \u2022 \($d.txt)" ]
+  | sort_by(.[0:1] + .[1:])
   | .[]
 ')"
 
 [ -n "$list" ] || exit 0
-printf '%s\n' "$list" | noctalia dmenu -p "Keybindings" > /dev/null
+printf '%s\n' "$list" | sed 's/^[01]\t//' | noctalia dmenu -p "Keybindings" > /dev/null
