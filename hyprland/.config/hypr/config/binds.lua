@@ -133,7 +133,6 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down " 
 -------------------
 
 -- Screen Capture
-hl.bind(mainMod .. " + P",     hl.dsp.exec_cmd("hyprpicker -a -n"),      { description = "[Capture] Color picker (hyprpicker)" })
 hl.bind("Print",               hl.dsp.exec_cmd(noctCall .. "screenshot-region"),     { description = "[Capture] Screenshot region" })
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"), { description = "[Capture] Screenshot fullscreen" })
 
@@ -148,6 +147,9 @@ hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(noctCall .. "panel-toggle control-cen
 
 -- Keybind cheatsheet
 hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("~/.local/bin/cheatsheet.sh"), { description = "[System] Keybind cheatsheet" })
+
+-- Project opener (~/work + ~/projects, MRU-first)
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("~/.local/bin/open-project.sh"), { description = "[Apps] Open project (MRU)" })
 
 ---------------------------
 ---- SNAPSHOTS (btrfs) ----
