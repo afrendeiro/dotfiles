@@ -19,7 +19,7 @@ if hyprctl monitors -j | jq -e "map(select(.name != \"eDP-1\" and .disabled == f
 elif [ "$(cat ~/.local/state/lid-suspend 2>/dev/null)" != "disabled" ] && [ "$(cat /sys/class/power_supply/AC/online 2>/dev/null)" != "1" ]; then
     systemctl suspend
 fi
-']]), { locked = true })
+']]), { description = "Lid closed: eDP-1 off (external) / suspend (battery)", locked = true })
 
 -- Lid opened: re-enable the internal display (Hyprland re-applies the 60 Hz modeline rule)
-hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd('wlr-randr --output eDP-1 --on; ' .. bar_nudge), { locked = true })
+hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd('wlr-randr --output eDP-1 --on; ' .. bar_nudge), { description = "Lid opened: eDP-1 on", locked = true })

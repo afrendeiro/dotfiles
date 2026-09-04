@@ -25,7 +25,10 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   — these are CachyOS-provided and NOT in the repo. Do not add or track them.
 - Tracked Hyprland files live under `hyprland/.config/hypr/`:
   `config/variables.lua` (app vars, MONITOR1/2, NUM_WPM, find_external()),
-  `config/binds.lua` (SUPER keybinds, uwsm launch prefix, noctalia msg panels),
+  `config/binds.lua` (SUPER keybinds, uwsm launch prefix, noctalia msg
+  panels; every `hl.bind` carries a `description = "..."` option — surfaced
+  by `hyprctl binds -j` and shown in the SUPER+K cheatsheet popup, so new
+  binds must include one),
   `config/monitors.lua` (eDP-1 modeline + external auto-right),
   `config/workspaces.lua` (10 persistent + gaming, on PRIMARY_MONITOR),
   `config/lid.lua` (must load AFTER monitor rules; owns lid-close suspend:
