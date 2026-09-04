@@ -26,9 +26,10 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - Tracked Hyprland files live under `hyprland/.config/hypr/`:
   `config/variables.lua` (app vars, MONITOR1/2, NUM_WPM, find_external()),
   `config/binds.lua` (SUPER keybinds, uwsm launch prefix, noctalia msg
-  panels; every `hl.bind` carries a `description = "..."` option — surfaced
-  by `hyprctl binds -j` and shown in the SUPER+K cheatsheet popup, so new
-  binds must include one),
+  panels; every `hl.bind` carries a `description = "[Group] text"` option —
+  `[Group]` in {Apps, Toggles, Panels, Capture, Snapshots, System, Navigate,
+  Workspaces, Media}, surfaced by `hyprctl binds -j` and grouped in the
+  SUPER+K cheatsheet popup; new binds must include one),
   `config/monitors.lua` (eDP-1 modeline + external auto-right),
   `config/workspaces.lua` (10 persistent + gaming, on PRIMARY_MONITOR),
   `config/lid.lua` (must load AFTER monitor rules; owns lid-close suspend:
@@ -86,6 +87,10 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 
 ## Safety
 
+- **`pkill -f '<pattern>'` matches its own command line** (the pattern appears
+  in the bash -c invocation) and kills the running shell — use the bracket
+  trick (`pkill -f '[c]heatsheet\.sh'`) or `pgrep -x`/exact name matching so
+  the literal pattern never matches the shell itself.
 - **Never restart `systemd-logind` from a running session** (e.g. to apply a
   `HandleLidSwitch` change): it tears down the uwsm/Hyprland session → black
   screen, forced power-off. Lid handling lives in the Hyprland layer
