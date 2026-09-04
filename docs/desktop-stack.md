@@ -33,7 +33,9 @@ edit the template, then apply with `noctalia msg templates-apply`.
 
 ## Microsoft Teams
 
-- `SUPER+T` — open the Teams PWA (meetings, screen-sharing, chat)
+- `SUPER+T` — launch the terminal Teams client (`kitty -e teams-tui-go`)
+- `SUPER+SHIFT+T` — open the Teams PWA for meetings/screen-sharing
+  (the TUI can't do those)
 - Azure AD approval status: `notes/teams-tui-go-azure-approval.md`
 
 ## Wallpapers
