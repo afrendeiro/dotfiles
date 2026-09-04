@@ -4,6 +4,12 @@ Status: **Evolution adopted** (2026-08-21). EWS account bridge working:
 mail + calendar + contacts + tasks all sync. Graph account configured but
 awaiting CeMM admin consent. EWS hard deadline **2026-10-01**.
 
+**Decision (2026-09-04): stay on EWS until forced.** The working EWS
+account stays connected; no switch attempt before October. Plan: if issues
+appear once EWS is killed on 2026-10-01, enable the preconfigured Graph
+account then (see "Why EWS for now" below) and drop EWS only if the Graph
+account proves out. No action until then.
+
 ## Current stack
 
 - **Client:** Evolution 3.60.2 + `evolution-ews` (CachyOS official repos).
