@@ -145,11 +145,11 @@ hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(noctCall .. "panel-toggle clipboard")
 -- Notifications
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center notifications"), { description = "[Panels] Notifications panel" })
 
--- Keybind cheatsheet
-hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("~/.local/bin/cheatsheet.sh"), { description = "[System] Keybind cheatsheet" })
+-- Keybind cheatsheet (noctalia launcher /keys provider)
+hl.bind(mainMod .. " + K", hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher /keys"), { description = "[System] Keybind cheatsheet (/keys)" })
 
--- Project opener (~/work + ~/projects, MRU-first)
-hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("~/.local/bin/open-project.sh"), { description = "[Apps] Open project (MRU)" })
+-- Project opener (noctalia launcher /proj provider)
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher /proj"), { description = "[Apps] Open project (/proj)" })
 
 ---------------------------
 ---- SNAPSHOTS (btrfs) ----

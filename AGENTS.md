@@ -241,6 +241,31 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `~/.local/state/noctalia/community-templates/neovim/` (cached upstream copy;
   local edits are preserved by noctalia's sync).
 
+## launcher-tools module
+
+- Local noctalia plugin stowed to
+  `~/.local/share/noctalia/plugins/launcher-tools/` (the XDG_DATA_HOME
+  drop-in — the `~/.local/state/noctalia/plugins/` tree only holds catalog
+  sources, NOT local plugins). id `afr/launcher-tools`; enable once per
+  machine with `noctalia msg plugins enable afr/launcher-tools`
+  (state persists across reinstalls of the files; re-enable after stow).
+- Two `[[launcher_provider]]` entries:
+  - `/keys` (`keys.luau`): Hyprland keybindings in the native launcher.
+    Empty query → 9 group rows (drill-in `g:<Group>` rewrites the query);
+    typing = fuzzy over combo+description. Data comes from
+    `~/.local/bin/keys-data.py` (scripts module), which RESOLVES
+    `binds.lua` + `variables.lua` at runtime — so new binds/descriptions
+    appear automatically, no regeneration step. Rows with an executable
+    `exec_cmd` payload RUN it on activation; window-op rows (no cmd) copy
+    the combo instead. `SUPER+K` opens `launcher /keys`.
+  - `/proj` (`proj.luau`): projects under `~/work` + `~/projects`, MRU-first
+    (`~/.local/state/open-project-mru`, shared with the old script);
+    activation opens kitty + nautilus in the project. `SUPER+P` opens
+    `launcher /proj`.
+- Binds.lua `description = "[Group] text"` convention feeds the /keys
+  groups (Groups: Apps, Toggles, Panels, Capture, Snapshots, System,
+  Navigate, Workspaces, Media — see the binds.lua section above).
+
 ## Hardware notes
 
 - `notes/xps14-da14260-hard-reset.md` — known EC power-loss/hard-reset issue on
