@@ -90,8 +90,7 @@ hl.bind(mainMod .. " + ALT + C",    hl.dsp.exec_cmd(noctCall .. "panel-toggle se
 
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. EVOLUTION_CLASS .. " " .. launchPrefix .. EVOLUTION), { description = "[Apps] Evolution mail (launch or focus)" })
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(launchPrefix .. CALENDAR),                { description = "[Apps] Calendar PWA" })
-hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e teams-tui-go"), { description = "[Apps] Teams (TUI)" })
-hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS),           { description = "[Apps] Teams (PWA)" })
+hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS), { description = "[Apps] Teams (PWA)" })
 hl.bind(mainMod .. " + CONTROL + T", hl.dsp.exec_cmd("~/.local/bin/toggle-dwt.sh"),  { description = "[Toggles] Toggle touchpad DWT (gaming)" })
 hl.bind(mainMod .. " + CONTROL + W", hl.dsp.exec_cmd("~/.local/bin/toggle-wifi.sh"), { description = "[Toggles] Toggle wifi" })
 hl.bind(mainMod .. " + CONTROL + B", hl.dsp.exec_cmd("~/.local/bin/toggle-bluetooth.sh"), { description = "[Toggles] Toggle bluetooth" })

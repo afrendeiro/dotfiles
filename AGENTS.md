@@ -192,7 +192,9 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   committed). Changing optional-feature scopes in config.json requires deleting
   it and re-authenticating via device code flow. Teams channels/mentions/extended
   profiles need admin-consented Graph scopes — keep them off unless granted.
-- Launch keybinds (`SUPER+T` / `SUPER+SHIFT+T`): `docs/desktop-stack.md`.
+- Not bound to a key since 2026-09: `SUPER+T` launches the Teams PWA
+  (meetings/screen-sharing); the TUI is available on demand via
+  `~/.local/bin/teams-tui-go` (launch reference: `docs/desktop-stack.md`).
 
 ## alacritty module
 
