@@ -129,7 +129,17 @@ def main():
                 cmd = resolve(cm.group(1), consts)
             rows.append({"combo": combo, "group": group, "desc": txt, "cmd": cmd})
     rows.sort(key=lambda r: (GROUP_ORDER.index(r["group"]) if r["group"] in GROUP_ORDER else 99, r["combo"]))
-    json.dump(rows, sys.stdout)
+    blob = json.dumps(rows)
+    sys.stdout.write(blob)
+    try:
+        cache = "/home/afr/.local/state/noctalia-keys.json"
+        tmp = cache + ".tmp"
+        with open(tmp, "w") as f:
+            f.write(blob)
+        import os
+        os.replace(tmp, cache)
+    except OSError:
+        pass
 
 
 if __name__ == "__main__":
