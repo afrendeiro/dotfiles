@@ -25,6 +25,7 @@ GITHUB  = "brave-origin --profile-directory=Default --app-id=mjoklplbddabcmpepno
 EVOLUTION_CLASS   = "org.gnome.Evolution"
 SPOTIFY_CLASS     = "spotify"
 SPOTIFY_TUI_CLASS = "spotify-tui"
+TEAMS_TUI_CLASS   = "teams-tui"
 OBSIDIAN_CLASS    = "obsidian"
 BROWSER_CLASS     = "brave-origin"
 TMUX_CLASS        = "tmux"
