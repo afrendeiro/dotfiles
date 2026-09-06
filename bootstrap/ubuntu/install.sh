@@ -50,6 +50,7 @@ if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
         keepassxc \
         libreoffice \
         hunspell-en-us \
+        hyphen-en-us \
         evolution \
         evolution-ews \
         evolution-data-server \

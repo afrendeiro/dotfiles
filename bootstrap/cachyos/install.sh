@@ -48,6 +48,7 @@ sudo pacman -S --noconfirm \
     opencode \
     libreoffice-fresh \
     hunspell-en_us \
+    hyphen-en \
     evolution \
     evolution-ews \
     evolution-data-server \
