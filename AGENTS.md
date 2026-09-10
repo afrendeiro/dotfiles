@@ -81,9 +81,17 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   untracked folder (details: `docs/desktop-stack.md`).
 - **LOCAL-ONLY, never commit**: the `[calendar]` + `[calendar.account.cemm]`
   block appended at the end of `hyprland/.config/noctalia/config.toml` (CeMM
-  Exchange ICS — org URL). It exists only in the working copy; noctalia has no
-  config include mechanism. After any `git checkout`/stash/merge of that file,
-  re-append it from the working copy (it ends at `pill_scale = 0.80`).
+  Exchange ICS — the URL embeds an access token; this repo is a public remote).
+  It exists only in the working copy; noctalia has no config include mechanism.
+  After any `git checkout`/stash/merge of that file, re-append it from the
+  working copy (it ends at `pill_scale = 0.80`).
+  The guard is `git update-index --skip-worktree
+  hyprland/.config/noctalia/config.toml`, which hides the block from
+  `git status` and from bulk `git add`/`git commit -a`. That bit is per-clone
+  and NOT carried by the repo — re-apply it on every fresh clone, and check
+  with `git ls-files -v | grep '^S'`. To intentionally edit the tracked part of
+  that file, `--no-skip-worktree` first, commit, then set it again; while the
+  bit is set, `git pull` refuses to update that file if upstream changed it.
 
 ## Safety
 
