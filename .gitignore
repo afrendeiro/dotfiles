@@ -30,6 +30,12 @@ scripts/.local/bin/ruff
 scripts/.local/bin/ty
 scripts/.local/bin/black
 scripts/.local/bin/blackd
+scripts/.local/bin/moe
+scripts/.local/bin/py-spy
+scripts/.local/bin/claude
+
+# teams-tui-go local state (favourited chat IDs, per-machine)
+teams-tui-go/.config/teams-tui-go/favourites.json
 
 # Sensitive
 .ssh/
