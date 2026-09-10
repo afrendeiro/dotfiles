@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eu
 
 state_file="${XDG_RUNTIME_DIR:-/tmp}/imv-bg-$imv_pid"
 
