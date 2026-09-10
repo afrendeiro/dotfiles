@@ -196,6 +196,20 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `SUPER+SHIFT+T` → Teams PWA (meetings/screen-sharing); see
   `docs/desktop-stack.md`.
 
+## imv module
+
+- `imv/.config/imv/config` → `~/.config/imv/config`. imv is the image viewer:
+  installed by `bootstrap/cachyos/install.sh`, registered as the `xdg-mime`
+  handler for image dirs there, and used as teams-tui-go's `image_viewer`.
+- The only tracked deviation from stock is `<Ctrl+b>` →
+  `toggle-imv-background.sh` (scripts module), which flips the canvas between
+  black and white via `imv-msg $imv_pid background <hex>` — for judging
+  figures with transparent backgrounds. imv exports `$imv_pid` to `exec`
+  binds; the toggle remembers its state in
+  `$XDG_RUNTIME_DIR/imv-bg-<pid>`, so it is per-window and dies with the
+  session. First press after a restart is a no-op if the background was
+  already white (the no-state-file branch assumes dark).
+
 ## alacritty module
 
 - Deployed on this machine (NOT left to stock presets). `alacritty.toml`

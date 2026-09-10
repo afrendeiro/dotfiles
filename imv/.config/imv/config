@@ -1,0 +1,2 @@
+[binds]
+<Ctrl+b> = exec $HOME/.local/bin/toggle-imv-background.sh

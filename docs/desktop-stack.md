@@ -38,6 +38,11 @@ edit the template, then apply with `noctalia msg templates-apply`.
   (the TUI can't do those)
 - Azure AD approval status: `notes/teams-tui-go-azure-approval.md`
 
+## Images (imv)
+
+- `Ctrl+b` — toggle the imv background between black and white (helps when
+  judging figures with transparent backgrounds). Per-window, resets on restart.
+
 ## Wallpapers
 
 `~/Pictures/wallpapers/omarchy/` is a local, untracked folder with the omarchy
