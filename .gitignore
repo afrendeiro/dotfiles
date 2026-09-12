@@ -33,6 +33,9 @@ scripts/.local/bin/blackd
 scripts/.local/bin/moe
 scripts/.local/bin/py-spy
 scripts/.local/bin/claude
+scripts/.local/bin/lsfg-vk-cli
+scripts/.local/bin/lsfg-vk-ui
+scripts/.local/bin/mako-*
 
 # teams-tui-go local state (favourited chat IDs, per-machine)
 teams-tui-go/.config/teams-tui-go/favourites.json
