@@ -303,6 +303,10 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   EC cuts power (1 amber + 6 white blink code, BIOS "WDT" event). Unresolved as of
   2026-08-18; before assuming any abrupt shutdown is a config problem, check the
   Dell/omarchy threads linked in that note for a fix.
+- `notes/xe-psr-timeouts.md` — PTL eDP: benign `Timed out waiting for PSR Idle
+  for re-enable` bursts at boot/shutdown only (journal noise, no visual
+  symptoms); Panel Replay stays active despite `xe.enable_psr=0`. Don't re-debug
+  as a config problem.
 - `notes/camera-ipu7.md` — camera (OV08X40 via Intel IPU7 + Synaptics
   CVS bridge) on this XPS 14. Requires the out-of-tree `intel_cvs` driver
   (`intel/vision-drivers`, installed via DKMS, AUTOINSTALL) to enumerate the

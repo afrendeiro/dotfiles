@@ -102,7 +102,7 @@ not caused by CachyOS patches or ntsync.
 - **PSR display glitch**: `7.2.0` also oopses in the xe driver during fullscreen modesets:
   `WARNING intel_psr_activate+0x3cf [xe]` + `xe: *ERROR* Timed out waiting PSR idle state`
   (unaffected by `xe.enable_psr=0` / `xe.psr_safest_params=1`). No glitches observed on the LTS kernel so far.
-  Still present on `7.2.4-3` and on **vanilla 7.2.4** (repeated "Timed out waiting for PSR Idle") — separate upstream issue.
+  Still present on `7.2.4-3` and on **vanilla 7.2.4** (repeated "Timed out waiting for PSR Idle") — separate upstream issue. Baseline + the Panel Replay finding: `notes/xe-psr-timeouts.md`.
 - Existing tracker hits: CachyOS/linux-cachyos **#992** ("7.2.0 silent HDMI loss, LTS works"), **#968** ("some games freezing"), and a Steam discussion "CachyOS constant crashing" (Subnautica 2, kernel 7.2.0-1-cachyos, crashes every 10–30 min).
 - Linux 7.2's headline change is a cache-aware scheduler (LLC task co-location) — a plausible area for wine thread-scheduling regressions; ntsync was also a candidate but is now ruled out.
 - **2026-09-12: no third-party report found** — searched CachyOS tracker + forum, Proton tracker, GitHub-wide, and bugzilla.kernel.org (queries: RDR2, "Red Dead", "wine 7.2", "PSR idle"/"PSR re-enable"/"panther lake psr" — zero matches). lore.kernel.org (LKML/regressions list) is behind Anubis anti-bot and could not be searched programmatically; do a browser check before filing.
