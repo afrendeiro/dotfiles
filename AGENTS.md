@@ -288,6 +288,14 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   groups (Groups: Apps, Toggles, Panels, Capture, Snapshots, System,
   Navigate, Workspaces, Media — see the binds.lua section above).
 
+## Kernel testing
+
+- Vanilla Arch kernels install alongside CachyOS ones for A/B classification
+  (upstream vs CachyOS-specific): `pkexec pacman -S linux linux-headers`, pick
+  the `linux` entry in the limine menu, remove with `pacman -Rns`. Vanilla
+  ≤ 7.1.9 does not boot on this PTL laptop; 7.2.4 does. Full procedure:
+  `notes/kernel-testing.md`.
+
 ## Hardware notes
 
 - `notes/xps14-da14260-hard-reset.md` — known EC power-loss/hard-reset issue on
