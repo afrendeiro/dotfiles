@@ -1,9 +1,10 @@
 # xe: "Timed out waiting for PSR Idle for re-enable" at boot/shutdown (PTL)
 
-Status: **baseline captured 2026-09-12** — benign (no visible symptoms, journal
-noise only), boot/shutdown-scoped. Panel Replay is active despite
-`xe.enable_psr=0`. Compare after 7.2.5; if unchanged, comment on the upstream
-xe tickets (see below).
+Status: **baseline captured 2026-09-12; RC observation 2026-09-14** — benign (no
+visible symptoms, journal noise only), boot/shutdown-scoped on 7.2.x. Panel Replay
+is active despite `xe.enable_psr=0`. On `7.3.0-rc2-3` the timeout variant changes
+and DSB poll errors appear (see RC section). Compare stable 7.2.6 when packaged;
+otherwise comment on the upstream xe tickets (see below).
 
 ## Symptom
 
@@ -59,13 +60,37 @@ So the panel's self-refresh is **Panel Replay**, which `xe.enable_psr=0` does no
 touch — the `for re-enable` timeout path still runs. `xe.enable_panel_replay=0`
 is the untested knob that should actually turn it off.
 
+## RC observation 2026-09-14 — `7.3.0-rc2-3-cachyos-rc`
+
+First boot on the CachyOS RC kernel (same cmdline, `enable_panel_replay` left at
+auto). The display-error profile changes:
+
+- PSR timeouts: only **2**, both the `Timed out waiting PSR idle state` variant
+  (18:02:58 and 18:03:00, during the RDR2 crash/teardown). **No**
+  `for PSR Idle for re-enable` bursts at boot/shutdown anymore.
+- **15× `[CRTC:153:pipe A] DSB 0 poll error`** — new on this machine (0 on all
+  7.2.x boots): 18:01:02–11 (session start) and 18:02:37–56 (RDR2 fullscreen
+  modeset).
+- The DSB scanline fix **is present** in the CachyOS `7.3-rc2` source
+  (`intel_vrr_safe_window_start(crtc_state) - 1` with the stale-PIPEDSL comment,
+  upstream `f7140c7`) — so these DSB errors occur *with* the patch applied and
+  VRR off. Relevant nuance for CachyOS #1024, where the missing patch was
+  suspected as the DSB-error cause.
+- Panel Replay still active despite `enable_psr=0` (`enable_panel_replay=-1`,
+  debugfs status `SU_STANDBY` instead of the 7.2.4 `SLEEP`).
+- **Visible symptoms on rc**: after the RDR2 launch the screen became unstable —
+  flickering and tearing — with no further kernel messages after the last DSB
+  error. Not seen on 7.2.x or LTS. This is a **display regression in 7.3-rc2**,
+  not benign journal noise; the rc kernel is not safe as a daily driver on this
+  machine (reboot to 7.2.4-3/LTS).
+
 ## Context
 
 - Laptop: XPS 14 DA14260, BIOS 1.8.2; panel **SHP 5571** (Sharp), 1920x1200
   eDP-1; external DP-1 3840x2160@60. VRR off on both (`hyprctl monitors`).
 - Cmdline: `quiet nowatchdog xe.enable_psr=0 xe.psr_safest_params=1 …`
   (kernel taints: "Setting dangerous option enable_psr").
-- `enable_dsb = Y` (default) — no DSB errors on this machine.
+- `enable_dsb = Y` (default) — no DSB errors on 7.2.x; 15 on 7.3-rc2.
 
 ## Upstream refs (Intel DRM tracker, gitlab.freedesktop.org/drm/xe/kernel)
 
@@ -74,10 +99,11 @@ is the untested knob that should actually turn it off.
   reporter says `xe.enable_psr=0` mitigates but does not clear everything.
 - **#8556** "PTL: VSync locks to 30 FPS … root cause: DSB poll errors".
 - **#9196** PTL eDP-2 PHY refclk failure.
-- Our variant (timeout-only, no DSB, no corruption, boot/shutdown only) is a
-  useful datapoint for either ticket.
+- Our variant: on 7.2.x timeout-only, no DSB, no corruption, boot/shutdown only;
+  on 7.3-rc2 the DSB errors appear *with* the scanline patch present (VRR off) —
+  useful datapoint for #8556/#1024.
 
-## Re-collection commands (run after 7.2.5)
+## Re-collection commands (run on stable 7.2.6 and any future kernel)
 
 ```sh
 # per-boot PSR stats: kernel, counts, window
@@ -104,12 +130,15 @@ pkexec sh -c 'cat /sys/module/xe/parameters/enable_psr /sys/module/xe/parameters
 
 ## Next steps
 
-1. **7.2.5**: rerun the commands above on the first boot with the same cmdline —
-   comparison stays clean only if `xe.enable_panel_replay` is left at auto.
-2. If the bursts persist: comment on xe **#8564** (or #8556) with this baseline —
-   XPS 14 DA14260, timeout-only variant, boot/shutdown scoped, and the Panel
-   Replay observation.
-3. Then (optional workaround test): boot once with
-   `xe.enable_panel_replay=0` added to `/etc/default/limine` and see if the
-   timeouts disappear. Only after the 7.2.5 comparison, to keep the baseline
-   valid.
+1. **Stable 7.2.6** (upstream 2026-09-14; CachyOS v3 build pending): rerun the
+   commands above on the first boot with the same cmdline — comparison stays
+   clean only if `xe.enable_panel_replay` is left at auto.
+2. Comment on CachyOS **#1024** with the rc observation: 15× `DSB 0 poll error`
+   on 7.3-rc2-3 *with* the `f7140c7` scanline fix present and VRR off — i.e. the
+   missing patch is not the whole story for DSB errors on PTL. Also mention the
+   7.2.x→rc timeout-variant change (2× `PSR idle state`, no `for re-enable`).
+3. If stable 7.2.6 still shows the old bursts: comment on xe **#8564** (or
+   #8556) with this baseline — XPS 14 DA14260, timeout-only variant,
+   boot/shutdown scoped, Panel Replay observation.
+4. (Optional workaround test): boot once with `xe.enable_panel_replay=0` added to
+   `/etc/default/limine` and see if the timeouts disappear.
