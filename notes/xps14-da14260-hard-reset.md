@@ -1,6 +1,6 @@
 # XPS 14 DA14260 — abrupt power loss on battery (EC hard reset)
 
-Status: **unresolved** (last checked 2026-08-26). Watching the linked threads for a fix.
+Status: **unresolved** (last checked 2026-09-14). Watching the linked threads for a fix.
 
 ## Symptom
 
@@ -37,6 +37,11 @@ This machine (Dell XPS 14 DA14260, Panther Lake / Core Ultra X7) is affected.
   machine is still on 1.8.2.
 - 2026-08-26 check: no solution, no recall, no BIOS update. Dell thread's OP shipped the
   laptop to Dell's service center; no verdict posted.
+- 2026-09-14 check: still no fix. Dell thread remains UNSOLVED (9 affected, no Dell
+  reply); `fwupdmgr` shows BIOS 1.8.2 as the latest for this unit; omarchy comment
+  (2026-08-25) reports BIOS v1.10.1 on an XPS 16 did **not** fix it ("hardware
+  related, not fixable by firmware updates"), with the palm-rest insulation still
+  the leading theory.
 
 ## Threads to check for a fix
 
