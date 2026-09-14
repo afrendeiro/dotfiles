@@ -203,3 +203,8 @@ hl.bind(mainMod .. " + SHIFT + S",  hl.dsp.exec_cmd("~/.local/bin/launch-or-focu
 hl.bind(mainMod .. "+ F9", hl.dsp.exec_cmd("~/.local/bin/toggle-edp.sh"), { description = "[System] Toggle internal display (eDP-1)" })
 
 hl.bind(mainMod .. "+ F10", hl.dsp.exec_cmd("~/.local/bin/toggle-edp.sh on"), { description = "[System] Reset internal display (eDP-1 on)" })
+
+-- External displays can stay dead after a dock unplug/replug (aquamarine 0.15.0
+-- regression, see notes/dock-display-replug.md): a VT switch releases the stale
+-- CRTC that keeps the Type-C port out of DP-alt mode.
+hl.bind(mainMod .. " + SHIFT + F10", hl.dsp.exec_cmd("~/.local/bin/recover-displays.sh"), { description = "[System] Recover external displays (VT switch)" })

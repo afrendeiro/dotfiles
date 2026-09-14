@@ -73,6 +73,12 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   (incl. opencode) to keep alacritty's transparency (`opacity = 0.6`).
 - nwg-displays output (`monitors.conf`, `monitors.lua`, `workspaces.conf` at the
   hypr root, not under `config/`) is machine-specific and gitignored.
+- Dock replug can leave the external monitor dead (aquamarine 0.15.0
+  regression: the disconnect commit is refused, the stale CRTC keeps the Intel
+  Type-C port out of DP-alt mode). Recover with `SUPER+SHIFT+F10` →
+  `recover-displays.sh` (VT switch via `pkexec chvt`) or suspend; details and
+  upstream links in `notes/dock-display-replug.md`. Remove the script/bind when
+  aquamarine > 0.15.0 ships the fix.
 - noctalia `[shell.greeter_sync] privilege_command = "pkexec"` — the login-greeter
   sync elevates via the narrow `org.noctalia.greeter.apply-appearance` polkit
   action. This DEPENDS on a system polkit rule at
