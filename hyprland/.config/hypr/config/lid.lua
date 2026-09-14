@@ -15,11 +15,11 @@ local bar_nudge = "sleep 1; noctalia msg bar-reserve-toggle; sleep 0.3; noctalia
 -- it kills the uwsm/Hyprland session (black screen).
 hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd([[bash -c '
 if hyprctl monitors -j | jq -e "map(select(.name != \"eDP-1\" and .disabled == false)) | length > 0" >/dev/null 2>&1; then
-    wlr-randr --output eDP-1 --off; ]] .. bar_nudge .. [[
+    ~/.local/bin/toggle-edp.sh off; ]] .. bar_nudge .. [[
 elif [ "$(cat ~/.local/state/lid-suspend 2>/dev/null)" != "disabled" ] && [ "$(cat /sys/class/power_supply/AC/online 2>/dev/null)" != "1" ]; then
     systemctl suspend
 fi
 ']]), { description = "Lid closed: eDP-1 off (external) / suspend (battery)", locked = true })
 
 -- Lid opened: re-enable the internal display (Hyprland re-applies the 60 Hz modeline rule)
-hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd('wlr-randr --output eDP-1 --on; ' .. bar_nudge), { description = "Lid opened: eDP-1 on", locked = true })
+hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd('~/.local/bin/toggle-edp.sh on; ' .. bar_nudge), { description = "Lid opened: eDP-1 on", locked = true })

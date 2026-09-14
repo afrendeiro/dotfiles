@@ -202,4 +202,4 @@ hl.bind(mainMod .. " + SHIFT + S",  hl.dsp.exec_cmd("~/.local/bin/launch-or-focu
 -- (Lid switch binds live in config/lid.lua, loaded after monitor rules)
 hl.bind(mainMod .. "+ F9", hl.dsp.exec_cmd("~/.local/bin/toggle-edp.sh"), { description = "[System] Toggle internal display (eDP-1)" })
 
-hl.bind(mainMod .. "+ F10", hl.dsp.exec_cmd('wlr-randr --output eDP-1 --on'), { description = "[System] Reset internal display (eDP-1 on)" })
+hl.bind(mainMod .. "+ F10", hl.dsp.exec_cmd("~/.local/bin/toggle-edp.sh on"), { description = "[System] Reset internal display (eDP-1 on)" })

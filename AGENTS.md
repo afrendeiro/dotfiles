@@ -30,11 +30,14 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `[Group]` in {Apps, Toggles, Panels, Capture, Snapshots, System, Navigate,
   Workspaces, Media}, surfaced by `hyprctl binds -j` and grouped in the
   SUPER+K cheatsheet popup; new binds must include one),
-  `config/monitors.lua` (eDP-1 modeline + external auto-right),
+  `config/monitors.lua` (eDP-1 modeline + external auto-right; the eDP-1 rule
+  is conditional on `~/.local/state/edp-state` — owned by `toggle-edp.sh`,
+  `SUPER+F9`/`F10` and the lid binds — because every `hyprctl reload`
+  re-applies monitor rules and would otherwise re-enable the panel),
   `config/workspaces.lua` (10 persistent + gaming, on PRIMARY_MONITOR),
   `config/lid.lua` (must load AFTER monitor rules; owns lid-close suspend:
-  external monitor → eDP-1 off, else suspend on battery while
-  `~/.local/state/lid-suspend` != "disabled" — toggled by
+  external monitor → eDP-1 off via `toggle-edp.sh off`, else suspend on
+  battery while `~/.local/state/lid-suspend` != "disabled" — toggled by
   `toggle-lid-suspend.sh` / `SUPER+CTRL+P`; logind `HandleLidSwitch=ignore`),
   and `hyprland.lua`.
 - noctalia drives the bar/shell/theme. Binds use `noctalia msg <cmd>`; theme
