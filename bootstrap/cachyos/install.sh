@@ -55,7 +55,7 @@ sudo pacman -S --noconfirm \
     gnome-keyring \
     spotify-launcher \
     signal-desktop \
-    evince \
+    papers \
     imv \
     celluloid \
     nautilus-python
@@ -124,7 +124,7 @@ esac
 
 echo "=== Default applications ==="
 xdg-mime default org.gnome.Evolution.desktop x-scheme-handler/mailto
-xdg-mime default org.gnome.Evince.desktop application/pdf
+xdg-mime default org.gnome.Papers.desktop application/pdf
 xdg-mime default imv-dir.desktop \
     image/png image/jpeg image/gif image/svg+xml image/webp image/bmp \
     image/tiff image/heif image/avif image/jxl image/qoi image/x-farbfeld
