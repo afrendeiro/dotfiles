@@ -1,10 +1,11 @@
 # xe: "Timed out waiting for PSR Idle for re-enable" at boot/shutdown (PTL)
 
-Status: **baseline captured 2026-09-12; RC observation 2026-09-14** — benign (no
-visible symptoms, journal noise only), boot/shutdown-scoped on 7.2.x. Panel Replay
-is active despite `xe.enable_psr=0`. On `7.3.0-rc2-3` the timeout variant changes
-and DSB poll errors appear (see RC section). Compare stable 7.2.6 when packaged;
-otherwise comment on the upstream xe tickets (see below).
+Status: **baseline captured 2026-09-12; RC observation 2026-09-14; stable
+7.2.5-1 boot 2026-09-15** — benign (no visible symptoms, journal noise only),
+boot/shutdown-scoped on 7.2.x. Panel Replay is active despite `xe.enable_psr=0`.
+On `7.3.0-rc2-3` the timeout variant changes and DSB poll errors appear (see RC
+section); stable 7.2.5-1 shows none of that. Compare rc3-4 and 7.2.6 when
+packaged; otherwise comment on the upstream xe tickets (see below).
 
 ## Symptom
 
@@ -25,10 +26,12 @@ errors, no screen corruption, no flicker/ghosting — i.e. **not** the xe
 | −2 (Sep 9 11:31 → Sep 11 22:49) | 7.2.x-cachyos (journal start rotated, exact version unknown) | 172 | 9 at boot, 9 at +2 min, **154 at shutdown** |
 | −1 (Sep 11 22:50 → Sep 12 14:52) | 7.2.4-3-cachyos | 56 | 18 at boot, **38 at shutdown** (14:52:32–44, reboot 14:52:40) |
 | 0 (Sep 12 14:53 →) | vanilla 7.2.4-arch1-2 | 10 | 6 at greetd start (14:53:12), 4 at greeter-compositor modeset (14:53:31–32) |
+| Sep 15 23:46 → | 7.2.5-1-cachyos | 8 (boot burst only; shutdown count pending next reboot) | 5 at greetd start (23:46:19–20), 3 at greeter-compositor modeset (23:46:32–33) |
 
 - All are the `for re-enable` variant; 0× `Timed out waiting PSR idle state`,
   0× `DSB … poll error`.
-- One `CPU pipe A FIFO underrun` at kernel display init (vanilla boot 0 only).
+- One `CPU pipe A FIFO underrun` at kernel display init (vanilla 7.2.4 boot 0
+  and CachyOS 7.2.5-1, both at display init).
 - Boot bursts coincide with `noctalia-greeter-compositor` starting and logging
   `Buffer is poisoned` / `connector eDP-1|DP-1: Failed to import buffer for
   scan-out` on both connectors.
@@ -84,6 +87,18 @@ auto). The display-error profile changes:
   not benign journal noise; the rc kernel is not safe as a daily driver on this
   machine (reboot to 7.2.4-3/LTS).
 
+## Stable 7.2.5 observation 2026-09-15 — `7.2.5-1-cachyos`
+
+First boot on the stable 7.2.5-1 build (same cmdline, `enable_panel_replay` left
+at auto):
+
+- 8 PSR timeouts, all the `for PSR Idle for re-enable` variant, greetd/modeset-
+  scoped (23:46:19–33) — same profile as the 7.2.4 baseline; 0× `PSR idle state`,
+  0× `DSB … poll error`, 1× FIFO underrun at display init.
+- During the RDR2 crash/teardown (23:49–23:50): 0 PSR timeouts, 0 DSB errors —
+  the rc2 DSB burst does **not** reproduce on stable 7.2.5.
+- Shutdown burst count pending the next reboot.
+
 ## Context
 
 - Laptop: XPS 14 DA14260, BIOS 1.8.2; panel **SHP 5571** (Sharp), 1920x1200
@@ -130,13 +145,18 @@ pkexec sh -c 'cat /sys/module/xe/parameters/enable_psr /sys/module/xe/parameters
 
 ## Next steps
 
-1. **Stable 7.2.6** (upstream 2026-09-14; CachyOS v3 build pending): rerun the
-   commands above on the first boot with the same cmdline — comparison stays
-   clean only if `xe.enable_panel_replay` is left at auto.
+1. **Stable 7.2.5-1** captured 2026-09-15 (boot burst only — 8 timeouts, 0 DSB;
+   shutdown count after the next reboot). Remaining comparisons: rc3-4 (CachyOS
+   #1031 closed 2026-09-15 "fixed in rc3 tagrel 4", build pending) and 7.2.6
+   when packaged — rerun the commands above on the first boot with the same
+   cmdline; comparison stays clean only if `xe.enable_panel_replay` is left at
+   auto.
 2. Comment on CachyOS **#1024** with the rc observation: 15× `DSB 0 poll error`
    on 7.3-rc2-3 *with* the `f7140c7` scanline fix present and VRR off — i.e. the
    missing patch is not the whole story for DSB errors on PTL. Also mention the
    7.2.x→rc timeout-variant change (2× `PSR idle state`, no `for re-enable`).
+   New datapoint: stable 7.2.5-1 has **0** DSB errors (boot and RDR2 modeset) vs
+   15 on rc2 — the DSB burst is rc-only so far.
 3. If stable 7.2.6 still shows the old bursts: comment on xe **#8564** (or
    #8556) with this baseline — XPS 14 DA14260, timeout-only variant,
    boot/shutdown scoped, Panel Replay observation.

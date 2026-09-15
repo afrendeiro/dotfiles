@@ -1,18 +1,19 @@
 # [BUG] RDR2 (Steam/Proton) crashes during engine init on Linux 7.2.x–7.3-rc2 (CachyOS + vanilla Arch); works on 6.18 LTS
 
-Status: **upstream regression confirmed, still unfixed in mainline 7.3-rc2** — reproduces
-on vanilla Arch `linux` 7.2.4-arch1-2 and on CachyOS `7.3.0-rc2-3` (2026-09-14), with and
-without ntsync, identical signature. CachyOS is NOT the venue (their issue template
-redirects upstream bugs): file at bugzilla.kernel.org (mark as regression) + Cc
+Status: **upstream regression confirmed, still unfixed in mainline 7.3-rc2 and
+stable 7.2.5** — reproduces on vanilla Arch `linux` 7.2.4-arch1-2 and on CachyOS
+`7.3.0-rc2-3` (2026-09-14) / `7.2.5-1` (2026-09-15), with and without ntsync,
+identical signature. CachyOS is NOT the venue (their issue template redirects
+upstream bugs): file at bugzilla.kernel.org (mark as regression) + Cc
 regressions@lists.linux.dev. Draft below adapted from the original CachyOS report.
-Stable 7.2.5/7.2.6 retest still pending (CachyOS v3 build stalled as of 2026-09-14;
-upstream 7.2.6 released 2026-09-14 — but since 7.3-rc2 still crashes, a stable fix is
-unlikely).
+Stable retest done: **7.2.5-1 still crashes** — the CachyOS v3 build only landed
+2026-09-15 13:00 UTC (after the clang-22 `drm/gud` FORTIFY build block, CachyOS
+issue #1031). Filing upstream is now the next step.
 
 ## System
 
 - Laptop: Dell XPS 14 DA14260; CPU Intel Core Ultra X7 358H (16 threads, 6P+8E+2LP hybrid); iGPU Intel Arc B390 (Panther Lake); 32 GB RAM
-- Kernel: `7.2.0-1-cachyos`, `7.2.4-3-cachyos`, vanilla Arch `7.2.4-arch1-2`, `7.3.0-rc2-3-cachyos-rc` (all broken) vs `6.18.42/6.18.50-cachyos-lts` (works)
+- Kernel: `7.2.0-1-cachyos`, `7.2.4-3-cachyos`, `7.2.5-1-cachyos`, vanilla Arch `7.2.4-arch1-2`, `7.3.0-rc2-3-cachyos-rc` (all broken) vs `6.18.42/6.18.50-cachyos-lts` (works)
 - Mesa: `3:26.3.0_devel` (cachyos-v3 mesa-git; 26.2.1 also tested — no difference)
 - Steam native 1.0.0.87-3, Proton 11.0 / Proton Experimental / GE-Proton11-5 (identical failure on 7.2.0)
 - Game: Red Dead Redemption 2 (Steam appid 1174180), Rockstar Launcher flow
@@ -35,7 +36,21 @@ A handled `EXCEPTION_ILLEGAL_INSTRUCTION` (0xc000001d) fires on a sibling thread
 - `7.2.0-1-cachyos`: crashes 100% of attempts, every Proton, every renderer, every config.
 - `6.18.42-1-cachyos-lts`: **game boots and runs** with an identical userspace (same prefix, same Proton, same launch options). First successful launch on this machine. Kernel-only regression.
 - **Vanilla Arch `linux` 7.2.4-arch1-2 (2026-09-12): crashes identically** → upstream mainline regression, NOT CachyOS-specific. (Vanilla 7.1.9 doesn't boot at all on this PTL machine — black screen — which limits bisection below 7.2.)
-- **CachyOS `7.3.0-rc2-3-cachyos-rc` (2026-09-14): crashes identically** → not fixed in current mainline development (7.3-rc2). Since 7.2.6's stable content is a subset of mainline 7.3-rc2, a fix in 7.2.5/7.2.6 is unlikely — the stable retest is a formality, not a blocker for filing.
+- **CachyOS `7.3.0-rc2-3-cachyos-rc` (2026-09-14): crashes identically** → not fixed in current mainline development (7.3-rc2). Since 7.2.6's stable content is a subset of mainline 7.3-rc2, a fix in 7.2.5/7.2.6 is unlikely — the stable retest is a formality, not a blocker for filing. **Confirmed: `7.2.5-1-cachyos` still crashes (retest 2026-09-15).**
+
+## Retest 2026-09-15 — `7.2.5-1-cachyos`: still crashes
+
+- Timeline (process monitor + Rockstar log): `PlayRDR2.exe` 23:49:34 → `RDR2.exe`
+  ~23:49:58 → crash 23:50:09 → full stack gone 23:50:13. Lifetime after
+  `RDR2.exe` starts: ~11 s (7.2.4-3: ~15 s).
+- Launcher log: `Game exited with code 0xc0000005 (3221225477)` +
+  `crashdetection: Exit code 0xc0000005 indicates a fatal game exit (reason:
+  STATUS_ACCESS_VIOLATION)`.
+- New dump: `CrashLogs/reports/6f989adb-5c2e-4943-9b9f-84643a2c0e6a.dmp`
+  (85 MB, 23:50:09).
+- GE-Proton11-5, same prefix/launch options. No kernel/GPU errors during the
+  crash; 0 PSR timeouts and 0 DSB errors in that window (rc2 showed 2 + 15) —
+  the display noise is rc-only.
 
 ## Retest 2026-09-14 — `7.3.0-rc2-3-cachyos-rc`: still crashes
 
@@ -128,17 +143,18 @@ not caused by CachyOS patches or ntsync.
 ## Evidence files (local, if a maintainer needs them)
 
 - RDR2 crash dumps: `~/.local/share/Steam/steamapps/compatdata/1174180/pfx/drive_c/users/steamuser/AppData/Local/Rockstar Games/Red Dead Redemption 2/CrashLogs/`
+  - 2026-09-15 (7.2.5-1): `reports/6f989adb-5c2e-4943-9b9f-84643a2c0e6a.dmp`
   - 2026-09-12 (7.2.4-3): `reports/4e471260-5d06-4ff1-8175-2b56510b1ba0.dmp` + `RDR2-20260912-144229-2828.crash.log`
   - 2026-08-30 (7.2.0-1): `reports/fdebb011-c2d5-4707-b7fb-4dc18c46d53e.dmp`
-- WINEDEBUG `+seh` trace, vanilla 7.2.4 (2026-09-12, ~1 MB): `~/steam-1174180.log`
+- WINEDEBUG `+seh` trace, vanilla 7.2.4 (2026-09-12, ~1 MB): `~/steam-1174180.log` (since deleted; regenerate with `WINEDEBUG=+seh PROTON_LOG=1` if needed)
 - Rockstar launcher log (game exit code): `.../Documents/Rockstar Games/Launcher/launcher.log`
 - Steam console: `~/.local/share/Steam/logs/console-linux.txt`
 - PSR oops: `journalctl -k` (intel_psr_activate, "Timed out waiting PSR idle state")
 
 ## Suggested next steps
 
-1. Retest on **7.2.5** when packaged (futex + PSR fixes may cover it) before filing
-2. If it persists: file upstream — bugzilla.kernel.org, regression, Cc regressions@lists.linux.dev; ntsync ruled out, so lead with scheduler/mm and the `+seh` signature
+1. ~~Retest on **7.2.5** when packaged~~ Done 2026-09-15: still crashes → file upstream now.
+2. File upstream — bugzilla.kernel.org, mark as regression, Cc regressions@lists.linux.dev; lead with scheduler/mm and the `+seh` signature; ntsync ruled out, LTS 6.18 works, vanilla 7.2.4 + CachyOS 7.2.5/7.3-rc2 all break.
 3. PSR `Timed out waiting for PSR Idle` is a separate, concrete bug — Intel DRM tracker (gitlab.freedesktop.org/drm/xe/kernel), reproduces on vanilla with `xe.enable_psr=0`
 4. Bisection is limited: vanilla 7.1.9 doesn't boot on this PTL machine
 
