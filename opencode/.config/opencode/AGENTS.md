@@ -33,5 +33,9 @@ documentation (desktop stack, configs, quirks) lives in the dotfiles repo.
   (tracked in `~/work/dotfiles/notes/`):
   - XPS 14 DA14260 EC hard-reset/power-loss bug (`xps14-da14260-hard-reset.md`)
   - IPU7 camera (OV08X40) workaround stack (`camera-ipu7.md`)
+- Skip this check if both notes were last checked within the past two days
+  (each note header records its check date, e.g. "last checked 2026-09-14").
+  When you do perform the check, update that date even if nothing changed, so
+  the skip rule applies for the next agent.
 - If a fix exists, summarize it to the user and update the relevant note;
   otherwise just report that they remain unresolved.
