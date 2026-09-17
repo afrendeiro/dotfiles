@@ -37,7 +37,8 @@ sudo pacman -S --noconfirm \
     base-devel \
     jq \
     bind \
-    poppler
+    poppler \
+    pdftk
 
 echo "=== GUI applications ==="
 sudo pacman -S --noconfirm \
