@@ -5,3 +5,4 @@ bun.lock
 .gitignore
 plugins/
 themes/
+service.json
