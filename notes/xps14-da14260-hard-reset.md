@@ -1,6 +1,6 @@
 # XPS 14 DA14260 — abrupt power loss on battery (EC hard reset)
 
-Status: **unresolved** (last checked 2026-09-14). Watching the linked threads for a fix.
+Status: **unresolved** (last checked 2026-09-17). Watching the linked threads for a fix.
 
 ## Symptom
 
@@ -42,6 +42,14 @@ This machine (Dell XPS 14 DA14260, Panther Lake / Core Ultra X7) is affected.
   (2026-08-25) reports BIOS v1.10.1 on an XPS 16 did **not** fix it ("hardware
   related, not fixable by firmware updates"), with the palm-rest insulation still
   the leading theory.
+- 2026-09-17 check: still no fix. omarchy #5953 was **reopened 2026-09-16** (the
+  reporter's earlier "firmware update fixed it" close was premature): crashes persist
+  on BIOS 1.8.2, incl. two hard freezes in two sessions on omarchy's new default
+  `linux-omarchy 7.2.5-3` (one with no suspend at all; the suspend-involved ones log
+  a nested-IRQ trap, vector `de`/irq 222 `sdca_irq`, after s2idle). The omarchy
+  maintainer replied "I'll investigate!". Dell community thread still UNSOLVED (now
+  10 affected, 0 responses). This unit is on BIOS 1.8.2; `fwupdmgr` still reports
+  that as the latest, and no BIOS > 1.9.0 exists (1.9.0 is Windows-only).
 
 ## Threads to check for a fix
 

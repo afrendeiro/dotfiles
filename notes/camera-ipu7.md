@@ -3,14 +3,18 @@
 Status: working as of 2026-08-21. Camera streams to browsers/desktop apps via
 libcamera → v4l2loopback relay.
 
-Re-checked 2026-09-14: **no native solution; all workarounds still required** —
-libcamera 0.7.2-4.1 (CachyOS revision bump; soft-ISP stride crash not re-tested),
-no `libcamera-provider.so` in `/usr/lib/spa-0.2/v4l2/` (pipewire 1.6.8), and
-kernel 7.2.4-3-cachyos has had no suspend/resume cycle since the upgrade to
-confirm the runtime-PM fix, so `90-ipu7-power.rules` stays. Upstream:
-intel/vision-drivers#36 still open (the USB-IO bridge and int3472 type 0x02
-landed in 7.1, but intel_cvs itself is still out of tree); RH bug 2413656 still
-NEW (Kate Hsuan) — upstreaming pace unchanged.
+Re-checked 2026-09-17: **still no native solution; all workarounds required** —
+kernel is now 7.2.5-1-cachyos (no suspend/resume cycle since the upgrade, so
+`90-ipu7-power.rules` stays untested-removable); the newest upstream staging/ipu7
+commits are probe error-path fixes only (async notifier UAF/leak, 2026-07-27/30) —
+the resume "Failed to get runtime PM" path is untouched; intel/vision-drivers#36
+still open (no activity since 2026-07-25; intel_cvs itself is still out of tree —
+the USB-IO bridge and int3472 type 0x02 landed in 7.1, but that is not the
+blocker) and RH bug 2413656 still NEW (2026-08-18) → DKMS stays. libcamera
+0.7.2-4.1 unchanged (soft-ISP stride crash not re-tested, no matching upstream
+issue); pipewire 1.6.8 still ships no `libcamera-provider.so` (only
+`libspa-v4l2.so`); v4l2loopback 0.15.4 is still the newest tag →
+relay/proxy/watchdog stay.
 
 ## Hardware
 
