@@ -1,0 +1,13 @@
+# Make the OpenSSH agent socket visible to the graphical session so GUI apps
+# can use key-based SSH auth. Most notably gvfs/Nautilus sftp: gvfsd-sftp spawns
+# /usr/bin/ssh and only finds the agent socket via gnome-keyring's environment
+# (org.gnome.keyring Daemon.GetEnvironment), which otherwise has no
+# SSH_AUTH_SOCK. Interactive fish shells export this themselves
+# (fish/.config/fish/conf.d/ssh-agent.fish); this covers the rest of the session.
+# The agent itself is a socket-activated systemd user unit (ssh-agent.socket).
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+
+# "uwsm finalize" pushes the listed variables into the systemd user manager
+# environment, so services started from graphical-session.target (e.g.
+# gvfs-daemon.service) inherit SSH_AUTH_SOCK directly as well.
+export UWSM_FINALIZE_VARNAMES="${UWSM_FINALIZE_VARNAMES:-} SSH_AUTH_SOCK"

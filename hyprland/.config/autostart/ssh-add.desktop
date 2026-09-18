@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=SSH key agent loader
+Comment=Load ~/.ssh/id_rsa into the ssh-agent at login (zenity prompt) so GUI apps can use key-based SSH auth
+Exec=sh -c "$HOME/.local/bin/load-ssh-key.sh"
+NoDisplay=true
+X-GNOME-Autostart-Enabled=true
