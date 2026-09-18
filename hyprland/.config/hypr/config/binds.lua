@@ -89,6 +89,7 @@ hl.bind(mainMod .. " + ALT + C",    hl.dsp.exec_cmd(noctCall .. "panel-toggle se
 -------------------------
 
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. EVOLUTION_CLASS .. " " .. launchPrefix .. EVOLUTION), { description = "[Apps] Evolution mail (launch or focus)" })
+hl.bind(mainMod .. " + CONTROL + M", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. MOE_TUI_CLASS .. " " .. launchPrefix .. MOE_TUI), { description = "[Apps] moe mail (TUI, launch or focus)" })
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(launchPrefix .. CALENDAR),                { description = "[Apps] Calendar PWA" })
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. TEAMS_TUI_CLASS .. " " .. launchPrefix .. TERMINAL .. " --class teams-tui -e teams-tui-go"), { description = "[Apps] Teams (TUI)" })
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(launchPrefix .. TEAMS), { description = "[Apps] Teams (PWA)" })

@@ -8,6 +8,7 @@ BROWSER      = "brave-origin"
 EDITOR       = "nvim"
 SPOTIFY      = "spotify-launcher"
 SPOTIFY_TUI  = 'kitty --class spotify-tui -e spotify_player'
+MOE_TUI      = 'kitty --class moe-tui -e moe'
 OBSIDIAN     = "obsidian"
 EVOLUTION    = "org.gnome.Evolution.desktop"
 
@@ -25,6 +26,7 @@ GITHUB  = "brave-origin --profile-directory=Default --app-id=mjoklplbddabcmpepno
 EVOLUTION_CLASS   = "org.gnome.Evolution"
 SPOTIFY_CLASS     = "spotify"
 SPOTIFY_TUI_CLASS = "spotify-tui"
+MOE_TUI_CLASS     = "moe-tui"
 TEAMS_TUI_CLASS   = "teams-tui"
 OBSIDIAN_CLASS    = "obsidian"
 BROWSER_CLASS     = "brave-origin"
