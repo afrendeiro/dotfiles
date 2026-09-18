@@ -24,6 +24,8 @@ edit the template, then apply with `noctalia msg templates-apply`.
 
 - `SUPER+M` — launch/focus **Evolution** (mail, calendar, contacts,
   tasks; EWS account, see `notes/evolution-m365.md`)
+- `SUPER+CTRL+M` — launch/focus **moe** (terminal mail/calendar/contacts/tasks
+  TUI, `kitty --class moe-tui -e moe`)
 - `SUPER+SHIFT+M` — Outlook PWA · `SUPER+C` — Calendar PWA · `SUPER+N` —
   To Do PWA (kept as backups while the Evolution EWS bridge is in use)
 - In Evolution: `Ctrl+1` Mail · `Ctrl+2` Contacts · `Ctrl+3` Calendar ·
