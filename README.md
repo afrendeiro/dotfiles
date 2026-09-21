@@ -101,7 +101,7 @@ omarchy v4.0 `themes/*/backgrounds/` images, flattened as `<theme>__<file>`.
 
 ## Machine-specific Settings
 
-Create `~/.config/fish/conf.d/local.fish` (gitignored) for SSH hosts, Bluetooth devices, etc. See `fish/.config/fish/conf.d/local.fish.example`.
+Create `~/.config/fish/conf.d/local.fish` (gitignored) for SSH hosts, Bluetooth devices, printer aliases, etc. See `fish/.config/fish/conf.d/local.fish.example`. CeMM printer queues are (re)created by `setup-printers.sh` (scripts module).
 
 **Backup** the file encrypted via [pass](https://www.passwordstore.org/):
 
