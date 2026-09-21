@@ -1,6 +1,6 @@
 # XPS 14 DA14260 — abrupt power loss on battery (EC hard reset)
 
-Status: **unresolved** (last checked 2026-09-17). Watching the linked threads for a fix.
+Status: **unresolved** (last checked 2026-09-21). Watching the linked threads for a fix.
 
 ## Symptom
 
@@ -50,6 +50,15 @@ This machine (Dell XPS 14 DA14260, Panther Lake / Core Ultra X7) is affected.
   maintainer replied "I'll investigate!". Dell community thread still UNSOLVED (now
   10 affected, 0 responses). This unit is on BIOS 1.8.2; `fwupdmgr` still reports
   that as the latest, and no BIOS > 1.9.0 exists (1.9.0 is Windows-only).
+- 2026-09-21 check: still no fix, no BIOS update (`fwupdmgr` refresh: 1.8.2 is
+  latest for this unit; 1.9.0/1.10.1 are Windows-only and an XPS 16 on 1.10.1
+  still power-offs). New in omarchy #5953: a third DA14260 on stock 1.8.2
+  (2026-09-18) and a well-instrumented XPS 16 report (2026-09-19) — its
+  power/thermal sampler shows nothing abnormal (86 %, flat voltage, 42 °C,
+  ~14 W) right up to the cut, Windows BIOS logs record these as `Power Off -
+  WDT`, a replacement motherboard crashed too, and one user reproduces on
+  demand by plugging in a TB4 dock. Maintainer "investigating"; nothing
+  actionable beyond the palm-rest insulation / thermal-profile theories.
 
 ## Threads to check for a fix
 

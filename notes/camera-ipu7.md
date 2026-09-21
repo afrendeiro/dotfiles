@@ -16,6 +16,11 @@ issue); pipewire 1.6.8 still ships no `libcamera-provider.so` (only
 `libspa-v4l2.so`); v4l2loopback 0.15.4 is still the newest tag →
 relay/proxy/watchdog stay.
 
+Re-checked 2026-09-21: no change — intel/vision-drivers#36 still open (no
+activity since 2026-07-25), RH bug 2413656 still NEW, intel/ipu7-drivers#63
+dormant since April; pipewire still ships only `libspa-v4l2.so`; libcamera
+0.7.2-4.1 unchanged → all workarounds still required.
+
 ## Hardware
 
 - XPS 14 (DA14260): IPU7 (PCI `8086:b05d`) + **OmniVision OV08X40** sensor
