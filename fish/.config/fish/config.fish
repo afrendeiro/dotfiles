@@ -101,9 +101,6 @@ alias sq="squeue | grep are"
 alias wsq="watch 'squeue | grep are'"
 alias bfg='java -jar ~/workspace/opt/bfg-1.14.0.jar'
 
-alias printdoublesided='lpr -P imageFORCE-C5140-5150-UFR-II -o print-quality=5 -o sides=two-sided-long-edge -o ColorModel=AdobeRGB'
-alias print="printdoublesided"
-
 function printmin
     set -l name (basename $argv[1])
     pdfjam --landscape --nup 2x1 -o /tmp/$name $argv[1] 2>/dev/null
