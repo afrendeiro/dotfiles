@@ -1,25 +1,60 @@
 -- Lid switch binds. Loaded AFTER monitors.lua (switch binds can silently fail if
 -- registered before hl.monitor rules).
+--
+-- The internal panel follows the lid state at runtime: closing removes eDP-1
+-- from the layout (Hyprland moves its workspaces to the remaining monitor),
+-- opening restores the custom modeline. monitors.lua derives the same state
+-- from /proc on every config apply, so reloads and boot-with-lid-closed are
+-- already correct. Helpers: set_internal_display()/edp_enabled() in
+-- config/variables.lua.
+--
+-- Lid closed without an external display: suspend on battery while lid-close
+-- sleep is enabled (~/.local/state/lid-suspend != "disabled", toggled by
+-- toggle-lid-suspend.sh / SUPER+CTRL+P). On AC nothing happens, mirroring the
+-- old logind profile. logind HandleLidSwitch=ignore — this binding owns lid
+-- suspend. NEVER restart systemd-logind from a running session: it kills the
+-- uwsm/Hyprland session (black screen).
 
--- After an output layout change, noctalia leaves the surviving bar surface at its
--- stale coordinates until something re-commits it. bar-reserve-toggle flips the
--- exclusive zone (which commits the layer surface); toggling twice restores state.
-local bar_nudge = "sleep 1; noctalia msg bar-reserve-toggle; sleep 0.3; noctalia msg bar-reserve-toggle"
+local function read_file(path)
+    local file = io.open(path, "r")
+    if not file then
+        return nil
+    end
+    local contents = file:read("*a")
+    file:close()
+    return contents
+end
 
--- Lid closed: disable eDP-1 if an external monitor is present (dock/desk
--- use); otherwise suspend on battery while lid-close sleep is enabled
--- (~/.local/state/lid-suspend != "disabled", toggled by
--- toggle-lid-suspend.sh / SUPER+CTRL+P). logind HandleLidSwitch=ignore —
--- this binding owns lid suspend (on AC nothing happens, mirroring the old
--- logind profile). NEVER restart systemd-logind from a running session:
--- it kills the uwsm/Hyprland session (black screen).
-hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd([[bash -c '
-if hyprctl monitors -j | jq -e "map(select(.name != \"eDP-1\" and .disabled == false)) | length > 0" >/dev/null 2>&1; then
-    ~/.local/bin/toggle-edp.sh off; ]] .. bar_nudge .. [[
-elif [ "$(cat ~/.local/state/lid-suspend 2>/dev/null)" != "disabled" ] && [ "$(cat /sys/class/power_supply/AC/online 2>/dev/null)" != "1" ]; then
-    systemctl suspend
-fi
-']]), { description = "Lid closed: eDP-1 off (external) / suspend (battery)", locked = true })
+local function trimmed(contents)
+    return (contents or ""):match("^%s*(.-)%s*$")
+end
 
--- Lid opened: re-enable the internal display (Hyprland re-applies the 60 Hz modeline rule)
-hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd('~/.local/bin/toggle-edp.sh on; ' .. bar_nudge), { description = "Lid opened: eDP-1 on", locked = true })
+local function external_active()
+    for _, monitor in ipairs(hl.get_monitors()) do
+        if monitor.name ~= "" and monitor.name ~= MONITOR1 then
+            return true
+        end
+    end
+    return false
+end
+
+-- Lid closed: eDP-1 off, then suspend if on battery without an external display.
+hl.bind("switch:on:Lid Switch", function()
+    if edp_enabled() then
+        set_internal_display(true)
+    end
+
+    local state_dir = os.getenv("XDG_STATE_HOME") or (os.getenv("HOME") .. "/.local/state")
+    local lid_suspend = trimmed(read_file(state_dir .. "/lid-suspend"))
+    local ac_online = trimmed(read_file("/sys/class/power_supply/AC/online"))
+    if not external_active() and lid_suspend ~= "disabled" and ac_online ~= "1" then
+        hl.exec_cmd("systemctl suspend")
+    end
+end, { description = "Lid closed: eDP-1 off / suspend on battery", locked = true })
+
+-- Lid opened: restore the internal panel.
+hl.bind("switch:off:Lid Switch", function()
+    if not edp_enabled() then
+        set_internal_display(false)
+    end
+end, { description = "Lid opened: eDP-1 on", locked = true })

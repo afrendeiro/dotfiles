@@ -199,13 +199,17 @@ hl.bind(mainMod .. " + S",          hl.dsp.exec_cmd("~/.local/bin/launch-or-focu
 hl.bind(mainMod .. " + SHIFT + S",  hl.dsp.exec_cmd("~/.local/bin/launch-or-focus.sh " .. SPOTIFY_TUI_CLASS .. " " .. launchPrefix .. SPOTIFY_TUI), { description = "[Apps] Spotify (TUI)" })
 
 
--- Manual internal-monitor toggle (F9) and reset (F10)
--- (Lid switch binds live in config/lid.lua, loaded after monitor rules)
-hl.bind(mainMod .. "+ F9", hl.dsp.exec_cmd("~/.local/bin/toggle-edp.sh"), { description = "[System] Toggle internal display (eDP-1)" })
+-- Manual internal-monitor toggle (F9) and reset (F10). The lid owns the panel
+-- otherwise (config/lid.lua); a config reload re-derives it from /proc, so an
+-- explicit toggle does not persist across reloads. Helpers in variables.lua.
+-- Single-line binds: keys-data.py (launcher /keys) parses one hl.bind per line.
+hl.bind(mainMod .. "+ F9", function() set_internal_display(edp_enabled()) end, { description = "[System] Toggle internal display (eDP-1)" })
 
-hl.bind(mainMod .. "+ F10", hl.dsp.exec_cmd("~/.local/bin/toggle-edp.sh on"), { description = "[System] Reset internal display (eDP-1 on)" })
+hl.bind(mainMod .. "+ F10", function() set_internal_display(false) end, { description = "[System] Reset internal display (eDP-1 on)" })
 
--- External displays can stay dead after a dock unplug/replug (aquamarine 0.15.0
--- regression, see notes/dock-display-replug.md): a VT switch releases the stale
--- CRTC that keeps the Type-C port out of DP-alt mode.
+-- External displays could stay dead after a dock unplug/replug (aquamarine
+-- 0.15.0 regression, fixed in 0.15.1 — PR #410; see
+-- notes/dock-display-replug.md): a VT switch releases the stale CRTC that
+-- keeps the Type-C port out of DP-alt mode. Kept as a manual fallback until
+-- the fix has proven itself.
 hl.bind(mainMod .. " + SHIFT + F10", hl.dsp.exec_cmd("~/.local/bin/recover-displays.sh"), { description = "[System] Recover external displays (VT switch)" })

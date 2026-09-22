@@ -56,5 +56,47 @@ end
 
 PRIMARY_MONITOR = find_external() or MONITOR1
 
+-- Internal panel (eDP-1): follows the physical lid switch. Lid open -> custom
+-- modeline rule, lid closed -> output removed from the layout (Hyprland moves
+-- its workspaces to the remaining monitor). config/monitors.lua applies the
+-- rule at config-apply time; config/lid.lua and the F9/F10 binds call
+-- set_internal_display() at runtime. No state file: every reload re-derives
+-- from /proc, so a closed/sleeping panel can never be resurrected by a reload.
+EDP_MODE = "modeline 193.25 1920 2056 2256 2592 1200 1203 1209 1245 -hsync +vsync"
+LID_STATE_PATH = "/proc/acpi/button/lid/LID0/state"
+
+function lid_is_closed()
+    local file = io.open(LID_STATE_PATH, "r")
+    if not file then
+        return false
+    end
+    local state = file:read("*a") or ""
+    file:close()
+    return state:match("closed") ~= nil
+end
+
+function edp_enabled()
+    return hl.get_monitor(MONITOR1) ~= nil
+end
+
+function edp_rule(disabled)
+    if disabled then
+        return { output = MONITOR1, disabled = true }
+    end
+    -- disabled must be set explicitly: hl.monitor() merges into the existing
+    -- rule for this output, so omitting it would inherit a previous disable.
+    return { output = MONITOR1, disabled = false, mode = EDP_MODE, position = "0x0", scale = "1.0" }
+end
+
+-- Apply the internal-panel state at runtime. hl.monitor() replaces the rule and
+-- schedules a monitor refresh, so no config reload is needed. noctalia leaves
+-- its bar surface at stale coordinates after an output layout change;
+-- bar-reserve-toggle commits it, toggling twice restores the previous state.
+function set_internal_display(disabled)
+    hl.monitor(edp_rule(disabled))
+    hl.exec_cmd("sleep 1; noctalia msg bar-reserve-toggle; sleep 0.3; noctalia msg bar-reserve-toggle")
+    hl.exec_cmd("notify-send Display 'Internal monitor " .. (disabled and "off" or "on") .. "'")
+end
+
 -- Workspaces
 NUM_WPM = 10 -- Number of workspaces per monitor (Max 10)
