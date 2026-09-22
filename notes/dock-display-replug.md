@@ -1,7 +1,9 @@
 # Dock: external display dead after unplug/replug (aquamarine 0.15.0 regression)
 
-Status: **unresolved upstream** (last checked 2026-09-14). Recovery: VT switch
-(`SUPER+SHIFT+F10` → `recover-displays.sh`), suspend/resume, or reboot.
+Status: **fixed upstream** — aquamarine 0.15.1 (PR #410, merged 2026-09-15,
+released 2026-09-17; installed here 2026-09-17) closes #386/#403. The manual
+recovery (`SUPER+SHIFT+F10` → `recover-displays.sh`) is kept for now as a
+fallback until a dock unplug/replug verifies clean; then remove it.
 
 ## Symptom
 
@@ -45,12 +47,15 @@ generations), with the same fix boundary.
   never disabled; re-plugged outputs fail modeset with EINVAL
 - https://github.com/hyprwm/aquamarine/issues/403 — USB-C DP-alt connector never
   re-detected after replug (our MST DP-5/DP-6 fingerprint)
-- Fix PRs #395, #399, #400 — closed, **not merged** as of 2026-09-14
+- https://github.com/hyprwm/aquamarine/pull/410 — `drm: release output on
+  disconnect manually`, merged 2026-09-15; shipped in **0.15.1** and closes both
+  issues above
 - https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/16256 and
   https://bugs.kde.org/show_bug.cgi?id=490623 — same defect in KWin
 
 ## TODO (future agent)
 
-When aquamarine > 0.15.0 ships with the fix (`pacman -Q aquamarine`): verify the
-dock replug works, then remove `recover-displays.sh`, its `SUPER+SHIFT+F10`
-bind, the AGENTS.md bullet, and this note's recovery section.
+The 0.15.0 regression is fixed in aquamarine 0.15.1 (PR #410). Once a dock
+unplug/replug has been verified to work without a VT switch, remove
+`recover-displays.sh`, its `SUPER+SHIFT+F10` bind, the AGENTS.md bullet, and
+this note.

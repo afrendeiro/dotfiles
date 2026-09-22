@@ -24,20 +24,25 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `config.animations|autostart|colors|decorations|environment|inputs|misc|windowrules`
   — these are CachyOS-provided and NOT in the repo. Do not add or track them.
 - Tracked Hyprland files live under `hyprland/.config/hypr/`:
-  `config/variables.lua` (app vars, MONITOR1/2, NUM_WPM, find_external()),
+  `config/variables.lua` (app vars, MONITOR1/2, NUM_WPM, find_external(), and
+  the internal-panel helpers EDP_MODE/edp_rule()/edp_enabled()/
+  set_internal_display()),
   `config/binds.lua` (SUPER keybinds, uwsm launch prefix, noctalia msg
   panels; every `hl.bind` carries a `description = "[Group] text"` option —
   `[Group]` in {Apps, Toggles, Panels, Capture, Snapshots, System, Navigate,
   Workspaces, Media}, surfaced by `hyprctl binds -j` and grouped in the
   SUPER+K cheatsheet popup; new binds must include one),
-  `config/monitors.lua` (eDP-1 modeline + external auto-right; the eDP-1 rule
-  is conditional on `~/.local/state/edp-state` — owned by `toggle-edp.sh`,
-  `SUPER+F9`/`F10` and the lid binds — because every `hyprctl reload`
-  re-applies monitor rules and would otherwise re-enable the panel),
+  `config/monitors.lua` (eDP-1 custom modeline + external auto-right; the
+  eDP-1 rule mirrors the physical lid switch read from
+  `/proc/acpi/button/lid/LID0/state` — lid open = modeline, lid closed =
+  disabled — so reloads and boot with the lid closed keep the panel off; no
+  state file),
   `config/workspaces.lua` (10 persistent + gaming, on PRIMARY_MONITOR),
-  `config/lid.lua` (must load AFTER monitor rules; owns lid-close suspend:
-  external monitor → eDP-1 off via `toggle-edp.sh off`, else suspend on
-  battery while `~/.local/state/lid-suspend` != "disabled" — toggled by
+  `config/lid.lua` (must load AFTER monitor rules; owns lid handling via
+  `hl.monitor()` at runtime: lid close removes eDP-1 from the layout, lid open
+  restores the modeline — `SUPER+F9`/`F10` are explicit toggles that do not
+  persist across reloads; on battery with no external display it suspends
+  while `~/.local/state/lid-suspend` != "disabled", toggled by
   `toggle-lid-suspend.sh` / `SUPER+CTRL+P`; logind `HandleLidSwitch=ignore`),
   and `hyprland.lua`.
 - noctalia drives the bar/shell/theme. Binds use `noctalia msg <cmd>`; theme
@@ -73,12 +78,13 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   (incl. opencode) to keep alacritty's transparency (`opacity = 0.6`).
 - nwg-displays output (`monitors.conf`, `monitors.lua`, `workspaces.conf` at the
   hypr root, not under `config/`) is machine-specific and gitignored.
-- Dock replug can leave the external monitor dead (aquamarine 0.15.0
+- Dock replug could leave the external monitor dead (aquamarine 0.15.0
   regression: the disconnect commit is refused, the stale CRTC keeps the Intel
-  Type-C port out of DP-alt mode). Recover with `SUPER+SHIFT+F10` →
-  `recover-displays.sh` (VT switch via `pkexec chvt`) or suspend; details and
-  upstream links in `notes/dock-display-replug.md`. Remove the script/bind when
-  aquamarine > 0.15.0 ships the fix.
+  Type-C port out of DP-alt mode). **Fixed in aquamarine 0.15.1** (PR #410,
+  closes #386/#403); `SUPER+SHIFT+F10` → `recover-displays.sh` (VT switch via
+  `pkexec chvt`) is kept for now as a manual fallback. Once a dock
+  unplug/replug verifies clean, remove the script/bind, this bullet, and
+  `notes/dock-display-replug.md`.
 - noctalia `[shell.greeter_sync] privilege_command = "pkexec"` — the login-greeter
   sync elevates via the narrow `org.noctalia.greeter.apply-appearance` polkit
   action. This DEPENDS on a system polkit rule at
