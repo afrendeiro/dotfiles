@@ -37,7 +37,8 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   `/proc/acpi/button/lid/LID0/state` — lid open = modeline, lid closed =
   disabled — so reloads and boot with the lid closed keep the panel off; no
   state file),
-  `config/workspaces.lua` (10 persistent + gaming, on PRIMARY_MONITOR),
+  `config/workspaces.lua` (10 persistent + gaming, on PRIMARY_MONITOR;
+  includes a re-home sweep — see below),
   `config/lid.lua` (must load AFTER monitor rules; owns lid handling via
   `hl.monitor()` at runtime: lid close removes eDP-1 from the layout, lid open
   restores the modeline — `SUPER+F9`/`F10` are explicit toggles that do not
@@ -45,6 +46,16 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   while `~/.local/state/lid-suspend` != "disabled", toggled by
   `toggle-lid-suspend.sh` / `SUPER+CTRL+P`; logind `HandleLidSwitch=ignore`),
   and `hyprland.lua`.
+- **Workspace re-home sweep** (`config/workspaces.lua`): when a monitor is
+  disabled/removed (lid close, dock unplug), Hyprland parks the departing
+  monitor's active workspace on the dead output — it can't be focused, so the
+  `SUPER+[0-9]` bind for it silently dies and the bar shows a stuck workspace
+  (e.g. ws2 parked on a vanished external, ws7 on lid-closed eDP-1). The sweep
+  listens on `monitor.removed` / `monitor.layout_changed` (deferred ~300 ms via
+  `hl.timer`, zoom-toast pattern) and on `config.reloaded`, and re-homes any
+  workspace whose `monitor` is nil or not in the live set to the active monitor
+  (`hl.dsp.workspace.move`). Only misplaced workspaces are moved. Tradeoff: lid
+  reopen shows an empty panel on eDP-1 (parked workspace is no longer restored).
 - noctalia drives the bar/shell/theme. Binds use `noctalia msg <cmd>`; theme
   applies via `require("noctalia").apply_theme()` and `hooks.colors_changed`
   triggers `hyprctl reload`. Do NOT add `noctalia msg templates-apply` to
