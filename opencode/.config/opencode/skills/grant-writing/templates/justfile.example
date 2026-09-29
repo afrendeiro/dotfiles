@@ -4,13 +4,22 @@
 
 _pandoc := "pandoc"
 _ref := "ref.docx"
+_pandoc_opts := "--reference-doc=" + _ref
+# Inline note authors ([XX: ...], [XX/YY: ...]) as "initials=Full name", comma-separated.
+_note_names := "XX=First Author,YY=Second Author"
 
 default:
     @just --list
 
+# Clean build: strips the inline author notes.
 build:
-    {{_pandoc}} grant.md -o grant.docx --reference-doc={{_ref}}
+    N='{{_note_names}}' perl -0pe 'BEGIN{$a=join "|", map {(split /=/)[0]} split /,/, $ENV{N}} s/[ \t]*\[(?:$a)(?:\/(?:$a))*:[^\]]*\]//g' grant.md | {{_pandoc}} -f markdown -o grant.docx {{_pandoc_opts}}
     libreoffice --headless --convert-to pdf --outdir . grant.docx
 
+# Draft for co-authors: inline author notes become Word/LibreOffice comments.
+draft:
+    N='{{_note_names}}' perl -0pe 'BEGIN{%n=map {split /=/, $_, 2} split /,/, $ENV{N}; $a=join "|", keys %n} s{\[((?:$a)(?:/(?:$a))*):\s*([^\]]*)\]}{my ($k, $t) = ($1, $2); $i++; my $w = join " & ", map {$n{$_}} split m{/}, $k; "[$t]\{.comment-start id=\"$i\" author=\"$w\"\}[]\{.comment-end id=\"$i\"\}"}ge' grant.md | {{_pandoc}} -f markdown -o grant-draft.docx {{_pandoc_opts}}
+    libreoffice --headless --convert-to pdf --outdir . grant-draft.docx
+
 clean:
-    rm -f grant.docx grant.pdf
+    rm -f grant.docx grant.pdf grant-draft.docx grant-draft.pdf

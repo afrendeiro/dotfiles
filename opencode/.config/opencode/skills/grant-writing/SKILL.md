@@ -86,17 +86,49 @@ engines) renders the docx with its styles intact.
 ```make
 _pandoc := "pandoc"
 _ref := "ref.docx"
+_pandoc_opts := "--reference-doc=" + _ref
+# Inline note authors ([XX: ...], [XX/YY: ...]) as "initials=Full name", comma-separated.
+_note_names := "XX=First Author,YY=Second Author"
 
 default:
     @just --list
 
+# Clean build: strips the inline author notes.
 build:
-    {{_pandoc}} grant.md -o grant.docx --reference-doc={{_ref}}
+    N='{{_note_names}}' perl -0pe 'BEGIN{$a=join "|", map {(split /=/)[0]} split /,/, $ENV{N}} s/[ \t]*\[(?:$a)(?:\/(?:$a))*:[^\]]*\]//g' grant.md | {{_pandoc}} -f markdown -o grant.docx {{_pandoc_opts}}
     libreoffice --headless --convert-to pdf --outdir . grant.docx
 
+# Draft for co-authors: inline author notes become Word/LibreOffice comments.
+draft:
+    N='{{_note_names}}' perl -0pe 'BEGIN{%n=map {split /=/, $_, 2} split /,/, $ENV{N}; $a=join "|", keys %n} s{\[((?:$a)(?:/(?:$a))*):\s*([^\]]*)\]}{my ($k, $t) = ($1, $2); $i++; my $w = join " & ", map {$n{$_}} split m{/}, $k; "[$t]\{.comment-start id=\"$i\" author=\"$w\"\}[]\{.comment-end id=\"$i\"\}"}ge' grant.md | {{_pandoc}} -f markdown -o grant-draft.docx {{_pandoc_opts}}
+    libreoffice --headless --convert-to pdf --outdir . grant-draft.docx
+
 clean:
-    rm -f grant.docx grant.pdf
+    rm -f grant.docx grant.pdf grant-draft.docx grant-draft.pdf
 ```
+
+### Inline author notes
+
+Open questions, comments and to-dos for co-authors live inline in the
+Markdown as `[XX: ...]`, where `XX` are the author's initials (`[XX/YY: ...]`
+when addressed to both). Set `_note_names` in the justfile to the project's
+`initials=Full name` pairs.
+
+- `just build` strips these notes (and the whitespace before them), so the
+  submission artifacts are clean. Paragraphs holding only notes disappear.
+- `just draft` writes `grant-draft.docx`/`.pdf`, with each note turned into
+  a real Word/LibreOffice comment by the named author(s). This is the
+  version to send co-authors for review.
+- Only initial-prefixed brackets are touched. Citations (`[@key]`), figure
+  captions, spans (`[text]{.class}`) and unprefixed placeholders
+  (`[to be confirmed]`) are left in place, so placeholders stay visible
+  until they are filled in.
+- Notes must not contain `]`. Draft comments are anchored at a point, not
+  a text range, and replies become separate adjacent comments (pandoc
+  cannot write threaded replies).
+- When converting a co-author's .docx back to Markdown, turn Word comments
+  into these notes (a pandoc Lua filter on `comment-start` spans, with
+  `--track-changes=all`), so the discussion survives the round trip.
 
 ### Variants seen in practice
 
@@ -308,6 +340,6 @@ When asked to start a new project:
 ## Templates
 
 See `templates/` in this skill's directory:
-- `justfile.example` — canonical build/clean recipe
+- `justfile.example` — canonical build/draft/clean recipe
 - `.gitignore.example` — artifact hygiene
 - `ref.docx` — neutral pandoc reference template (styles only)
