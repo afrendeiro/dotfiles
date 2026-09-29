@@ -207,6 +207,10 @@ hl.bind(mainMod .. "+ F9", function() set_internal_display(edp_enabled()) end, {
 
 hl.bind(mainMod .. "+ F10", function() set_internal_display(false) end, { description = "[System] Reset internal display (eDP-1 on)" })
 
+-- Move all workspaces to the internal panel or the external monitor (toggle).
+-- Overrides the PRIMARY_MONITOR workspace rules until the next reload/replug.
+hl.bind(mainMod .. " + F12", hl.dsp.exec_cmd("~/.local/bin/toggle-workspaces-display.sh"), { description = "[Workspaces] Move all workspaces to internal/external display (toggle)" })
+
 -- External displays could stay dead after a dock unplug/replug (aquamarine
 -- 0.15.0 regression, fixed in 0.15.1 — PR #410; see
 -- notes/dock-display-replug.md): a VT switch releases the stale CRTC that

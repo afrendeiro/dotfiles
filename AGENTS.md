@@ -45,6 +45,9 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   persist across reloads; on battery with no external display it suspends
   while `~/.local/state/lid-suspend` != "disabled", toggled by
   `toggle-lid-suspend.sh` / `SUPER+CTRL+P`; logind `HandleLidSwitch=ignore`),
+  `SUPER+F12` → `toggle-workspaces-display.sh` moves every workspace to the
+  display holding fewer of them (eDP-1 ↔ external; Hyprland always leaves one
+  filler workspace behind, hence the majority rule),
   and `hyprland.lua`.
 - **Workspace re-home sweep** (`config/workspaces.lua`): when a monitor is
   disabled/removed (lid close, dock unplug), Hyprland parks the departing
