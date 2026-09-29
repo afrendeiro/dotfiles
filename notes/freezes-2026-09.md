@@ -31,8 +31,7 @@ results back to keep this note current.
 - **2026-09-03 — no freeze since the 7.2.2 reboot (>1 day).** Cluster was
   100% on 7.2.0; if this holds, treat the cause as kernel-side in the
   7.2.0 window (7.2.1's futex/io_uring/HID/HID-over-BT fix batches are the
-  only behavior-relevant deltas; see the 7.2.0→7.2.2 analysis in
-  `rdr2-proton-crash.md` watch list).
+  only behavior-relevant deltas).
 
 ## Evidence
 
@@ -69,9 +68,7 @@ results back to keep this note current.
 
 - Freezes were on 7.2.0; now running 7.2.2 — does the pattern continue?
   (Nothing in 7.2.0→7.2.2 touches GPU/scheduler; expected same.)
-- 7.3-rc1 / 7.3 is the scheduled retest anyway (see `rdr2-proton-crash.md`
-  watch list) — worth noting in any upstream report whether freezes
-  persist there.
+- Worth noting in any upstream report whether freezes persist on 7.3.
 - If freezes continue: consider temporarily stopping `ipu7-camera-proxy`
   to rule the always-on 4K YUY2 gst pipeline in/out.
 - Optional prep for better forensics: enable `sshd` so the SSH-from-phone

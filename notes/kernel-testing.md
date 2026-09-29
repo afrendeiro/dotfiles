@@ -1,7 +1,8 @@
 # Testing a vanilla Arch kernel alongside CachyOS kernels
 
-Status: procedure verified 2026-09-12 (installed `linux` 7.2.4-arch1-2 for the RDR2
-regression A/B — see `rdr2-kernel-regression-report.md`).
+Status: procedure verified 2026-09-12 (installed `linux` 7.2.4-arch1-2 for a
+game-crash regression A/B; it turned out to be upstream — the FRED `INT`
+#GP-context bug, fixed by `93f53499d0b9` in 7.2.8 / 7.3-rc4).
 
 Use when a bug must be classified as CachyOS-specific vs upstream/mainline.
 
@@ -40,7 +41,7 @@ The hook removes the limine entry. Reboot to return to CachyOS.
 
 - `xe.enable_psr=0 xe.psr_safest_params=1` are in the shared cmdline, yet the
   `xe: *ERROR* Timed out waiting for PSR Idle` messages still appear on vanilla
-  7.2.4 (see the RDR2 note).
+  7.2.4 (see `xe-psr-timeouts.md`).
 - Proton games inherit the **Steam client's environment** — restart Steam with
   env vars to A/B them without touching launch options:
   `PROTON_NO_NTSYNC=1 setsid steam` (ntsync off) or
