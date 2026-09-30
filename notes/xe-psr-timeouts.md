@@ -1,11 +1,14 @@
 # xe: "Timed out waiting for PSR Idle for re-enable" at boot/shutdown (PTL)
 
-Status: **baseline captured 2026-09-12; RC observation 2026-09-14; stable
-7.2.5-1 boot 2026-09-15** — benign (no visible symptoms, journal noise only),
-boot/shutdown-scoped on 7.2.x. Panel Replay is active despite `xe.enable_psr=0`.
-On `7.3.0-rc2-3` the timeout variant changes and DSB poll errors appear (see RC
-section); stable 7.2.5-1 shows none of that. Compare rc3-4 and 7.2.6 when
-packaged; otherwise comment on the upstream xe tickets (see below).
+Status: **workaround confirmed 2026-09-30** (`xe.enable_panel_replay=0` → 0
+timeouts, one-off boot, not yet permanent); **unresolved upstream (last checked
+2026-09-29, on 7.2.8-1)** — mostly
+benign journal noise, boot/shutdown-scoped on 7.2.x. Panel Replay is active
+despite `xe.enable_psr=0`. 7.3-rc2 changed the variant and added DSB errors +
+visible flicker; 7.2.8 adds runtime `PSR idle state` timeouts (likely a
+stable revert, see below). No upstream fix targets this panel — expected path
+is the `xe.enable_panel_replay=0` workaround and/or a DMI+panel quirk (see
+"Upstream status & fix timeline").
 
 ## Symptom
 
@@ -27,6 +30,8 @@ errors, no screen corruption, no flicker/ghosting — i.e. **not** the xe
 | −1 (Sep 11 22:50 → Sep 12 14:52) | 7.2.4-3-cachyos | 56 | 18 at boot, **38 at shutdown** (14:52:32–44, reboot 14:52:40) |
 | 0 (Sep 12 14:53 →) | vanilla 7.2.4-arch1-2 | 10 | 6 at greetd start (14:53:12), 4 at greeter-compositor modeset (14:53:31–32) |
 | Sep 15 23:46 → | 7.2.5-1-cachyos | 8 (boot burst only; shutdown count pending next reboot) | 5 at greetd start (23:46:19–20), 3 at greeter-compositor modeset (23:46:32–33) |
+| Sep 28 08:55 → 19:59 | 7.2.7-1-cachyos (probably; version line rotated out) | 253 | 3 at boot, **250 at shutdown/reboot** (19:57–19:59) |
+| Sep 28 19:59 → | 7.2.8-1-cachyos | 16 so far: 9× `for re-enable` + **7× `PSR idle state`** | 9 at boot (19:59); idle-state pairs at 21:26, 22:53, 23:08, 23:16 — during normal desktop use; 0 DSB, 0 FIFO; fullscreen RDR2 session 2026-09-29 logged nothing |
 
 - All are the `for re-enable` variant; 0× `Timed out waiting PSR idle state`,
   0× `DSB … poll error`.
@@ -99,6 +104,80 @@ at auto):
   the rc2 DSB burst does **not** reproduce on stable 7.2.5.
 - Shutdown burst count pending the next reboot.
 
+## Stable 7.2.8 observation 2026-09-29 — `7.2.8-1-cachyos`
+
+- First time the `Timed out waiting PSR idle state` variant (2 s wait on PSR
+  disable) shows up on a **stable** kernel, and outside any modeset: 7× during
+  ordinary desktop use. Previously rc2-only.
+- Likely cause (inference): 7.2.8 reverted "drm/i915/display: Clear
+  SEL_FETCH_PLANE_CTL on plane disable" (added in 7.2.5; revert = upstream
+  `a26204be587c`) without its replacement, which is queued for 7.2.9.
+- 7.2.6/7.2.7 carried no PSR/Panel Replay/DSB changes (7.2.7: cdclk only).
+
+## Workaround test 2026-09-30 — `xe.enable_panel_replay=0` (7.2.8-1)
+
+One-off boot (limine `e` edit) with `xe.enable_panel_replay=0 xe.enable_psr=0
+xe.psr_safest_params=1`:
+
+- **0 timeouts** of either variant through greetd + session start (every
+  earlier 7.2.x boot: 5–18 by that point), 0 DSB, 0 FIFO underrun.
+- debugfs `i915_psr_status`: `PSR mode: disabled` (was `Panel Replay Selective
+  Update enabled (Early Transport)`); both params read `0`.
+- For comparison, the preceding 7.2.8 boot (Panel Replay on) ended with 181×
+  `for re-enable` (172 in the shutdown burst) + 7× `PSR idle state`.
+- → Panel Replay is the trigger. Trade-off: with both off the panel has **no
+  self-refresh at all** (some battery cost). Still to check: the shutdown
+  burst of this boot, and whether dropping `xe.enable_psr=0` (keeping PSR2
+  with Panel Replay off) stays clean.
+
+## Upstream status & fix timeline (researched 2026-09-29)
+
+gitlab issue comments need a login; lore/patchwork block scripted access —
+status below is from the gitlab API, torvalds mirror, kernel.org ChangeLogs and
+stable-queue.
+
+- **Tickets**: xe #8564 / #8556 / #9196 all **open, unassigned** (last activity
+  09-09 / 09-09 / 09-28). Newer PTL matches, all open: #9253, #9296, #9385 (DSB
+  poll errors/corruption), #8924 (Panel Replay parks in SLEEP with
+  `enable_psr2_sel_fetch=0`), #8930 (XPS 13 WCL PR-SU stutter), #9119 (XPS 16:
+  DPCD 0x107 advertises AS SDP while PR_ALPM_CTL disables it — patch
+  "drm/i915/psr: Clarify AS SDP handling in Panel Replay mode", unmerged).
+  omarchy #11016: **same model (DA14260)**, Panel Replay lag on 7.2.3/7.2.4,
+  fixed by `xe.enable_panel_replay=0`. CachyOS #1024: `enable_dsb=0` stops DSB
+  errors but not the stutter.
+- **Existing quirk doesn't cover this unit**: `45c77d4bf8d4` "Disable Panel
+  Replay on Dell XPS 14 DA14260 as a quirk" + `1de647abdfda` (both 7.1) match
+  the **LGD panel** only; this machine has the **Sharp SHP 5571**, and debugfs
+  shows Panel Replay active — consistent with the quirk not matching.
+  (Unverified against source locally.)
+- **7.2.9** (stable-queue/queue-7.2): "drm/i915/psr: Clear stale sel fetch
+  enable bits on sel fetch disable" (mainline `2777ec985227`, closes xe#8739),
+  plus `c034e8a46e4c` "drm/i915/vrr: Disable DC balance by default" (Cc stable
+  v7.0+; VRR-only). Expected to remove the 7.2.8 runtime timeouts.
+- **7.3** (final ~late Oct): DSB safe-window fixes (`f7140c7cef30`,
+  `4a68c7516c57`), PTL DC3CO rework, `cd0121502ce6` "Block DC3CO entry during
+  active frame". Nothing aimed at the `for re-enable` wait (50 ms wait in the
+  PSR work handler) or the `PSR idle state` wait (2 s, on disable). rc2 showed a
+  display regression on this machine — retest rc5+ before trusting 7.3.
+- **7.4** (~end of Dec, drm-intel-next): `3659b6d90f98` "clear the Panel Replay
+  error status register" (wrong DPCD address, no stable tag), AS SDP
+  skip-frames series (`8dbe5c47ca42`, `dc0fd724e13a`, `eddf77ff1a23`,
+  `9ed39b7d74b4`), `908f1be9c343` "On DPCD init wake the DPRx for eDP". Earliest
+  real Panel Replay improvements — generic, not a fix for this panel.
+- **Assessment**: a targeted fix in 7.2.y or 7.3 is unlikely; realistic
+  paths are the workaround below, a quirk extension (needs a report), or the
+  7.4 Panel Replay work.
+
+## Workaround knobs (verified present in 7.2.8 and 7.3-rc4 `modinfo xe`)
+
+- `xe.enable_panel_replay=0` — the confirmed fix for DA14260 (omarchy #11016),
+  XPS 16 and WCL; falls back to PSR1/PSR2.
+- `xe.enable_psr2_sel_fetch=0` — **avoid**: with Panel Replay still on it can
+  freeze the panel (xe #8924).
+- `xe.enable_dsb`, `xe.enable_dc` (0–4), `xe.psr_safest_params` — secondary.
+- Early Transport has no module param; runtime-only via debugfs
+  `i915_edp_psr_debug` (`0x20` = disable ET, `0x40` = disable Panel Replay).
+
 ## Context
 
 - Laptop: XPS 14 DA14260, BIOS 1.8.2; panel **SHP 5571** (Sharp), 1920x1200
@@ -145,20 +224,17 @@ pkexec sh -c 'cat /sys/module/xe/parameters/enable_psr /sys/module/xe/parameters
 
 ## Next steps
 
-1. **Stable 7.2.5-1** captured 2026-09-15 (boot burst only — 8 timeouts, 0 DSB;
-   shutdown count after the next reboot). Remaining comparisons: rc3-4 (CachyOS
-   #1031 closed 2026-09-15 "fixed in rc3 tagrel 4", build pending) and 7.2.6
-   when packaged — rerun the commands above on the first boot with the same
-   cmdline; comparison stays clean only if `xe.enable_panel_replay` is left at
-   auto.
-2. Comment on CachyOS **#1024** with the rc observation: 15× `DSB 0 poll error`
-   on 7.3-rc2-3 *with* the `f7140c7` scanline fix present and VRR off — i.e. the
-   missing patch is not the whole story for DSB errors on PTL. Also mention the
-   7.2.x→rc timeout-variant change (2× `PSR idle state`, no `for re-enable`).
-   New datapoint: stable 7.2.5-1 has **0** DSB errors (boot and RDR2 modeset) vs
-   15 on rc2 — the DSB burst is rc-only so far.
-3. If stable 7.2.6 still shows the old bursts: comment on xe **#8564** (or
-   #8556) with this baseline — XPS 14 DA14260, timeout-only variant,
-   boot/shutdown scoped, Panel Replay observation.
-4. (Optional workaround test): boot once with `xe.enable_panel_replay=0` added to
-   `/etc/default/limine` and see if the timeouts disappear.
+1. ~~Workaround test~~ done 2026-09-30: `xe.enable_panel_replay=0` → 0
+   timeouts (see above). Remaining: count this boot's shutdown burst (next
+   boot, `journalctl -b -1 -k`), try one boot WITHOUT `xe.enable_psr=0` (PSR2
+   on, Panel Replay off), then make the chosen set permanent in
+   `/etc/default/limine` (+ `limine-update`).
+2. Optional isolation: runtime `echo 0x20 > …/i915_edp_psr_debug` (ET off only)
+   to see whether Early Transport alone triggers the timeouts.
+3. **7.2.9** when packaged: re-count — expect the runtime `PSR idle state`
+   timeouts to go away (sel-fetch replacement patch).
+4. **File a drm/xe issue** for the Sharp SHP 5571 on DA14260: attach EDID/OUI
+   + `i915_psr_status`, cite #9119 and omarchy #11016, ask for the DA14260
+   Panel Replay quirk (`45c77d4bf8d4`) to cover this panel too.
+5. 7.3 final / 7.4-rc1: retest (rc2 flicker regression; 7.4 Panel Replay/AS SDP
+   series).
