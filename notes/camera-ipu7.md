@@ -21,6 +21,34 @@ activity since 2026-07-25), RH bug 2413656 still NEW, intel/ipu7-drivers#63
 dormant since April; pipewire still ships only `libspa-v4l2.so`; libcamera
 0.7.2-4.1 unchanged → all workarounds still required.
 
+Re-checked 2026-09-23: no change — upstream trackers identical
+(intel/vision-drivers#36 open/last activity 2026-07-25; RH bug 2413656 still
+NEW; intel/ipu7-drivers#63 open/dormant since April). No native solution;
+workarounds still required.
+
+Re-checked 2026-09-28: no change — intel/vision-drivers#36 still open (no
+activity since 2026-07-25), RH bug 2413656 still NEW (last change
+2026-08-18). No native solution; all workarounds still required.
+
+Re-checked 2026-10-01: intel_cvs still not upstreamed (still the #1 blocker;
+on 7.1 the sensor+CVS chip enumerate but nothing binds → ov08x40 never probes),
+BUT there is now a promising **native libcamera path with the hardware ISP**:
+[jibsta210/ipu7-camera-linux](https://github.com/jibsta210/ipu7-camera-linux) —
+a libcamera `ipu7` pipeline handler driving PSYS directly (4K/1080p NV12,
+~29 fps, software auto-exposure; no gst relay, no v4l2loopback, no CPU-heavy
+soft ISP) for Panther Lake / OV08X40 on CachyOS. It needs (a) `intel_cvs`
+(DKMS, still required), (b) the one-line PSYS debugfs fix from
+intel/ipu7-drivers#63 — `debugfs_create_dir("ipu7-psys", NULL)` (referenced by
+PRs #87/#88/#117) so the DKMS PSYS module works against the in-tree ISYS, and
+(c) ISP parameter blobs captured from Intel's Camera HAL via LD_PRELOAD ioctl
+intercept (proprietary `.aiqb`-derived structures). Also new: LKML patch
+(2026-09-04) to hide ov08x40's broken 1928x1088 binned mode (only first/last
+line delivered; browsers would get a saturated frame at ≤1080p). None of this
+removes our workarounds yet (out-of-tree everything), but worth evaluating
+the pipeline-handler route next time the relay/stride-crash is touched; the
+soft-ISP 4096-stride crash may be sidestepped entirely by the PSYS path.
+Track: jibsta210/ipu7-camera-linux, jibsta210/svp7500-camera-fix-pack.
+
 ## Hardware
 
 - XPS 14 (DA14260): IPU7 (PCI `8086:b05d`) + **OmniVision OV08X40** sensor

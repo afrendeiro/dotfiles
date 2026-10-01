@@ -1,6 +1,6 @@
 # XPS 14 DA14260 — abrupt power loss on battery (EC hard reset)
 
-Status: **unresolved** (last checked 2026-09-21). Watching the linked threads for a fix.
+Status: **unresolved** (last checked 2026-10-01). Watching the linked threads for a fix.
 
 ## Symptom
 
@@ -59,6 +59,26 @@ This machine (Dell XPS 14 DA14260, Panther Lake / Core Ultra X7) is affected.
   WDT`, a replacement motherboard crashed too, and one user reproduces on
   demand by plugging in a TB4 dock. Maintainer "investigating"; nothing
   actionable beyond the palm-rest insulation / thermal-profile theories.
+- 2026-09-23 check: still no fix. omarchy #5953 remains open but got maintainer
+  triage today (2026-09-23: assigned to spencerbull + labeled `bug`); no new
+  user reports since 2026-09-19. Dell community thread still UNSOLVED (11
+  "me too", 0 Dell replies). This unit is on BIOS 1.8.2, still the latest for
+  it via `fwupdmgr refresh --force`; no BIOS > 1.9.0 exists (1.9.0/1.10.1 are
+  Windows-only and an XPS 16 on 1.10.1 still power-offs).
+- 2026-09-28 check: still no fix. omarchy #5953 still open, now actively
+  worked: a new DA16260 (XPS 16) report 2026-09-25, and rblalock notes no
+  crashes since switching to the **performance** power mode (matching the
+  power-profile workaround theory); 2026-09-27 the maintainer (kwilczynski)
+  asked reporters to A/B test a pre-release kernel 7.2.7rc1 to rule out the
+  kernel and to attach logs. Dell community thread unchanged (still "contact
+  Dell Technical Support"). `fwupdmgr get-updates`: no updates — 1.8.2 still
+  the latest for this unit, no BIOS > 1.9.0 (Windows-only), no recall.
+- 2026-10-01 check: still no fix. Dell community thread (now dated 2026-06-28,
+  explicit DA14260/DA16260 title) states plainly that "the latest firmware
+  update does not alleviate the issue" and several users keep hitting random
+  shutdowns; one user claims a firmware update corrected it but the thread
+  author calls that premature (sporadic issue). The thread author has an open
+  Dell ticket; no BIOS > 1.9.0 published as a fix, no recall.
 
 ## Threads to check for a fix
 
