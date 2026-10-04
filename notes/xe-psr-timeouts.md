@@ -244,7 +244,7 @@ stable-queue.
   on 7.3-rc2 the DSB errors appear *with* the scanline patch present (VRR off) —
   useful datapoint for #8556/#1024.
 
-## Re-collection commands (run on stable 7.2.6 and any future kernel)
+## Re-collection commands (run on any retest boot)
 
 ```sh
 # per-boot PSR stats: kernel, counts, window
@@ -269,19 +269,69 @@ pkexec sh -c 'cat /sys/module/xe/parameters/enable_psr /sys/module/xe/parameters
   cat /sys/kernel/debug/dri/0000:00:02.0/eDP-1/i915_psr_status'
 ```
 
+## Retesting on new kernels (is there an upstream fix yet?)
+
+The workaround hides any fix: with both params forced off, a fixed kernel looks
+exactly like a broken one. Retest deliberately when one of these lands:
+
+| Trigger | Why |
+|---|---|
+| 7.2.9+ stable (CachyOS `linux-cachyos`) | "Clear stale sel fetch enable bits on sel fetch disable" (mainline `2777ec985227`) — may fix PSR2 |
+| 7.3 final (`linux-cachyos`), then 7.3.y | DSB/DC3CO rework; rc2 had a flicker regression — check it's gone |
+| 7.4-rc / 7.4 (`linux-cachyos-rc`) | Panel Replay error-status fix `3659b6d90f98` + AS SDP series — first real Panel Replay work |
+| Any changelog mentioning a DA14260 / SHP 5571 / Sharp Panel Replay quirk, or activity on xe #8564 / #9119 / omarchy #11016 | a quirk would make the params unnecessary |
+
+Check what changed first (cheap, no reboot): search the kernel ChangeLog or
+`git log` of `drivers/gpu/drm/i915/display/intel_psr.c` for `psr`, `panel
+replay`, `sel fetch`, `PTL`, `DA14260`. No relevant commits → skip the retest.
+
+### How to test (one-off, nothing persistent)
+
+Test the two modes **separately**, PSR2 first (it is the one with a queued
+fix), on a day when a frozen boot is acceptable:
+
+1. Reboot, press a key at the limine menu, highlight the kernel, press `e`,
+   and edit the cmdline for this boot only:
+   - **PSR2 test**: delete `xe.enable_psr=0` (keep `xe.enable_panel_replay=0`)
+   - **Panel Replay test**: delete `xe.enable_panel_replay=0` (keep
+     `xe.enable_psr=0`; Panel Replay ignores `enable_psr`, see "Key finding")
+
+   Boot with the edited entry. The edit is not saved — the next reboot is back
+   on the safe config automatically.
+2. **If the greeter shows only a frozen cursor** (2026-10-04 failure mode):
+   Ctrl+Alt+F3, wait a few seconds, Ctrl+Alt+F1 — the VT modesets kick the
+   panel out of self-refresh. Or just reboot. Either way the test FAILED.
+3. Confirm the mode is actually active (otherwise the test proves nothing):
+   ```sh
+   pkexec sh -c 'cat /sys/module/xe/parameters/enable_psr /sys/module/xe/parameters/enable_panel_replay; \
+     grep -E "PSR mode|selective fetch" /sys/kernel/debug/dri/0000:00:02.0/eDP-1/i915_psr_status'
+   ```
+   Expect `PSR2 enabled` (PSR2 test) or `Panel Replay … enabled` (PR test).
+4. Exercise it for a session: greeter → login, a lid-close suspend + resume
+   (battery), a fullscreen app/game, and the external monitor if docked.
+5. Count errors — run the per-boot loop from "Re-collection commands" plus
+   `journalctl -b -k | grep -cE 'Selective fetch|drm_WARN'`. Then reboot
+   normally and count the shutdown burst with `journalctl -b -1 -k`.
+
+**Pass** = mode active, 0 `Timed out waiting`, 0 `Selective fetch … failed`,
+0 `drm_WARN`/DSB errors, no frozen/blank screen — across boot, resume and
+shutdown. Only after a pass on a couple of boots: drop that param from
+`KERNEL_CMDLINE` in `/etc/default/limine` and run
+`pkexec limine-mkinitcpio` (or `limine-update`), then update this note's Status
+line and the AGENTS.md pointer.
+
+Record each retest as a dated section above ("Retest YYYY-MM-DD — <kernel>")
+with the counts, pass or fail.
+
 ## Next steps
 
-1. ~~Workaround test~~ done 2026-09-30: `xe.enable_panel_replay=0` → 0
-   timeouts (see above). Remaining: count this boot's shutdown burst (next
-   boot, `journalctl -b -1 -k`), try one boot WITHOUT `xe.enable_psr=0` (PSR2
-   on, Panel Replay off), then make the chosen set permanent in
-   `/etc/default/limine` (+ `limine-update`).
-2. Optional isolation: runtime `echo 0x20 > …/i915_edp_psr_debug` (ET off only)
-   to see whether Early Transport alone triggers the timeouts.
-3. **7.2.9** when packaged: re-count — expect the runtime `PSR idle state`
-   timeouts to go away (sel-fetch replacement patch).
-4. **File a drm/xe issue** for the Sharp SHP 5571 on DA14260: attach EDID/OUI
-   + `i915_psr_status`, cite #9119 and omarchy #11016, ask for the DA14260
-   Panel Replay quirk (`45c77d4bf8d4`) to cover this panel too.
-5. 7.3 final / 7.4-rc1: retest (rc2 flicker regression; 7.4 Panel Replay/AS SDP
-   series).
+1. **Retest** per the section above on 7.2.9, 7.3 final, and 7.4.
+2. **File a drm/xe issue** for the Sharp SHP 5571 on DA14260 — BOTH self-refresh
+   modes broken: Panel Replay (timeouts, blank after resume) and PSR2
+   (`Selective fetch area calculation failed`, frozen greeter). Attach
+   EDID/OUI + `i915_psr_status`, cite #9119 and omarchy #11016, ask for the
+   DA14260 quirk (`45c77d4bf8d4`, LGD-only) to cover this panel. Mention the
+   kernel is tainted by the `enable_psr`/`enable_panel_replay` options.
+3. Optional isolation (only if PSR2 still fails after 7.2.9): runtime
+   `echo 0x20 > /sys/kernel/debug/dri/0000:00:02.0/i915_edp_psr_debug`
+   (Early Transport off) during a PSR2 test boot.

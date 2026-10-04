@@ -334,10 +334,11 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
   Dell/omarchy threads linked in that note for a fix.
 - `notes/xe-psr-timeouts.md` — PTL eDP: `Timed out waiting for PSR Idle`
   bursts (boot/shutdown; on 7.2.8 also at runtime) caused by **Panel Replay**,
-  which stays active despite `xe.enable_psr=0`. `xe.enable_panel_replay=0`
-  clears them (verified 2026-09-30, not yet permanent — pending plan in the
-  note). Upstream quirk covers only the LGD panel, not this Sharp one. Don't
-  re-debug as a config problem.
+  which stays active despite `xe.enable_psr=0`; PSR2 is broken too (frozen
+  greeter). Permanent workaround: `xe.enable_psr=0 xe.enable_panel_replay=0`
+  in `/etc/default/limine` (not in the repo — per-machine). Upstream quirk
+  covers only the LGD panel, not this Sharp one. Don't re-debug as a config
+  problem; on new kernels follow the note's "Retesting on new kernels".
 - `notes/camera-ipu7.md` — camera (OV08X40 via Intel IPU7 + Synaptics
   CVS bridge) on this XPS 14. Requires the out-of-tree `intel_cvs` driver
   (`intel/vision-drivers`, installed via DKMS, AUTOINSTALL) to enumerate the
