@@ -1,6 +1,7 @@
 # xe: "Timed out waiting for PSR Idle for re-enable" at boot/shutdown (PTL)
 
-Status: **workaround confirmed 2026-09-30** (`xe.enable_panel_replay=0` → 0
+Status: **use `xe.enable_psr=0 xe.enable_panel_replay=0`** (PSR2-on test
+FAILED 2026-10-04, see below); **workaround confirmed 2026-09-30** (`xe.enable_panel_replay=0` → 0
 timeouts, one-off boot, not yet permanent); **unresolved upstream (last checked
 2026-09-29, on 7.2.8-1)** — mostly
 benign journal noise, boot/shutdown-scoped on 7.2.x. Panel Replay is active
@@ -129,6 +130,31 @@ xe.psr_safest_params=1`:
   self-refresh at all** (some battery cost). Still to check: the shutdown
   burst of this boot, and whether dropping `xe.enable_psr=0` (keeping PSR2
   with Panel Replay off) stays clean.
+
+## PSR2-on test 2026-10-04 — FAILED (frozen greeter at boot)
+
+Config: `xe.enable_panel_replay=0` only (no `enable_psr=0`; the old
+`/etc/modprobe.d/xe-psr-off.conf` — which WAS effective via the initramfs
+`modconf` hook, contrary to earlier notes — renamed `.disabled`). debugfs:
+`PSR2 enabled (Early Transport)`, `PSR2 selective fetch: enabled`.
+
+- 11:25:08 kernel: `Selective fetch area calculation failed in pipe A`.
+- Greeter rendered and presented its first frame at 11:25:15, but the panel
+  showed only a frozen cursor for ~90 s — frames never reached the screen
+  (panel stuck in PSR2 self-refresh). 108× `for PSR Idle for re-enable`
+  (11:25:13–11:26:48), peaking while switching to tty3 and back; the VT
+  modesets eventually un-stuck it and the greeter appeared.
+- After the Hyprland session started (11:26:49): no further timeouts.
+
+**Conclusion: PSR2 on this Sharp panel is not usable either.** The working
+config is BOTH off: `xe.enable_psr=0 xe.enable_panel_replay=0` (two days
+clean, 2026-09-30 → 10-02). No self-refresh — accept the battery cost.
+
+**Made permanent 2026-10-04** in `/etc/default/limine` (cmdline only;
+modprobe drop-in stays `.disabled`; backup `/etc/default/limine.bak-20261004`).
+First boot: both params `0`, `PSR mode: disabled`, 0 timeouts / selective-fetch
+/ DSB / FIFO / drm_WARN. (The PSR2-on boot ended with 124 timeouts incl.
+shutdown.)
 
 ## Blank screen after resume 2026-10-02 / 10-04 (Panel Replay on) — lid.lua bug
 
