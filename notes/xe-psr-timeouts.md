@@ -130,6 +130,27 @@ xe.psr_safest_params=1`:
   burst of this boot, and whether dropping `xe.enable_psr=0` (keeping PSR2
   with Panel Replay off) stays clean.
 
+## Blank screen after resume 2026-10-02 / 10-04 (Panel Replay on) — lid.lua bug
+
+Symptom: after a lid-close suspend the panel stayed blank; Ctrl+Alt+F3 → login
+→ `hyprctl --instance 0 reload` → Ctrl+Alt+F1 brought the session back.
+
+Journal (boot 2026-10-02 → 10-04, Panel Replay on), identical both times
+(10-02 21:01, 10-04 11:03):
+
+1. Resume → logind logs the queued `Lid closed` + `Lid opened` at once.
+2. Hyprland receives the **stale** `switch:on:Lid Switch` after thaw →
+   `lid.lua` turned eDP-1 off and ran `systemctl suspend` again (1–2 s
+   s2idle), racing the eDP-1 re-enable from the `switch:off` handler.
+3. Panel blank; VT switch → 92 (resp. 45) PSR timeouts; the reload modeset →
+   `drm_WARN_ON(intel_dp->psr.active)` at `intel_psr.c:2050
+   intel_psr_activate` (Hyprland).
+
+Fix (dotfiles, 2026-10-04): the close handler checks `lid_is_closed()` (/proc)
+and ignores events the real lid state contradicts. Verified: battery close →
+exactly one suspend, clean resume; AC close → eDP-1 off ~1 s later, on at
+open (watcher log); 0 PSR timeouts/warnings with `enable_panel_replay=0`.
+
 ## Upstream status & fix timeline (researched 2026-09-29)
 
 gitlab issue comments need a login; lore/patchwork block scripted access —
