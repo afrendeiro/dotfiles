@@ -39,7 +39,15 @@ local function external_active()
 end
 
 -- Lid closed: eDP-1 off, then suspend if on battery without an external display.
+-- The close that triggered a suspend is delivered again on resume, right before
+-- the "opened" event; acting on it suspended a second time and raced the eDP-1
+-- re-enable, leaving the panel blank. Ignore events the real lid state
+-- (/proc, lid_is_closed() in variables.lua) contradicts.
 hl.bind("switch:on:Lid Switch", function()
+    if not lid_is_closed() then
+        return
+    end
+
     if edp_enabled() then
         set_internal_display(true)
     end
