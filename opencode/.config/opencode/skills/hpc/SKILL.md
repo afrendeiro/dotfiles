@@ -36,6 +36,8 @@ Local aliases (define in `~/.config/fish/conf.d/local.fish`):
 alias hpc="ssh -X $USER@login"
 ```
 
+**Local vs HPC username**: the local username may differ from the HPC one. Use the `login` host alias from `~/.ssh/config` (which sets `User`) instead of `$USER@login` in scripts and justfiles.
+
 **Important**: Non-interactive SSH does not load SLURM. Always use `bash -l`:
 ```bash
 ssh $USER@login 'bash -l -c "sinfo"'
@@ -133,6 +135,18 @@ scancel <jobid>         # Cancel a job
 sacct -S 2026-01-01 --user=$USER   # Job history
 ```
 
+## Network and Python environment
+
+- **All compute nodes have internet access**: downloads (e.g. public datasets) run inside SLURM jobs, not on the login node.
+- **`uv` is installed on the HPC** at `~/.local/bin/uv`, which is only on `PATH` in interactive shells. In non-interactive ssh commands and job scripts, use `export PATH=$HOME/.local/bin:$PATH` (or call `~/.local/bin/uv`).
+- Create/update the project environment **on the login node** with `uv sync --frozen` (uv can fetch managed Python versions), then run jobs with `uv run --frozen --no-sync ...`.
+- The login node limits per-process memory: large environments (e.g. torch/CUDA wheels) make `uv sync` crash with `memory allocation ... failed`. Use low concurrency: `UV_CONCURRENT_DOWNLOADS=2 UV_CONCURRENT_INSTALLS=1 UV_CONCURRENT_BUILDS=1 uv sync --frozen`.
+
+Example (from a local machine):
+```bash
+ssh login 'bash -l -c "export PATH=\$HOME/.local/bin:\$PATH UV_CONCURRENT_DOWNLOADS=2 UV_CONCURRENT_INSTALLS=1 && cd ~/projects/<name> && uv sync --frozen"'
+```
+
 ## Code/data sync workflow
 
 Code stays local, data stays on HPC. Use rsync (never git push/pull for working state).
@@ -154,6 +168,10 @@ fetch-processed:
         ./processed/analysis/
 ```
 
+### rsync version on the HPC
+
+The HPC has rsync 3.1.3: options newer than that (e.g. `--mkpath`) fail with `unknown option`. Create destination parents with `ssh login 'mkdir -p ...'` first.
+
 ### rsync exclusion patterns
 Always exclude from sync:
 - `.venv/` — virtual environments
@@ -166,9 +184,33 @@ Always exclude from sync:
 ## Project paths on HPC
 
 - Home: `$HOME/`
-- Projects: `~/projects/<name>/`
-- Data (large): `~/nobackup/` or `~/scratch/`
+- Projects: `~/projects/<name>/` — this is the same as `~/nobackup/projects/<name>/` (the lab's shared projects storage on `~/nobackup/`). Code, data, processed outputs and results all live in the project directory.
+- **Never use `~/scratch/`.**
 - Logs: `~/projects/<name>/logs/`
+
+## Project metadata: `cemm_metadata.json` (mandatory)
+
+Every project root folder on the HPC (`~/projects/<name>/`) **must** contain a `cemm_metadata.json` that follows the CeMM metadata specification:
+
+- Schema (JSON Schema draft-07): `https://metadata.int.cemm.at/latest/cemm_metadata_schema.json` (currently spec `1.0.0`; the file sets `"metadataSpecificationVersion": "1.0.0"` and `"schema": "http://metadata.int.cemm.at/1.0.0/cemm_metadata_schema.json"`).
+- Required fields: `user`, `date`, `group`, `project`, `description`, `method`, `quality`, `rawOrProcessed`, `externalOrInternal`, `metadataSpecificationVersion`, `schema`. Use ontology terms for `method` (e.g. EFO), `organism` (NCBI Taxonomy) and `organTissueType` (UBERON), and verify the IDs (e.g. via EBI OLS).
+- Set `metadataLocation` to the resolved path, e.g. `/nobackup/lab_rendeiro/projects/<name>/cemm_metadata.json`.
+- Keep it in line with the data on disk: add a `date` entry for every data download/receipt or other data event.
+- Always validate before syncing:
+  ```bash
+  curl -sk -o /tmp/cemm_metadata_schema.json https://metadata.int.cemm.at/latest/cemm_metadata_schema.json
+  uvx check-jsonschema --schemafile /tmp/cemm_metadata_schema.json cemm_metadata.json
+  ```
+- Common pitfalls: trailing commas (invalid JSON), and empty strings in `format: date` fields (e.g. `"endDate": ""` fails — omit optional fields instead).
+- Keep it at the root of the local project too, so it is synced with the code (`rsync` of the project root).
+
+## Restricted (controlled-access) data
+
+Because `~/nobackup/` is shared by the lab, controlled-access or otherwise sensitive data must be locked down:
+
+- Layout per cohort: `data/<cohort>/` for openly available data, `data/<cohort>/restricted/` for controlled-access data of the same cohort.
+- Permissions: restricted directories `700`, files `400` (`rsync --perms --chmod=D700,F400`, or `chmod -R u=rwX,go= <dir>` then `chmod 400` on files).
+- Never copy restricted data outside its `restricted/` directory (no copies in scratch, home, shared group folders or results).
 
 ## Environment
 
