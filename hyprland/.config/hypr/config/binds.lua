@@ -48,22 +48,63 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { description = "[Nav
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { description = "[Navigate] Resize window (mouse)" })
 
 -- Zoom
+-- cursor:zoom_factor is a persistent magnifier (1.0 = off) with no built-in
+-- indicator, so every change ends with a toast showing the level. A repeat
+-- timer coalesces key-repeat: each change restarts a two-tick countdown
+-- (~400 ms), so holding the key yields one toast with the settled value.
+-- The toast is a noctalia internal notification: toast-only, never stored in
+-- the notification history.
+local ZOOM_MIN, ZOOM_MAX, ZOOM_STEP = 1.0, 3.0, 0.3
+local zoom_pending, zoom_ticks = nil, 0
+
+-- The local must exist before the timer: a local is not in scope inside its
+-- own initializer, so a callback created inline would capture a nil global.
+local zoom_toast_timer
+zoom_toast_timer = hl.timer(function()
+    zoom_ticks = zoom_ticks + 1
+    if zoom_ticks < 2 then
+        return -- let a held key settle before announcing the level
+    end
+
+    zoom_toast_timer:set_enabled(false)
+    if zoom_pending == nil then
+        return
+    end
+
+    local percent = math.floor(zoom_pending * 100 + 0.5)
+    zoom_pending = nil
+
+    local body = percent == 100 and "100% (reset)" or (percent .. "%")
+    hl.exec_cmd(string.format(
+        "noctalia msg notification-show '{\"app_name\":\"Hyprland\",\"summary\":\"Zoom\",\"body\":\"%s\",\"urgency\":\"low\",\"timeout_ms\":2000}'",
+        body))
+end, { timeout = 200, type = "repeat" })
+zoom_toast_timer:set_enabled(false)
+
 local function zoomfunction(value)
     local zoomvalue = hl.get_config("cursor:zoom_factor")
-    if (zoomvalue + value) > 3.0 then
-        hl.config({ cursor = { zoom_factor = 3.0 } })
-    elseif (zoomvalue + value) < 1.0 then
-        hl.config({ cursor = { zoom_factor = 1.0 } })
-    else
-        hl.config({ cursor = { zoom_factor = zoomvalue + value } })
+    local newvalue = math.max(ZOOM_MIN, math.min(ZOOM_MAX, zoomvalue + value))
+    if newvalue ~= zoomvalue then
+        hl.config({ cursor = { zoom_factor = newvalue } })
+    end
+
+    -- Show the toast once the value stops changing.
+    zoom_pending = newvalue
+    zoom_ticks = 0
+    if not zoom_toast_timer:is_enabled() then
+        zoom_toast_timer:set_enabled(true)
     end
 end
-hl.bind(mainMod .. " + Minus", function() zoomfunction(-0.3) end, { description = "[System] Zoom UI out", repeating = true })
-hl.bind(mainMod .. " + Plus", function() zoomfunction(0.3) end, { description = "[System] Zoom UI in", repeating = true })
+hl.bind(mainMod .. " + Minus", function() zoomfunction(-ZOOM_STEP) end, { description = "[System] Zoom UI out", repeating = true })
+-- Hyprland matches a bind against the keymap sym with no modifiers applied and
+-- requires an exact modifier mask: "Plus" (a shift-level sym) never matches, so
+-- bind the unshifted "equal" sym plus SHIFT to cover SUPER + Shift + = ("+").
+hl.bind(mainMod .. " + equal", function() zoomfunction(ZOOM_STEP) end, { description = "[System] Zoom UI in", repeating = true })
+hl.bind(mainMod .. " + SHIFT + equal", function() zoomfunction(ZOOM_STEP) end, { description = "[System] Zoom UI in", repeating = true })
 
---# Zoom with keypad
-hl.bind(mainMod .. " + code:82", function() zoomfunction(-0.3) end, { description = "[System] Zoom UI out (keypad)", repeating = true })
-hl.bind(mainMod .. " + code:86", function() zoomfunction(0.3) end, { description = "[System] Zoom UI in (keypad)", repeating = true })
+--# Zoom with keypad (code:82/86 = numpad -/+; keycodes stay layout-independent)
+hl.bind(mainMod .. " + code:82", function() zoomfunction(-ZOOM_STEP) end, { description = "[System] Zoom UI out (keypad)", repeating = true })
+hl.bind(mainMod .. " + code:86", function() zoomfunction(ZOOM_STEP) end, { description = "[System] Zoom UI in (keypad)", repeating = true })
 
 
 ------------------

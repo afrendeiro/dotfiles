@@ -45,6 +45,20 @@ edit the template, then apply with `noctalia msg templates-apply`.
 - `Ctrl+b` — toggle the imv background between black and white (helps when
   judging figures with transparent backgrounds). Per-window, resets on restart.
 
+## UI zoom (persistent magnifier)
+
+Hyprland's `cursor:zoom_factor` magnifies the whole desktop around the cursor
+and **stays on** — unlike a hold-to-zoom key, so an accidental press makes the
+screen look like a weird crop of the desktop. 1.0 = off, max 3.0.
+
+- `SUPER + Shift + =` / `SUPER + -` — zoom in / out in 0.3 steps (numpad `+`/`-`
+  also work; the top-row binds need the explicit `Shift` because Hyprland
+  matches the unshifted sym with an exact modifier mask)
+- A "Zoom" toast shows the level after each change (noctalia internal
+  notification, never stored in history)
+- Reset: `hyprctl eval 'hl.config({cursor = {zoom_factor = 1.0}})'`, or a config
+  reload (`zoom_factor` is a runtime keyword, not persisted in the config)
+
 ## Wallpapers
 
 `~/Pictures/wallpapers/omarchy/` is a local, untracked folder with the omarchy

@@ -14,7 +14,7 @@ import sys
 CONF = "/home/afr/.config/hypr/config"
 GROUP_ORDER = ["Apps", "Toggles", "Panels", "Capture", "Snapshots",
                "System", "Navigate", "Workspaces", "Media"]
-KEY_ALIAS = {"period": ".", "Print": "PrtSc", "Minus": "-", "Plus": "+"}
+KEY_ALIAS = {"period": ".", "Print": "PrtSc", "Minus": "-", "Plus": "+", "equal": "="}
 
 
 def parse_consts(path):
@@ -120,7 +120,7 @@ def main():
                 txt = text.replace(" N", f" {i}")
             combo = resolve(keyex, consts).replace("mainMod", "SUPER").replace("  ", " ")
             combo = combo.replace(" + ", "+")
-            combo = KEY_ALIAS.get(combo, combo)
+            combo = "+".join(KEY_ALIAS.get(part, part) for part in combo.split("+"))
             if "mouse" in combo or "code" in combo:
                 continue
             cmd = None
