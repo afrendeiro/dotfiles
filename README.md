@@ -99,6 +99,22 @@ EOF
 Wallpapers live in `~/Pictures/wallpapers/omarchy/` (untracked); they're the
 omarchy v4.0 `themes/*/backgrounds/` images, flattened as `<theme>__<file>`.
 
+## Yubikey screen unlock (Hyprland)
+
+The noctalia lock screen authenticates through the PAM `login` service.
+`hyprland/.config/noctalia/config.toml` sets `[lockscreen] allow_empty_password
+= true` so Enter on an empty field triggers the key (touch to unlock); the
+password still works. Set up once per machine:
+
+```bash
+pkexec pacman -S pam-u2f
+mkdir -p ~/.config/Yubico && pamu2fcfg > ~/.config/Yubico/u2f_keys  # touch key
+pkexec sed -i '/pam_nologin.so/a auth       sufficient   pam_u2f.so cue' /etc/pam.d/login
+```
+
+`sufficient` = key OR password. This also enables the key for TTY logins
+(greetd has its own PAM file and is unaffected).
+
 ## Machine-specific Settings
 
 Create `~/.config/fish/conf.d/local.fish` (gitignored) for SSH hosts, Bluetooth devices, printer aliases, etc. See `fish/.config/fish/conf.d/local.fish.example`. CeMM printer queues are (re)created by `setup-printers.sh` (scripts module).

@@ -84,6 +84,7 @@ gpu_poll_seconds = 2
 
 [lockscreen]
 lock_before_suspend = true
+allow_empty_password = true
 
 [idle]
 behavior_order = [ "lock", "screen-off", "suspend" ]
