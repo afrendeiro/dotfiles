@@ -38,6 +38,8 @@ edit the template, then apply with `noctalia msg templates-apply`.
 - `SUPER+T` — launch the terminal Teams client (`kitty -e teams-tui-go`)
 - `SUPER+SHIFT+T` — open the Teams PWA for meetings/screen-sharing
   (the TUI can't do those)
+- "Teams (TUI)" in the noctalia launcher (desktop entry from the
+  `teams-tui-go` module) — same launch-or-focus behavior as `SUPER+T`
 - Azure AD approval status: `notes/teams-tui-go-azure-approval.md`
 
 ## Images (imv)

@@ -2,6 +2,7 @@
 *.local
 !scripts/.local/
 !nautilus/.local/
+!teams-tui-go/.local/
 !launcher-tools/.local/
 *.local.fish
 fish_variables

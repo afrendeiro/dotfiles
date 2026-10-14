@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Teams (TUI)
+GenericName=Microsoft Teams client
+Comment=Terminal Microsoft Teams client (teams-tui-go)
+# Absolute path: the desktop-entry spec expands neither ~ nor $HOME in Exec.
+# launch-or-focus.sh focuses an existing teams-tui window (no second
+# instance) and otherwise starts kitty, mirroring the SUPER+T bind.
+Exec=/home/afr/.local/bin/launch-or-focus.sh teams-tui kitty --class teams-tui -e teams-tui-go
+Icon=utilities-terminal
+Terminal=false
+Categories=Network;InstantMessaging;
+Keywords=teams;chat;microsoft;tui;terminal;
+StartupNotify=false
+StartupWMClass=teams-tui

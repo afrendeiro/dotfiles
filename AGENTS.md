@@ -232,6 +232,11 @@ Every top-level directory is a stow package whose internal path mirrors $HOME
 - Launch keybinds: `SUPER+T` → TUI (`kitty -e teams-tui-go`),
   `SUPER+SHIFT+T` → Teams PWA (meetings/screen-sharing); see
   `docs/desktop-stack.md`.
+- `teams-tui-go/.local/share/applications/teams-tui-go.desktop` is stowed to
+  `~/.local/share/applications/`, so it shows up in the noctalia launcher as
+  "Teams (TUI)". The Exec mirrors `SUPER+T` through `launch-or-focus.sh`
+  (absolute path — the desktop-entry spec expands neither `~` nor `$HOME`) and
+  `StartupWMClass=teams-tui` matches the kitty window class.
 
 ## imv module
 
