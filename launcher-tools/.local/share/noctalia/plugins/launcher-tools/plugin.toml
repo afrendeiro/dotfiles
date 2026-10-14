@@ -1,0 +1,25 @@
+id = "afr/launcher-tools"
+name = "Launcher Tools"
+version = "0.1.0"
+plugin_api = 24
+author = "afr"
+license = "MIT"
+icon = "puzzle"
+description = "Keybindings (/keys) and project (/proj) providers for the launcher"
+tags = ["launcher", "utility", "productivity"]
+
+[[launcher_provider]]
+id = "keys"
+entry = "keys.luau"
+prefix = "keys"
+glyph = "keyboard"
+include_in_global_search = false
+debounce_ms = 150
+
+[[launcher_provider]]
+id = "projects"
+entry = "proj.luau"
+prefix = "proj"
+glyph = "folder-open"
+include_in_global_search = false
+debounce_ms = 100

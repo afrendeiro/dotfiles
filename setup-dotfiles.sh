@@ -42,6 +42,10 @@ case "${XDG_SESSION_DESKTOP:-}${XDG_CURRENT_DESKTOP:-}" in
     *[Hh]yprland*)
         stow hyprland
         echo "Stowed hyprland module"
+        # noctalia launcher providers (/keys, /proj); enable state persists.
+        stow launcher-tools
+        noctalia msg plugins enable afr/launcher-tools 2>/dev/null \
+            || echo "  WARNING: could not enable afr/launcher-tools (noctalia not running?)"
         ;;
     *[Gg]nome*)
         stow gnome
