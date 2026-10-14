@@ -38,6 +38,9 @@ scripts/.local/bin/claude
 scripts/.local/bin/lsfg-vk-cli
 scripts/.local/bin/lsfg-vk-ui
 scripts/.local/bin/mako-*
+# uv-managed: python shims (uv python install) and uv tool entry points
+scripts/.local/bin/python3*
+scripts/.local/bin/agentlog
 
 # teams-tui-go local state (favourited chat IDs, per-machine)
 teams-tui-go/.config/teams-tui-go/favourites.json
