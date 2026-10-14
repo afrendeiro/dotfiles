@@ -1,0 +1,6 @@
+# CachyOS's untracked ~/.config/uwsm/env exports BROWSER=firefox; env.d is
+# sourced after it, so this wins. CLI tools that honor $BROWSER (Python
+# webbrowser, gh, git web--browse, OAuth flows) otherwise open Firefox while
+# xdg-open follows mimeapps.list (brave-origin.desktop). Keep in sync with
+# BROWSER in hypr/config/variables.lua.
+export BROWSER=brave-origin
