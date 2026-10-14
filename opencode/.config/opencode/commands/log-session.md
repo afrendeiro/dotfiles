@@ -1,0 +1,1 @@
+/home/afr/work/agentlog/integrations/opencode/log-session.md
